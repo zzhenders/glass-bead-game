@@ -52,6 +52,10 @@ def user_following_recent():
 def posts():
 	"""I don't know yet but this seems important to have."""
 
+@app.route("/posts/search")
+def search_posts():
+	"""Search for posts matching given criteria."""	
+
 @app.route("/posts/create", methods=['POST'])
 def create_post():
 	"""Create a new post."""
