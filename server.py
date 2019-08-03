@@ -2,7 +2,7 @@
 #
 # Flask server for Glass Bead Game. Contains routes.
 
-from flask import Flask, redirect, request, render_template, session
+from flask import Flask, redirect, request, render_template, session, jsonify
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
@@ -54,11 +54,19 @@ def posts():
 
 @app.route("/posts/search")
 def search_posts():
-	"""Search for posts matching given criteria."""	
+	"""Search for posts matching given criteria."""
+
+	search_terms = request.args.get("terms")
+	list_of_posts = model.Post.search_for(search_terms)  #list of Post objects 
+	dict_of_posts = model.translate_posts_to_dict(list_of_posts)
+	return jsonify(dict_of_posts)
+
 
 @app.route("/posts/create", methods=['POST'])
 def create_post():
 	"""Create a new post."""
+
+	
 
 @app.route("/posts/<postid>")
 def post():
