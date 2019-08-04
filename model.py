@@ -8,7 +8,7 @@ db=SQLAlchemy()
 class Post(db.Model):
 	"""Post."""
 
-	__tablemame__ = "posts"
+	__tablename__ = "posts"
 
 	id = db.Column(db.Integer, primary_key=True, autoincrement=True)
 	title = db.Column(db.String(80), nullable=False)
