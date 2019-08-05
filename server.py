@@ -76,7 +76,7 @@ def create_post():
                                     title=title,
                                     content=content,
                                     references=references,
-                                    uid=uid)
+                                    uid=uid))
 
 
 @app.route("/posts/<postid>")
