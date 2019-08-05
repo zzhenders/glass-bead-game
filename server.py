@@ -72,12 +72,11 @@ def create_post():
     references = request.form.get('references')
     uid = request.form.get('uid')
 
-    return redirect("posts/" + model.addPost(model.Post(
+    return redirect("posts/" + model.addPost(
                                     title=title,
                                     content=content,
                                     references=references,
                                     uid=uid)
-    )
 
 
 @app.route("/posts/<postid>")
