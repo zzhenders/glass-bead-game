@@ -4,6 +4,7 @@
 
 from flask import Flask, redirect, request, render_template, session, jsonify
 from flask_sqlalchemy import SQLAlchemy
+import model
 
 app = Flask(__name__)
 
@@ -66,7 +67,18 @@ def search_posts():
 def create_post():
 	"""Create a new post."""
 
-	
+    title = request.form.get('title')
+    content = request.form.get('content')
+    references = request.form.get('references')
+    uid = request.form.get('uid')
+
+    return redirect("posts/" + model.addPost(model.Post(
+                                    title=title,
+                                    content=content,
+                                    references=references,
+                                    uid=uid)
+    )
+
 
 @app.route("/posts/<postid>")
 def post():
@@ -91,3 +103,7 @@ def responses():
 @app.route("/posts/<postid>/origins")
 def origins():
 	"""Origins of a particular post."""
+
+if __name__ == '__main__':
+    model.connect_to_db(app)
+    app.run(debug=True, host="0.0.0.0")
