@@ -31,6 +31,15 @@ class Post(db.Model):
 									   cls.content.like(search_terms)
 									   )).all()
 
+	def to_dictionary(self):
+		"""Returns a dictionary representation of the Post instance."""
+
+		return {key: value
+				for key, value in [('id', self.id),
+								   ('title', self.title),
+								   ('content', self.content),
+								   ('uid'), self.uid]}
+
 
 class User(db.Model):
 	"""A user."""
