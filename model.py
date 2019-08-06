@@ -41,7 +41,15 @@ class User(db.Model):
 	uname = db.Column(db.String(30), nullable=False, unique=True)
 
 class Reference(db.Model):
-	pass
+	"""A post reference.
+
+	A single reference linking a post and the post it is responding to.
+	"""
+
+	__tablename__ = "references"
+
+	post_id = db.Column(db.Integer, db.ForeignKey('posts.id'))
+	post_ref = db.Column(db.Integer, db.ForeignKey('posts.id'))
 
 class Bookmark(db.Model):
 	pass
