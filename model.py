@@ -15,6 +15,23 @@ class Post(db.Model):
 	content = db.Column(db.Text, nullable=False)
 	uid = db.Column(db.Integer, db.ForeignKey('users.id'))
 
+	@classmethod
+	def search_for(cls, search_terms):
+		"""Get all posts matching search terms.
+
+		Returns a list of Post objects where the search terms are present
+		either in the title or the body. All search terms must be present, and
+		search terms must be in order, but they may be anywhere.
+
+		Currently case-sensitive.
+		"""
+
+		search_terms = '%' + '%'.join(search_terms.strip().split()) + '%'
+		return cls.query.filter(db.or_(cls.title.like(search_terms),
+									   cls.content.like(search_terms)
+									   )).all()
+
+
 class User(db.Model):
 	"""A user."""
 
