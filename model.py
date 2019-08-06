@@ -16,16 +16,22 @@ class Post(db.Model):
 	uid = db.Column(db.Integer, db.ForeignKey('users.id'))
 
 class User(db.Model):
+	"""A user."""
+
+	__tablename__ = "users"
+
+	id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+	uname = db.Column(db.String(30), nullable=False, unique=True)
+
+class Reference(db.Model):
 	pass
 
-class Reference(db.model):
-	pass
-
-class Bookmark(db.model):
+class Bookmark(db.Model):
 	pass
 
 def connect_to_db(app):
 	app.config['SQLALCHEMY_DATABASE_URL'] = DB_URI
+	app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 	app.config['SQLALCHEMY_ECHO'] = True
 	db.app = app
 	db.init_app(app)
