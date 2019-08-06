@@ -57,6 +57,7 @@ class Reference(db.Model):
 
 	__tablename__ = "references"
 
+	id = db.Column(db.Integer, primary_key=True, autoincrement=True)
 	post_id = db.Column(db.Integer, db.ForeignKey('posts.id'))
 	post_ref = db.Column(db.Integer, db.ForeignKey('posts.id'))
 
@@ -65,6 +66,7 @@ class Bookmark(db.Model):
 
 	__tablename__ = "bookmarks"
 
+	id = db.Column(db.Integer, primary_key=True, autoincrement=True)
 	post_id = db.Column(db.Integer, db.ForeignKey('posts.id'))
 	user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
