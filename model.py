@@ -52,7 +52,12 @@ class Reference(db.Model):
 	post_ref = db.Column(db.Integer, db.ForeignKey('posts.id'))
 
 class Bookmark(db.Model):
-	pass
+	"""A bookmark a user has made."""
+
+	__tablename__ = "bookmarks"
+
+	post_id = db.Column(db.Integer, db.ForeignKey('posts.id'))
+	user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
 def connect_to_db(app):
 	app.config['SQLALCHEMY_DATABASE_URL'] = DB_URI
