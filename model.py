@@ -15,6 +15,18 @@ class Post(db.Model):
 	content = db.Column(db.Text, nullable=False)
 	uid = db.Column(db.Integer, db.ForeignKey('users.id'))
 
+	# Relationships
+	references = db.relationship('Post',
+								 secondary='references',
+								 primaryjoin='Post.id==Reference.post_id',
+								 secondaryjoin='Post.id==Reference.post_ref',
+								 )
+
+	responses = db.relationship('Post',
+								 primaryjoin='Post.id==Reference.post_ref',
+								 secondaryjoin='Post.id==Reference.post_id',
+								 )
+
 	@classmethod
 	def search_for(cls, search_terms):
 		"""Get all posts matching search terms.
