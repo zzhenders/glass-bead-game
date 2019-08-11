@@ -67,16 +67,25 @@ def search_posts():
 def create_post():
     """Create a new post."""
 
-    title = request.form.get('title')
-    content = request.form.get('content')
-    references = request.form.get('references')
-    uid = request.form.get('uid')
+    if title and content and uid:
+        # Validate information exists
 
-    return redirect("posts/" + model.addPost(
-                                    title=title,
-                                    content=content,
-                                    references=references,
-                                    uid=uid))
+        title = request.form.get('title')
+        content = request.form.get('content')
+        uid = request.form.get('uid')
+
+        references = request.form.get('references', [])
+        references = model.Post.query.filter(Post.id.in_(references).all())
+
+        try:
+            new_post = Post(title=title, content=content,
+                            references=references, uid=uid)
+            post_id = new_post.id
+
+            return redirect("posts/" + post_id)
+
+        except:
+            print("\n\n*** Error adding post ***\n\n") # How to handle error?
 
 
 @app.route("/posts/<postid>")
