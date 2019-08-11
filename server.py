@@ -59,7 +59,8 @@ def search_posts():
 
     search_terms = request.args.get("terms")
     list_of_posts = Post.search_for(search_terms)  #list of Post objects 
-    dict_of_posts = translate_posts_to_dict(list_of_posts)
+    dict_of_posts = {post.to_dictionary()
+                     for post in list_of_posts}
     return jsonify(dict_of_posts)
 
 
