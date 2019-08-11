@@ -17,35 +17,35 @@ def users():
 def create_user():
     """Add a user."""
 
-@app.route("/users/<userid>")
+@app.route("/users/<user_id>")
 def user_root():
     """User root directory and information."""
 
-@app.route("/users/<userid>/update", methods=['POST'])
+@app.route("/users/<user_id>/update", methods=['POST'])
 def update_user():
     """Update user information."""
 
-@app.route("/users/<userid>/delete", methods=['POST'])
+@app.route("/users/<user_id>/delete", methods=['POST'])
 def delete_user():
     """Remove user."""
 
-@app.route("/users/<userid>/bookmarks")
+@app.route("/users/<user_id>/bookmarks")
 def bookmarks():
     """Bookmarks a user has saved."""
 
-@app.route("/users/<userid>/followers")
+@app.route("/users/<user_id>/followers")
 def user_followers():
     """Users following user specified."""
 
-@app.route("/users/<userid>/followers/recent-posts")
+@app.route("/users/<user_id>/followers/recent-posts")
 def user_followers_recent():
     """Most recent posts by user's followers."""
 
-@app.route("/users/<userid>/following")
+@app.route("/users/<user_id>/following")
 def user_following():
     """Users followed by user specified."""
 
-@app.route("/users/<userid>/following/recent-posts")
+@app.route("/users/<user_id>/following/recent-posts")
 def user_following_recent():
     """Most recent posts by users followed by user."""
 
@@ -89,15 +89,22 @@ def create_post():
             print("\n\n*** Error adding post ***\n\n") # How to handle error?
 
 
-@app.route("/posts/<postid>")
+@app.route("/posts/<post_id>")
 def post():
     """A particular post."""
 
-@app.route("/posts/<postid>/edit", methods=['POST'])
+    try:
+        post = Post.query.filter(Post.id == post_id).one()
+        return jsonify(post.to_dictionary())
+    except:
+        print("\n\n*** Error accessing post *** \n\n")
+
+
+@app.route("/posts/<post_id>/edit", methods=['POST'])
 def edit_post():
     """Update a post."""
 
-@app.route("/posts/<postid>/erase", methods=['POST'])
+@app.route("/posts/<post_id>/erase", methods=['POST'])
 def erase_post():
     """Void a post.
 
@@ -105,11 +112,11 @@ def erase_post():
     the relevant users.
     """
 
-@app.route("/posts/<postid>/responses")
+@app.route("/posts/<post_id>/responses")
 def responses():
     """Responses to a particular post."""
 
-@app.route("/posts/<postid>/origins")
+@app.route("/posts/<post_id>/origins")
 def origins():
     """Origins of a particular post."""
 
