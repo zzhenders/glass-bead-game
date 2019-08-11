@@ -4,7 +4,7 @@
 
 from flask import Flask, redirect, request, render_template, session, jsonify
 from flask_sqlalchemy import SQLAlchemy
-import model
+from model import User, Post, Bookmark, Reference, connect_to_db, DB_URI
 
 app = Flask(__name__)
 
@@ -58,8 +58,8 @@ def search_posts():
     """Search for posts matching given criteria."""
 
     search_terms = request.args.get("terms")
-    list_of_posts = model.Post.search_for(search_terms)  #list of Post objects 
-    dict_of_posts = model.translate_posts_to_dict(list_of_posts)
+    list_of_posts = Post.search_for(search_terms)  #list of Post objects 
+    dict_of_posts = translate_posts_to_dict(list_of_posts)
     return jsonify(dict_of_posts)
 
 
@@ -75,7 +75,7 @@ def create_post():
         uid = request.form.get('uid')
 
         references = request.form.get('references', [])
-        references = model.Post.query.filter(Post.id.in_(references).all())
+        references = Post.query.filter(Post.id.in_(references).all())
 
         try:
             new_post = Post(title=title, content=content,
@@ -113,5 +113,5 @@ def origins():
     """Origins of a particular post."""
 
 if __name__ == '__main__':
-    model.connect_to_db(app, model.DB_URI)
+    connect_to_db(app, DB_URI)
     app.run(debug=True, host="0.0.0.0")
