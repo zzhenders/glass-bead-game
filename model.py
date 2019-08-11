@@ -18,17 +18,12 @@ class Post(db.Model):
 	# Relationships
 
 	# self.user: the User who made this post.
-	
+
 	references = db.relationship('Post',
 								 secondary='references',
 								 primaryjoin='Post.id==Reference.post_id',
 								 secondaryjoin='Post.id==Reference.post_ref',
-								 )
-
-	responses = db.relationship('Post',
-								 primaryjoin='Post.id==Reference.post_ref',
-								 secondaryjoin='Post.id==Reference.post_id',
-								 )
+								 backref='responses')
 
 	@classmethod
 	def search_for(cls, search_terms):
@@ -91,8 +86,8 @@ class Bookmark(db.Model):
 
 	# self.user: the User who made this bookmark
 
-def connect_to_db(app):
-	app.config['SQLALCHEMY_DATABASE_URL'] = DB_URI
+def connect_to_db(app, database_uri):
+	app.config['SQLALCHEMY_DATABASE_URL'] = database_uri
 	app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 	app.config['SQLALCHEMY_ECHO'] = True
 	db.app = app
