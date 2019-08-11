@@ -88,6 +88,9 @@ def create_post():
         except:
             print("\n\n*** Error adding post ***\n\n") # How to handle error?
 
+    else:
+        print("\n\n*** Error adding post ***\n\n") # How to handle error?
+
 
 @app.route("/posts/<post_id>")
 def post():
