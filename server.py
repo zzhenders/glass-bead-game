@@ -68,39 +68,26 @@ def search_posts():
 def create_post():
     """Create a new post."""
 
-    if title and content and uid:
-        # Validate information exists
+    title = request.form.get('title')
+    content = request.form.get('content')
+    uid = request.form.get('uid')
 
-        title = request.form.get('title')
-        content = request.form.get('content')
-        uid = request.form.get('uid')
+    references = request.form.get('references', [])
+    references = Post.query.filter(Post.id.in_(references).all())
 
-        references = request.form.get('references', [])
-        references = Post.query.filter(Post.id.in_(references).all())
+    new_post = Post(title=title, content=content,
+                    references=references, uid=uid)
+    post_id = new_post.id
 
-        try:
-            new_post = Post(title=title, content=content,
-                            references=references, uid=uid)
-            post_id = new_post.id
-
-            return redirect("posts/" + post_id)
-
-        except:
-            print("\n\n*** Error adding post ***\n\n") # How to handle error?
-
-    else:
-        print("\n\n*** Error adding post ***\n\n") # How to handle error?
+    return redirect("posts/" + post_id)
 
 
 @app.route("/posts/<post_id>")
 def post():
     """A particular post."""
 
-    try:
-        post = Post.query.filter(Post.id == post_id).one()
-        return jsonify(post.to_dictionary())
-    except:
-        print("\n\n*** Error accessing post *** \n\n")
+    post = Post.query.filter(Post.id == post_id).one()
+    return jsonify(post.to_dictionary())
 
 
 @app.route("/posts/<post_id>/edit", methods=['POST'])
