@@ -74,7 +74,7 @@ def search_posts():
 
     search_terms = request.args.get("terms")
     list_of_posts = Post.search_for(search_terms)  #list of Post objects 
-    dict_of_posts = {post.to_dictionary()
+    dict_of_posts = {post.id: post.to_dictionary()
                      for post in list_of_posts}
     return jsonify(dict_of_posts)
 
@@ -137,7 +137,7 @@ def responses(post_id):
     """Responses to a particular post."""
 
     post = Post.query.filter(Post.id == post_id).one()
-    dict_of_posts = {post.to_dictionary()
+    dict_of_posts = {post.id: post.to_dictionary()
                      for post in post.responses}
     return jsonify(dict_of_posts)
 
@@ -147,7 +147,7 @@ def references(post_id):
     """References by a particular post."""
 
     post = Post.query.filter(Post.id == post_id).one()
-    dict_of_posts = {post.to_dictionary()
+    dict_of_posts = {post.id: post.to_dictionary()
                      for post in post.references}
     return jsonify(dict_of_posts)
 
