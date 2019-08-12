@@ -4,7 +4,7 @@
 
 from flask import Flask, redirect, request, render_template, session, jsonify
 from flask_sqlalchemy import SQLAlchemy
-from model import User, Post, Bookmark, Reference, connect_to_db, DB_URI
+from model import User, Post, Bookmark, Reference, connect_to_db, DB_URI, db
 
 app = Flask(__name__)
 
@@ -77,6 +77,7 @@ def create_post():
 
     new_post = Post(title=title, content=content,
                     references=references, uid=uid)
+    db.session.commit()
     post_id = new_post.id
 
     return redirect("posts/" + post_id)
