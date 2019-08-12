@@ -57,6 +57,13 @@ def delete_user(user_id):
 def bookmarks(user_id):
     """Bookmarks a user has saved."""
 
+    user = User.query.filter(User.id == user_id
+                             ).options(db.joinedload('bookmarks')).one()
+    dict_of_posts = {post.id: post.to_dictionary()
+                     for post in user.bookmarks}
+    return jsonify(dict_of_posts)
+
+
 @app.route("/users/<user_id>/followers")
 def user_followers(user_id):
     """Users following user specified."""
