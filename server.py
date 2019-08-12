@@ -17,6 +17,14 @@ def users():
 def create_user():
     """Add a user."""
 
+    uname = request.form.get('uname')
+    new_user = User(uname=uname)
+    db.session.add(new_user)
+    db.session.commit()
+
+    uid = new_user.id
+    return redirect(f'/users/{uid}')
+
 @app.route("/users/<user_id>")
 def user_root(user_id):
     """User root directory and information."""
