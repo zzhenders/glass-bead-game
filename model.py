@@ -60,7 +60,7 @@ class User(db.Model):
 	uname = db.Column(db.String(30), nullable=False, unique=True)
 
 	# Relationships 
-	bookmarks = db.relationship('Bookmark', backref='user')
+	bookmarks = db.relationship('Post', secondary="bookmarks")
 	posts = db.relationship('Post', backref='user')
 
 class Reference(db.Model):
@@ -84,6 +84,7 @@ class Bookmark(db.Model):
 	post_id = db.Column(db.Integer, db.ForeignKey('posts.id'))
 	user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
+	user = db.relationship('User')
 	# self.user: the User who made this bookmark
 
 def connect_to_db(app, database_uri):
