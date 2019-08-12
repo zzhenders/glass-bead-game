@@ -40,6 +40,15 @@ def user_root(user_id):
 def update_user(user_id):
     """Update user information."""
 
+    uname = request.form.get('uname')
+    user = User.query.filter(uname=uname).one()
+    uid = user.id
+    user.uname = uname
+    db.session.commit()
+
+    return redirect(f'/users/{uid}')
+
+
 @app.route("/users/<user_id>/delete", methods=['POST'])
 def delete_user(user_id):
     """Remove user."""
