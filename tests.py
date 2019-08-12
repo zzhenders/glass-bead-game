@@ -1,6 +1,7 @@
 from unittest import TestCase
 from server import app
 from model import db, Post, User, Reference, Bookmark, connect_to_db
+from datetime import datetime
 
 TEST_DB_URI = "postgresql:///testdb"
 
@@ -114,11 +115,13 @@ def db_test_data():
     # Add sample posts
     p1 = Post(title="One million years dungeon",
               content="One million years dungeon",
-              user=u1)
+              user=u1,
+              created=datetime.utcnow())
     p2 = Post(title="Poor Lemongrab",
               content="You try your best",
               user=u2,
-              references=[p1])
+              references=[p1],
+              created=datetime.utcnow())
 
     db.session.add_all([u1, u2, u3, u4, p1, p2])
     db.session.commit()

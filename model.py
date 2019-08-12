@@ -14,6 +14,7 @@ class Post(db.Model):
 	title = db.Column(db.String(80), nullable=False)
 	content = db.Column(db.Text, nullable=False)
 	uid = db.Column(db.Integer, db.ForeignKey('users.id'))
+	created = db.Column(db.DateTime, nullable=False)
 
 	# Relationships
 
@@ -48,7 +49,9 @@ class Post(db.Model):
 				for key, value in [('id', self.id),
 								   ('title', self.title),
 								   ('content', self.content),
-								   ('uid', self.uid)]}
+								   ('uid', self.uid),
+								   ('created', self.created),
+								   ]}
 
 
 class User(db.Model):
