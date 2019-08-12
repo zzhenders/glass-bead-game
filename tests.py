@@ -32,6 +32,13 @@ class FlaskTests(TestCase):
         result = self.client.get(f"/users/{user.id}")
         self.assertIn(b'million', result.data)
 
+    def test_user_bookmarks(self):
+
+        user = User.query.filter(User.uname=='marceline'
+                                 ).options(db.joinedload('bookmarks')).one()
+        result = self.client.get(f'/users/{user.id}/bookmarks')
+        self.assertIn(b'million', result.data)
+
 class ModelTests(TestCase):
 
     def setUp(self):
@@ -97,6 +104,13 @@ def db_test_data():
 
     db.session.add_all([u1, u2, u3, u4, p1, p2])
     db.session.commit()
+
+    # Add bookmarks
+    b1 = Bookmark(user=u3, post_id=p1.id)
+
+    db.session.add_all([b1])
+    db.session.commit()
+
 
 if __name__ == "__main__":
     import unittest
