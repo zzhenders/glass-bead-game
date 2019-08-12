@@ -48,7 +48,7 @@ class Post(db.Model):
 				for key, value in [('id', self.id),
 								   ('title', self.title),
 								   ('content', self.content),
-								   ('uid'), self.uid]}
+								   ('uid', self.uid)]}
 
 
 class User(db.Model):
