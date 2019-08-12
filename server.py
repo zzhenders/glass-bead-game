@@ -25,6 +25,7 @@ def create_user():
     uid = new_user.id
     return redirect(f'/users/{uid}')
 
+
 @app.route("/users/<user_id>")
 def user_root(user_id):
     """User root directory."""
@@ -35,6 +36,7 @@ def user_root(user_id):
                      for post in user.posts
                      if not post.references}
     return jsonify(dict_of_posts)
+
 
 @app.route("/users/<user_id>/update", methods=['POST'])
 def update_user(user_id):
@@ -111,7 +113,7 @@ def create_post():
     db.session.commit()
     post_id = new_post.id
 
-    return redirect("posts/" + post_id)
+    return redirect(f'posts/{post_id}')
 
 
 @app.route("/posts/<post_id>")
