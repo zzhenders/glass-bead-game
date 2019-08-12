@@ -1,6 +1,6 @@
 from unittest import TestCase
 from server import app
-from model import db, Post, User, Reference, Bookmark, connect_to_db
+from model import db, Post, User, Reference, Bookmark, Follower, connect_to_db
 from datetime import datetime
 
 TEST_DB_URI = "postgresql:///testdb"
@@ -103,6 +103,17 @@ class ModelTests(TestCase):
                                         ).first().user.uname)
 
 
+    def test_followers(self):
+        """Test that user.followers returns the correct User(s)."""
+
+        print('\n\n\ntest followers\n\n\n')
+        self.assertIn('simon',
+                      [follower.uname
+                       for follower
+                       in User.query.filter(User.uname=='bubblegum'
+                                            ).first().followers])
+
+
 def db_test_data():
     """Create sample data for test database."""
 
@@ -129,7 +140,12 @@ def db_test_data():
     # Add bookmarks
     b1 = Bookmark(user=u3, post_id=p1.id)
 
-    db.session.add_all([b1])
+    # Add followers
+    f1 = Follower(user_id=u1.id, follower_id=u2.id)
+    f2 = Follower(user_id=u2.id, follower_id=u3.id)
+    f3 = Follower(user_id=u2.id, follower_id=u4.id)
+
+    db.session.add_all([b1, f1, f2, f3])
     db.session.commit()
 
 
