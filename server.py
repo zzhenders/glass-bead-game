@@ -18,35 +18,35 @@ def create_user():
     """Add a user."""
 
 @app.route("/users/<user_id>")
-def user_root():
+def user_root(user_id):
     """User root directory and information."""
 
 @app.route("/users/<user_id>/update", methods=['POST'])
-def update_user():
+def update_user(user_id):
     """Update user information."""
 
 @app.route("/users/<user_id>/delete", methods=['POST'])
-def delete_user():
+def delete_user(user_id):
     """Remove user."""
 
 @app.route("/users/<user_id>/bookmarks")
-def bookmarks():
+def bookmarks(user_id):
     """Bookmarks a user has saved."""
 
 @app.route("/users/<user_id>/followers")
-def user_followers():
+def user_followers(user_id):
     """Users following user specified."""
 
 @app.route("/users/<user_id>/followers/recent-posts")
-def user_followers_recent():
+def user_followers_recent(user_id):
     """Most recent posts by user's followers."""
 
 @app.route("/users/<user_id>/following")
-def user_following():
+def user_following(user_id):
     """Users followed by user specified."""
 
 @app.route("/users/<user_id>/following/recent-posts")
-def user_following_recent():
+def user_following_recent(user_id):
     """Most recent posts by users followed by user."""
 
 @app.route("/posts")
@@ -84,7 +84,7 @@ def create_post():
 
 
 @app.route("/posts/<post_id>")
-def post():
+def post(post_id):
     """A particular post."""
 
     post = Post.query.filter(Post.id == post_id).one()
@@ -92,7 +92,7 @@ def post():
 
 
 @app.route("/posts/<post_id>/edit", methods=['POST'])
-def edit_post():
+def edit_post(post_id):
     """Update a post."""
 
     title = request.form.get('title')
@@ -110,7 +110,7 @@ def edit_post():
 
 
 @app.route("/posts/<post_id>/erase", methods=['POST'])
-def erase_post():
+def erase_post(post_id):
     """Void a post.
 
     Deletes content of a post. References will still exist until changed by
@@ -118,7 +118,7 @@ def erase_post():
     """
 
 @app.route("/posts/<post_id>/responses")
-def responses():
+def responses(post_id):
     """Responses to a particular post."""
 
     post = Post.query.filter(Post.id == post_id).one()
@@ -128,7 +128,7 @@ def responses():
 
 
 @app.route("/posts/<post_id>/origins")
-def origins():
+def origins(post_id):
     """Origins of a particular post."""
 
 if __name__ == '__main__':
