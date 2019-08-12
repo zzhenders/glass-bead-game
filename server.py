@@ -121,6 +121,12 @@ def erase_post():
 def responses():
     """Responses to a particular post."""
 
+    post = Post.query.filter(Post.id == post_id).one()
+    dict_of_posts = {post.to_dictionary()
+                     for post in post.responses}
+    return jsonify(dict_of_posts)
+
+
 @app.route("/posts/<post_id>/origins")
 def origins():
     """Origins of a particular post."""
