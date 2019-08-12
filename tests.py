@@ -113,6 +113,16 @@ class ModelTests(TestCase):
                        in User.query.filter(User.uname=='bubblegum'
                                             ).first().followers])
 
+    def test_followed(self):
+        """Test that user.following returns the correct User(s)."""
+
+        print('\n\n\ntest following\n\n\n')
+        self.assertIn('bubblegum',
+                      [followed.uname
+                       for followed
+                       in User.query.filter(User.uname=='marceline'
+                                            ).first().followed])
+
 
 def db_test_data():
     """Create sample data for test database."""
