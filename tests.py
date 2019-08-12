@@ -5,6 +5,7 @@ from model import db, Post, User, Reference, Bookmark, connect_to_db
 TEST_DB_URI = "postgresql:///testdb"
 
 class FlaskTests(TestCase):
+    """Implementations tests for Flask API"""
 
     def setUp(self):
         """Do this before each test."""
@@ -15,6 +16,7 @@ class FlaskTests(TestCase):
 
         connect_to_db(app, TEST_DB_URI)
         db_test_data()
+
 
     def tearDown(self):
         """Do this after each test."""
@@ -25,21 +27,29 @@ class FlaskTests(TestCase):
         Reference.query.delete()
         Bookmark.query.delete()
 
-    def test_user_root(self):
 
+    def test_user_root(self):
+        """Test `/users/<user_id>` route."""
+
+        print('\n\n\ntest user root\n\n\n')
         user = User.query.filter(User.uname=='lemongrab'
                                  ).options(db.joinedload('posts')).one()
         result = self.client.get(f"/users/{user.id}")
         self.assertIn(b'million', result.data)
 
-    def test_user_bookmarks(self):
 
+    def test_user_bookmarks(self):
+        """Test for `/users/<user_id>/bookmarks` route."""
+
+        print('\n\n\ntest user bookmarks\n\n\n')
         user = User.query.filter(User.uname=='marceline'
                                  ).options(db.joinedload('bookmarks')).one()
         result = self.client.get(f'/users/{user.id}/bookmarks')
         self.assertIn(b'million', result.data)
 
+
 class ModelTests(TestCase):
+    """Database tests."""
 
     def setUp(self):
         """Do this before each test."""
@@ -51,7 +61,19 @@ class ModelTests(TestCase):
         connect_to_db(app, TEST_DB_URI)
         db_test_data()
 
+
+    def tearDown(self):
+        """Do this after each test."""
+
+        print('\n\n\n...tearing down...\n\n\n')
+        Post.query.delete()
+        User.query.delete()
+        Reference.query.delete()
+        Bookmark.query.delete()
+
+
     def test_post_references(self):
+        """Test that post.references returns the correct object(s)."""
 
         print('\n\n\ntest post references\n\n\n')
         self.assertIn('million',
@@ -59,7 +81,9 @@ class ModelTests(TestCase):
                                         Post.title=='Poor Lemongrab'
                                         ).first().references[0].title)
 
+
     def test_post_responses(self):
+        """Test that post.responses returns the correct object(s)."""
 
         print('\n\n\ntest post responses\n\n\n')
         self.assertIn('Lemon',
@@ -67,21 +91,15 @@ class ModelTests(TestCase):
                                         Post.title=='One million years dungeon'
                                         ).first().responses[0].title)
 
+
     def test_post_author(self):
+        """Test that post.user returns the correct User object."""
+
         print('\n\n\ntest post author\n\n\n')
         self.assertIn('lemon',
                       Post.query.filter(
                                         Post.title=='One million years dungeon'
                                         ).first().user.uname)
-
-    def tearDown(self):
-        """Do this after each test."""
-
-        print('\n\n\n...tearing down...\n\n\n')
-        Post.query.delete()
-        User.query.delete()
-        Reference.query.delete()
-        Bookmark.query.delete()
 
 
 def db_test_data():
