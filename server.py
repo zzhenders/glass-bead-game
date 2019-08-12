@@ -127,9 +127,15 @@ def responses(post_id):
     return jsonify(dict_of_posts)
 
 
-@app.route("/posts/<post_id>/origins")
-def origins(post_id):
-    """Origins of a particular post."""
+@app.route("/posts/<post_id>/references")
+def references(post_id):
+    """References by a particular post."""
+
+    post = Post.query.filter(Post.id == post_id).one()
+    dict_of_posts = {post.to_dictionary()
+                     for post in post.references}
+    return jsonify(dict_of_posts)
+
 
 if __name__ == '__main__':
     connect_to_db(app, DB_URI)
