@@ -94,6 +94,20 @@ def post():
 def edit_post():
     """Update a post."""
 
+    title = request.form.get('title')
+    content = request.form.get('content')
+    uid = request.form.get('uid')
+
+    references = request.form.get('references', [])
+    references = Post.query.filter(Post.id.in_(references).all())
+
+    post = Post.query.filter(Post.id == post_id).one()
+    post.title, post.content, post.references = title, content, references
+    db.session.commit()
+
+    return redirect(f'/users/{uid}/following/recent-posts')
+
+
 @app.route("/posts/<post_id>/erase", methods=['POST'])
 def erase_post():
     """Void a post.
