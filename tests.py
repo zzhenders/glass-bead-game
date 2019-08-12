@@ -4,6 +4,35 @@ from model import db, Post, User, Reference, Bookmark, connect_to_db
 
 TEST_DB_URI = "postgresql:///testdb"
 
+class FlaskTests(TestCase):
+
+    def setUp(self):
+        """Do this before each test."""
+
+        print('\n\n...setting up...\n\n')
+        self.client = app.test_client()
+        app.config['TESTING'] = True
+
+        connect_to_db(app, TEST_DB_URI)
+        db_test_data()
+
+    def tearDown(self):
+        """Do this after each test."""
+
+        print('\n\n\n...tearing down...\n\n\n')
+        Post.query.delete()
+        User.query.delete()
+        Reference.query.delete()
+        Bookmark.query.delete()
+
+    def test_user_root(self):
+
+        user = User.query.filter(User.uname=='lemongrab').options(db.joinedload('posts')).one()
+        result = self.client.get(f"/users/{user.id}")
+        print(result.data)
+        print(user.posts)
+        self.assertIn(b'million', result.data)
+
 class ModelTests(TestCase):
 
     def setUp(self):
