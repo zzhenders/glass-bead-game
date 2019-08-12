@@ -27,7 +27,14 @@ def create_user():
 
 @app.route("/users/<user_id>")
 def user_root(user_id):
-    """User root directory and information."""
+    """User root directory."""
+
+    user = User.query.filter(User.id == user_id
+                             ).options(db.joinedload('posts')).one()
+    dict_of_posts = {post.id: post.to_dictionary()
+                     for post in user.posts
+                     if not post.references}
+    return jsonify(dict_of_posts)
 
 @app.route("/users/<user_id>/update", methods=['POST'])
 def update_user(user_id):
