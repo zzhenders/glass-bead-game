@@ -27,10 +27,9 @@ class FlaskTests(TestCase):
 
     def test_user_root(self):
 
-        user = User.query.filter(User.uname=='lemongrab').options(db.joinedload('posts')).one()
+        user = User.query.filter(User.uname=='lemongrab'
+                                 ).options(db.joinedload('posts')).one()
         result = self.client.get(f"/users/{user.id}")
-        print(result.data)
-        print(user.posts)
         self.assertIn(b'million', result.data)
 
 class ModelTests(TestCase):
