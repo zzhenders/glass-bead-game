@@ -65,6 +65,11 @@ class User(db.Model):
 	# Relationships 
 	bookmarks = db.relationship('Post', secondary="bookmarks")
 	posts = db.relationship('Post', backref='user')
+	followers = db.relationship('User',
+								secondary='followers',
+								primaryjoin='User.id==Follower.user_id',
+								secondaryjoin='User.id==Follower.follower_id',
+								backref='followed')
 
 class Reference(db.Model):
 	"""A post reference.
@@ -89,6 +94,15 @@ class Bookmark(db.Model):
 
 	user = db.relationship('User')
 	# self.user: the User who made this bookmark
+
+class Follower(db.Model):
+	"""A follower of a user."""
+
+	__tablename__ = "followers"
+
+	id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+	user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+	follower_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
 def connect_to_db(app, database_uri):
 	app.config['SQLALCHEMY_DATABASE_URL'] = database_uri
