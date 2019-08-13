@@ -80,6 +80,17 @@ def create_bookmark(user_id):
     return jsonify({'bookmarked_post_id': post_id})
 
 
+@app.route("/users/<user_id>/bookmarks/delete", methods=['POST'])
+def delete_bookmark(user_id):
+    """Adds a bookmark to the user's bookmarks."""
+
+    bookmark_id = request.form.get('bookmark_id')
+    Bookmark.query.filter(Bookmark.id == bookmark_id).delete()
+    db.session.commit()
+
+    return jsonify({'deleted': True})
+
+
 @app.route("/users/<user_id>/followers")
 def user_followers(user_id):
     """Users following user specified."""
