@@ -67,6 +67,19 @@ def bookmarks(user_id):
     return jsonify(dict_of_posts)
 
 
+@app.route("/users/<user_id>/bookmarks/create", methods=['POST'])
+def create_bookmark(user_id):
+    """Adds a bookmark to the user's bookmarks."""
+
+    post_id = request.form.get('post_id')
+    new_bookmark = Bookmark(user_id=user_id, post_id=post_id)
+    db.session.add(new_bookmark)
+    db.session.commit()
+
+    bookmark_id = new_bookmark.id
+    return jsonify({'bookmarked_post_id': post_id})
+
+
 @app.route("/users/<user_id>/followers")
 def user_followers(user_id):
     """Users following user specified."""
