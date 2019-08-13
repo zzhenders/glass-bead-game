@@ -71,6 +71,15 @@ class User(db.Model):
 								secondaryjoin='User.id==Follower.follower_id',
 								backref='followed')
 
+	def to_dictionary(self):
+		"""Returns a dictionary representation of the User instance."""
+
+		return {key: value
+				for key, value
+				in [('id', self.id),
+					('uname', self.uname)
+					]}
+
 class Reference(db.Model):
 	"""A post reference.
 
