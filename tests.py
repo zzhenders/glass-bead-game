@@ -57,6 +57,16 @@ class FlaskTests(TestCase):
         self.assertIn(b'simon', result.data)
 
 
+    def test_user_followers_recent(self):
+        """Test for `/users/<user_id>/followers/recent-posts` route."""
+
+        print('\n\n\ntest user followers recent\n\n\n')
+        user = User.query.filter(User.uname == 'lemongrab').one()
+        result = self.client.get(f'/users/{user.id}/followers/recent-posts')
+        self.assertNotIn(b'best', result.data)
+        self.assertIn(b'favorite', result.data)
+
+
     def test_user_followed(self):
         """Test for `/users/<user_id>/followed` route."""
 
@@ -159,8 +169,12 @@ def db_test_data():
               user=u2,
               references=[p1],
               created=datetime.utcnow())
+    p3 = Post(title="Candy Kingdom",
+              content="It's my favorite kingdom!",
+              user=u2,
+              created=datetime.utcnow())
 
-    db.session.add_all([u1, u2, u3, u4, p1, p2])
+    db.session.add_all([u1, u2, u3, u4, p1, p2, p3])
     db.session.commit()
 
     # Add bookmarks
