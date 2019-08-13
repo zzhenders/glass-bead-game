@@ -114,7 +114,7 @@ class Follower(db.Model):
 	follower_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
 def connect_to_db(app, database_uri):
-	app.config['SQLALCHEMY_DATABASE_URL'] = database_uri
+	app.config['SQLALCHEMY_DATABASE_URI'] = database_uri
 	app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 	app.config['SQLALCHEMY_ECHO'] = True
 	db.app = app
