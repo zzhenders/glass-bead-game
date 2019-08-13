@@ -116,6 +116,19 @@ def user_following(user_id):
 def user_following_recent(user_id):
     """Most recent posts by users followed by user."""
 
+    # TODO: NEEDS REWORKING, VERY INEFFICIENT!#############################
+    #
+    user = User.query.filter(User.id == user_id).one()
+
+    dict_of_posts = {followed.id: Post.query.filter(Post.user_id == followed.id
+                                ).order_by('created')[-1].to_dictionary()
+                     for followed
+                     in user.followed}
+
+    return jsonify(dict_of_posts)
+    #######################################################################
+
+
 @app.route("/posts")
 def posts():
     """I don't know yet but this seems important to have."""
