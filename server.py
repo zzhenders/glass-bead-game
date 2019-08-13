@@ -23,8 +23,8 @@ def create_user():
     db.session.add(new_user)
     db.session.commit()
 
-    uid = new_user.id
-    return redirect(f'/users/{uid}')
+    user_id = new_user.id
+    return redirect(f'/users/{user_id}')
 
 
 @app.route("/users/<user_id>")
@@ -45,11 +45,11 @@ def update_user(user_id):
 
     uname = request.form.get('uname')
     user = User.query.filter(uname=uname).one()
-    uid = user.id
+    user_id = user.id
     user.uname = uname
     db.session.commit()
 
-    return redirect(f'/users/{uid}')
+    return redirect(f'/users/{user_id}')
 
 
 @app.route("/users/<user_id>/delete", methods=['POST'])
@@ -124,13 +124,13 @@ def create_post():
 
     title = request.form.get('title')
     content = request.form.get('content')
-    uid = request.form.get('uid')
+    user_id = request.form.get('user_id')
 
     references = request.form.get('references', [])
     references = Post.query.filter(Post.id.in_(references)).all()
 
     new_post = Post(title=title, content=content, references=references,
-                    uid=uid, created=datetime.utcnow())
+                    user_id=user_id, created=datetime.utcnow())
     db.session.add(new_post)
     db.session.commit()
     post_id = new_post.id
@@ -152,7 +152,7 @@ def edit_post(post_id):
 
     title = request.form.get('title')
     content = request.form.get('content')
-    uid = request.form.get('uid')
+    user_id = request.form.get('user_id')
 
     references = request.form.get('references', [])
     references = Post.query.filter(Post.id.in_(references).all())
@@ -161,7 +161,7 @@ def edit_post(post_id):
     post.title, post.content, post.references = title, content, references
     db.session.commit()
 
-    return redirect(f'/users/{uid}/following/recent-posts')
+    return redirect(f'/users/{user_id}/following/recent-posts')
 
 
 @app.route("/posts/<post_id>/erase", methods=['POST'])
