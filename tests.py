@@ -50,12 +50,21 @@ class FlaskTests(TestCase):
 
 
     def test_user_followers(self):
-        """Test for `/users/<user_id>/follwers` route."""
+        """Test for `/users/<user_id>/followers` route."""
 
-        print('\n\n\n**test user followers\n\n\n')
+        print('\n\n\ntest user followers\n\n\n')
         user = User.query.filter(User.uname == 'bubblegum').one()
         result = self.client.get(f'/users/{user.id}/followers')
         self.assertIn(b'simon', result.data)
+
+
+    def test_user_followed(self):
+        """Test for `/users/<user_id>/followed` route."""
+
+        print('\n\n\ntest user followed\n\n\n')
+        user = User.query.filter(User.uname == 'marceline').one()
+        result = self.client.get(f'/users/{user.id}/following')
+        self.assertIn(b'bubblegum', result.data)
 
 
 class ModelTests(TestCase):
