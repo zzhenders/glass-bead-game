@@ -71,6 +71,13 @@ def bookmarks(user_id):
 def user_followers(user_id):
     """Users following user specified."""
 
+    user = User.query.filter(User.id == user_id
+                             ).options(db.joinedload('followers')).one()
+    dict_of_users = {follower.id: follower.to_dictionary()
+                     for follower in user.followers}
+    return jsonify(dict_of_users)
+
+
 @app.route("/users/<user_id>/followers/recent-posts")
 def user_followers_recent(user_id):
     """Most recent posts by user's followers."""
