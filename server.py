@@ -4,7 +4,8 @@
 
 from flask import Flask, redirect, request, render_template, session, jsonify
 from flask_sqlalchemy import SQLAlchemy
-from model import User, Post, Bookmark, Reference, connect_to_db, DB_URI, db
+from model import User, Post, Bookmark, Reference, Follower,\
+                  connect_to_db, DB_URI, db
 from datetime import datetime
 
 app = Flask(__name__)
@@ -55,6 +56,30 @@ def update_user(user_id):
 @app.route("/users/<user_id>/delete", methods=['POST'])
 def delete_user(user_id):
     """Remove user."""
+
+@app.route("/users/<user_id>/follow", methods=['POST'])
+def follow_user(user_id):
+    """Follow the user identified by `user_id`."""
+
+    follower_id = request.form.get('uid')  # uid: the user making the request
+    new_follow = Follower(user_id=user_id, follower_id=follower_id)
+
+    db.session.add(new_follow)
+    db.session.commit()
+
+    return jsonify({'follow_id': new_follow.id})
+
+
+@app.route("/users/<user_id>/unfollow", methods=['POST'])
+def unfollow_user(user_id):
+    """Follow the user identified by `user_id`."""
+
+    follower_id = request.form.get('uid')  # uid: the user making the request
+    Follower.query.filter(user_id=user_id, follower_id=follower_id).delete()
+
+    db.session.commit()
+
+    return jsonify({'unfollowed': True})
 
 @app.route("/users/<user_id>/bookmarks")
 def bookmarks(user_id):
