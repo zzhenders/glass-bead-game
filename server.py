@@ -84,7 +84,20 @@ def user_followers_recent(user_id):
 
 @app.route("/users/<user_id>/following")
 def user_following(user_id):
-    """Users followed by user specified."""
+    """Users followed by user specified.
+
+    Return json of all the users followed by the user specified in the
+    URI. Note that route is `...following` but model has the attribute
+    `followed`. This is to maintain an English-like relationship in
+    the URI and model respectively.
+    """
+
+    user = User.query.filter(User.id == user_id
+                             ).options(db.joinedload('followed')).one()
+    dict_of_users = {followed.id: followed.to_dictionary()
+                     for followed in user.followed}
+    return jsonify(dict_of_users)
+
 
 @app.route("/users/<user_id>/following/recent-posts")
 def user_following_recent(user_id):
