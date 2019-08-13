@@ -49,6 +49,15 @@ class FlaskTests(TestCase):
         self.assertIn(b'million', result.data)
 
 
+    def test_user_followers(self):
+        """Test for `/users/<user_id>/follwers` route."""
+
+        print('\n\n\n**test user followers\n\n\n')
+        user = User.query.filter(User.uname == 'bubblegum').one()
+        result = self.client.get(f'/users/{user.id}/followers')
+        self.assertIn(b'simon', result.data)
+
+
 class ModelTests(TestCase):
     """Database tests."""
 
