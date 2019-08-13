@@ -34,7 +34,7 @@ class FlaskTests(TestCase):
 
         print('\n\n\ntest user root\n\n\n')
         user = User.query.filter(User.uname=='lemongrab'
-                                 ).options(db.joinedload('posts')).one()
+                                 ).one()
         result = self.client.get(f"/users/{user.id}")
         self.assertIn(b'million', result.data)
 
@@ -44,7 +44,7 @@ class FlaskTests(TestCase):
 
         print('\n\n\ntest user bookmarks\n\n\n')
         user = User.query.filter(User.uname=='marceline'
-                                 ).options(db.joinedload('bookmarks')).one()
+                                 ).one()
         result = self.client.get(f'/users/{user.id}/bookmarks')
         self.assertIn(b'million', result.data)
 
