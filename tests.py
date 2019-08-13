@@ -23,10 +23,9 @@ class FlaskTests(TestCase):
         """Do this after each test."""
 
         print('\n\n\n...tearing down...\n\n\n')
-        Post.query.delete()
-        User.query.delete()
-        Reference.query.delete()
-        Bookmark.query.delete()
+        db.session.remove()
+        db.drop_all()
+        db.engine.dispose()
 
 
     def test_user_root(self):
@@ -85,10 +84,9 @@ class ModelTests(TestCase):
         """Do this after each test."""
 
         print('\n\n\n...tearing down...\n\n\n')
-        Post.query.delete()
-        User.query.delete()
-        Reference.query.delete()
-        Bookmark.query.delete()
+        db.session.remove()
+        db.drop_all()
+        db.engine.dispose()
 
 
     def test_post_references(self):
