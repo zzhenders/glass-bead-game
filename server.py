@@ -127,14 +127,15 @@ def create_post():
     uid = request.form.get('uid')
 
     references = request.form.get('references', [])
-    references = Post.query.filter(Post.id.in_(references).all())
+    references = Post.query.filter(Post.id.in_(references)).all()
 
     new_post = Post(title=title, content=content, references=references,
                     uid=uid, created=datetime.utcnow())
+    db.session.add(new_post)
     db.session.commit()
     post_id = new_post.id
 
-    return redirect(f'posts/{post_id}')
+    return redirect(f'/posts/{post_id}')
 
 
 @app.route("/posts/<post_id>")
