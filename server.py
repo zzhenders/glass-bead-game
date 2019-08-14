@@ -3,6 +3,7 @@
 # Flask server for Glass Bead Game. Contains routes.
 
 from flask import Flask, redirect, request, render_template, session, jsonify
+from flask import abort
 from flask_sqlalchemy import SQLAlchemy
 from model import User, Post, Bookmark, Reference, Follower
 from model import connect_to_db, DB_URI, db
@@ -230,9 +231,13 @@ def edit_post(post_id):
     user_id = request.form.get('user_id')
 
     references = request.form.get('references', [])
-    references = Post.query.filter(Post.id.in_(references).all())
+    references = Post.query.filter(Post.id.in_(references)).all()
 
     post = Post.query.filter(Post.id == post_id).one()
+
+    if post.erased:
+        abort(403, 'Cannot update erased post.')
+
     post.title, post.content, post.references = title, content, references
     db.session.commit()
 
