@@ -99,6 +99,10 @@ def create_bookmark(user_id):
     """Adds a bookmark to the user's bookmarks."""
 
     post_id = request.form.get('post_id')
+
+    if Post.query.filter(Post.id == post_id).one().erased:
+        abort(403, 'Cannot bookmark erased post.')
+
     new_bookmark = Bookmark(user_id=user_id, post_id=post_id)
     db.session.add(new_bookmark)
     db.session.commit()
@@ -136,7 +140,9 @@ def user_followers_recent(user_id):
     #
     user = User.query.filter(User.id == user_id).one()
 
-    dict_of_posts = {follower.id: Post.query.filter(Post.user_id == follower.id
+    dict_of_posts = {follower.id: Post.query.filter(
+                                Post.user_id == follower.id,
+                                Post.erased == False,
                                 ).order_by('created')[-1].to_dictionary()
                      for follower
                      in user.followers}
@@ -170,7 +176,9 @@ def user_following_recent(user_id):
     #
     user = User.query.filter(User.id == user_id).one()
 
-    dict_of_posts = {followed.id: Post.query.filter(Post.user_id == followed.id
+    dict_of_posts = {followed.id: Post.query.filter(
+                                Post.user_id == followed.id,
+                                Post.erased == False,
                                 ).order_by('created')[-1].to_dictionary()
                      for followed
                      in user.followed}
@@ -190,7 +198,8 @@ def search_posts():
     search_terms = request.args.get("terms")
     list_of_posts = Post.search_for(search_terms)  #list of Post objects 
     dict_of_posts = {post.id: post.to_dictionary()
-                     for post in list_of_posts}
+                     for post in list_of_posts
+                     if not post.erased}
     return jsonify(dict_of_posts)
 
 
@@ -203,7 +212,8 @@ def create_post():
     user_id = request.form.get('user_id')
 
     references = request.form.get('references', [])
-    references = Post.query.filter(Post.id.in_(references)).all()
+    references = Post.query.filter(Post.id.in_(references),
+                                   Post.erased == False).all()
 
     new_post = Post(title=title, content=content, references=references,
                     user_id=user_id, created=datetime.utcnow())
@@ -219,7 +229,11 @@ def post(post_id):
     """A particular post."""
 
     post = Post.query.filter(Post.id == post_id).one()
-    return jsonify(post.to_dictionary())
+
+    if post.erased:
+        return jsonify(post.was_erased())
+    else:
+        return jsonify(post.to_dictionary())
 
 
 @app.route("/posts/<post_id>/edit", methods=['POST'])
@@ -253,6 +267,10 @@ def erase_post(post_id):
     """
 
     post = Post.query.filter(Post.id == post_id).one()
+    
+    if post.erased:
+        abort(403, 'Cannot erase an erased post.')
+
     post.title, post.content= '', ''
     post.erased = True
     db.session.commit()
@@ -266,7 +284,8 @@ def responses(post_id):
 
     post = Post.query.filter(Post.id == post_id).one()
     dict_of_posts = {post.id: post.to_dictionary()
-                     for post in post.responses}
+                     for post in post.responses
+                     if not post.erased}
     return jsonify(dict_of_posts)
 
 
