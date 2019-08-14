@@ -4,8 +4,8 @@
 
 from flask import Flask, redirect, request, render_template, session, jsonify
 from flask_sqlalchemy import SQLAlchemy
-from model import User, Post, Bookmark, Reference, Follower,\
-                  connect_to_db, DB_URI, db
+from model import User, Post, Bookmark, Reference, Follower
+from model import connect_to_db, DB_URI, db
 from datetime import datetime
 
 app = Flask(__name__)
