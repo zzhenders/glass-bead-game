@@ -38,6 +38,16 @@ class FlaskTests(TestCase):
         self.assertIn(b'million', result.data)
 
 
+    def test_create_user(self):
+        """Test `/users/create` route."""
+
+        print('\n\n\ntest create user\n\n\n')
+        result = self.client.post(f'/users/create',
+                                  data={'uname': 'lemon'},
+                                  follow_redirects=True)
+        self.assertEquals(200, result.status_code)
+
+
     def test_delete_user(self):
         """Test `/users/<user_id>/delete"""
 
