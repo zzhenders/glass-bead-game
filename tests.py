@@ -38,6 +38,18 @@ class FlaskTests(TestCase):
         self.assertIn(b'million', result.data)
 
 
+    def test_delete_user(self):
+        """Test `/users/<user_id>/delete"""
+
+        print('\n\n\ntest delete user\n\n\n')
+        user_id = User.query.filter(User.uname=='lemongrab').one().id
+        result = self.client.post(f'/users/{user_id}/delete')
+        self.assertEqual(204, result.status_code)
+
+        check_post = Post.query.filter(Post.user_id == user_id).first()
+        self.assertEqual('', check_post.title)
+
+
     def test_user_bookmarks(self):
         """Test for `/users/<user_id>/bookmarks` route."""
 
