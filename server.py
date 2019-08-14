@@ -243,9 +243,17 @@ def edit_post(post_id):
 def erase_post(post_id):
     """Void a post.
 
-    Deletes content of a post. References will still exist until changed by
-    the relevant users.
+    Deletes content of a post. Responses will still exist until changed
+    by the relevant users.
     """
+
+    post = Post.query.filter(Post.id == post_id).one()
+    post.title, post.content= '', ''
+    post.erased = True
+    db.session.commit()
+
+    return ('', 204)  # status 204: success, no content
+
 
 @app.route("/posts/<post_id>/responses")
 def responses(post_id):
