@@ -118,11 +118,14 @@ class FlaskTests(TestCase):
         """Test that an erased post cannot be updated."""
 
         print('\n\n\ntest update erased post\n\n\n')
-        post_id = Post.query.filter(Post.title == 'Poor Lemongrab'
-                                 ).one().id
+        post = Post.query.filter(Post.title == 'Poor Lemongrab'
+                                 ).one()
+        post_id, user_id = post.id, post.user_id
         self.client.post(f'/posts/{post_id}/erase')
         result = self.client.post(f'/posts/{post_id}/edit',
-                         data={'title':'abc', 'content':'content'})
+                         data={'title':'abc',
+                               'content':'content',
+                               'user_id':user_id})
         self.assertEqual(403, result.status_code)
 
 
