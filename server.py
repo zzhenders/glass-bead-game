@@ -67,7 +67,7 @@ def follow_user(user_id):
     db.session.add(new_follow)
     db.session.commit()
 
-    return jsonify({'follow_id': new_follow.id})
+    return ('', 204)  # status 204: success, no content
 
 
 @app.route("/users/<user_id>/unfollow", methods=['POST'])
@@ -79,7 +79,8 @@ def unfollow_user(user_id):
 
     db.session.commit()
 
-    return jsonify({'unfollowed': True})
+    return ('', 204)  # status 204: success, no content
+
 
 @app.route("/users/<user_id>/bookmarks")
 def bookmarks(user_id):
@@ -101,8 +102,7 @@ def create_bookmark(user_id):
     db.session.add(new_bookmark)
     db.session.commit()
 
-    bookmark_id = new_bookmark.id
-    return jsonify({'bookmarked_post_id': post_id})
+    return ('', 204)  # status 204: success, no content
 
 
 @app.route("/users/<user_id>/bookmarks/delete", methods=['POST'])
@@ -113,7 +113,7 @@ def delete_bookmark(user_id):
     Bookmark.query.filter(Bookmark.id == bookmark_id).delete()
     db.session.commit()
 
-    return jsonify({'deleted': True})
+    return ('', 204)  # status 204: success, no content
 
 
 @app.route("/users/<user_id>/followers")
@@ -210,7 +210,7 @@ def create_post():
     db.session.commit()
     post_id = new_post.id
 
-    return redirect(f'/posts/{post_id}')
+    return redirect(f'/users/{user_id}/following/recent-posts')
 
 
 @app.route("/posts/<post_id>")
