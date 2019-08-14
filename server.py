@@ -58,6 +58,23 @@ def update_user(user_id):
 def delete_user(user_id):
     """Remove user."""
 
+    user = User.query.filter(User.id == user_id
+                             ).options(db.joinedload('posts')).one()
+
+    if user.deleted:
+        abort(403, 'Cannot delete a deleted user.')
+
+    user.uname = f'{user.uname} (deleted)'
+    user.deleted = True
+
+    for post in user.posts:
+        post.title, post.content= '', ''
+        post.erased = True
+    
+    db.session.commit()
+
+    return ('', 204) # status 204: success, no content
+
 @app.route("/users/<user_id>/follow", methods=['POST'])
 def follow_user(user_id):
     """Follow the user identified by `user_id`."""
@@ -267,7 +284,7 @@ def erase_post(post_id):
     """
 
     post = Post.query.filter(Post.id == post_id).one()
-    
+
     if post.erased:
         abort(403, 'Cannot erase an erased post.')
 
