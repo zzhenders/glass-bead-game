@@ -70,10 +70,14 @@ def delete_user(user_id):
     for post in user.posts:
         post.title, post.content= '', ''
         post.erased = True
+
+    Follower.query.filter(Follower.follower_id == user.id).delete()
+    Bookmark.query.filter(Bookmark.user_id == user_id).delete()
     
     db.session.commit()
 
     return ('', 204) # status 204: success, no content
+
 
 @app.route("/users/<user_id>/follow", methods=['POST'])
 def follow_user(user_id):

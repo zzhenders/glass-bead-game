@@ -48,6 +48,9 @@ class FlaskTests(TestCase):
 
         check_post = Post.query.filter(Post.user_id == user_id).first()
         self.assertEqual('', check_post.title)
+        self.assertEqual([],
+                         Follower.query.filter(Follower.follower_id == user_id
+                                               ).all())
 
 
     def test_user_bookmarks(self):
