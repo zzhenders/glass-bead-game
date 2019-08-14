@@ -54,6 +54,14 @@ class Post(db.Model):
 								   ('created', self.created),
 								   ]}
 
+	def was_erased(self):
+		"""Returns a dictionary representing an erased post."""
+
+		return {key: value
+				for key, value in [('id', self.id),
+								   ('user_id', self.user_id)
+								   ('erased', self.erased),
+								   ]}
 
 class User(db.Model):
 	"""A user."""
