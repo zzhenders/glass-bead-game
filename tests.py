@@ -76,6 +76,18 @@ class FlaskTests(TestCase):
         self.assertIn(b'bubblegum', result.data)
 
 
+    def test_updated_erased_post(self):
+        """Test that an erased post cannot be updated."""
+
+        print('\n\n\ntest update erased post\n\n\n')
+        post = Post.query.filter(Post.title == 'Poor Lemongrab'
+                                 ).one()
+        self.client.post(f'/posts/{post.id}/erase')
+        result = self.client.post(f'/posts/{post.id}/edit',
+                         data={'title':'abc', 'content':'content'})
+        self.assertIn(b'403', result.data)
+
+
 class ModelTests(TestCase):
     """Database tests."""
 
