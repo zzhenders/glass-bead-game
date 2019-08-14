@@ -21,12 +21,16 @@ def create_user():
     """Add a user."""
 
     uname = request.form.get('uname')
-    new_user = User(uname=uname)
-    db.session.add(new_user)
-    db.session.commit()
 
-    user_id = new_user.id
-    return redirect(f'/users/{user_id}')
+    if not uname:
+        abort(400)  # Bad request
+    else:
+        new_user = User(uname=uname)
+        db.session.add(new_user)
+        db.session.commit()
+
+        user_id = new_user.id
+        return redirect(f'/users/{user_id}')
 
 
 @app.route("/users/<user_id>")
@@ -46,12 +50,16 @@ def update_user(user_id):
     """Update user information."""
 
     uname = request.form.get('uname')
-    user = User.query.filter(uname=uname).one()
-    user_id = user.id
-    user.uname = uname
-    db.session.commit()
 
-    return redirect(f'/users/{user_id}')
+    if not uname:
+        abort(400)  # Bad request
+    else:
+        user = User.query.filter(uname=uname).one()
+        user_id = user.id
+        user.uname = uname
+        db.session.commit()
+
+        return redirect(f'/users/{user_id}')
 
 
 @app.route("/users/<user_id>/delete", methods=['POST'])
@@ -63,20 +71,20 @@ def delete_user(user_id):
 
     if user.deleted:
         abort(403, 'Cannot delete a deleted user.')
+    else:
+        user.uname = f'{user.uname} (deleted)'
+        user.deleted = True
 
-    user.uname = f'{user.uname} (deleted)'
-    user.deleted = True
+        for post in user.posts:
+            post.title, post.content= '', ''
+            post.erased = True
 
-    for post in user.posts:
-        post.title, post.content= '', ''
-        post.erased = True
+        Follower.query.filter(Follower.follower_id == user.id).delete()
+        Bookmark.query.filter(Bookmark.user_id == user_id).delete()
+        
+        db.session.commit()
 
-    Follower.query.filter(Follower.follower_id == user.id).delete()
-    Bookmark.query.filter(Bookmark.user_id == user_id).delete()
-    
-    db.session.commit()
-
-    return ('', 204) # status 204: success, no content
+        return ('', 204) # status 204: success, no content
 
 
 @app.route("/users/<user_id>/follow", methods=['POST'])
@@ -84,12 +92,16 @@ def follow_user(user_id):
     """Follow the user identified by `user_id`."""
 
     follower_id = request.form.get('uid')  # uid: the user making the request
-    new_follow = Follower(user_id=user_id, follower_id=follower_id)
 
-    db.session.add(new_follow)
-    db.session.commit()
+    if not follower_id:
+        abort(400)  # Bad request
+    else:
+        new_follow = Follower(user_id=user_id, follower_id=follower_id)
 
-    return ('', 204)  # status 204: success, no content
+        db.session.add(new_follow)
+        db.session.commit()
+
+        return ('', 204)  # status 204: success, no content
 
 
 @app.route("/users/<user_id>/unfollow", methods=['POST'])
@@ -97,11 +109,14 @@ def unfollow_user(user_id):
     """Follow the user identified by `user_id`."""
 
     follower_id = request.form.get('uid')  # uid: the user making the request
-    Follower.query.filter(user_id=user_id, follower_id=follower_id).delete()
+    if not follower_id:
+        abort(400)  # Bad request
+    else:
+        Follower.query.filter(user_id=user_id,
+                              follower_id=follower_id).delete()
+        db.session.commit()
 
-    db.session.commit()
-
-    return ('', 204)  # status 204: success, no content
+        return ('', 204)  # status 204: success, no content
 
 
 @app.route("/users/<user_id>/bookmarks")
@@ -121,14 +136,16 @@ def create_bookmark(user_id):
 
     post_id = request.form.get('post_id')
 
-    if Post.query.filter(Post.id == post_id).one().erased:
+    if not post_id:
+        abort(400)  # Bad request
+    elif Post.query.filter(Post.id == post_id).one().erased:
         abort(403, 'Cannot bookmark erased post.')
+    else:
+        new_bookmark = Bookmark(user_id=user_id, post_id=post_id)
+        db.session.add(new_bookmark)
+        db.session.commit()
 
-    new_bookmark = Bookmark(user_id=user_id, post_id=post_id)
-    db.session.add(new_bookmark)
-    db.session.commit()
-
-    return ('', 204)  # status 204: success, no content
+        return ('', 204)  # status 204: success, no content
 
 
 @app.route("/users/<user_id>/bookmarks/delete", methods=['POST'])
@@ -136,10 +153,14 @@ def delete_bookmark(user_id):
     """Adds a bookmark to the user's bookmarks."""
 
     bookmark_id = request.form.get('bookmark_id')
-    Bookmark.query.filter(Bookmark.id == bookmark_id).delete()
-    db.session.commit()
 
-    return ('', 204)  # status 204: success, no content
+    if not bookmark_id:
+        abort(400)  # Bad request
+    else:
+        Bookmark.query.filter(Bookmark.id == bookmark_id).delete()
+        db.session.commit()
+
+        return ('', 204)  # status 204: success, no content
 
 
 @app.route("/users/<user_id>/followers")
@@ -217,11 +238,15 @@ def search_posts():
     """Search for posts matching given criteria."""
 
     search_terms = request.args.get("terms")
-    list_of_posts = Post.search_for(search_terms)  #list of Post objects 
-    dict_of_posts = {post.id: post.to_dictionary()
-                     for post in list_of_posts
-                     if not post.erased}
-    return jsonify(dict_of_posts)
+
+    if not search_terms:
+        abort(400)  # Bad request
+    else:
+        list_of_posts = Post.search_for(search_terms)  #list of Post objects 
+        dict_of_posts = {post.id: post.to_dictionary()
+                         for post in list_of_posts
+                         if not post.erased}
+        return jsonify(dict_of_posts)
 
 
 @app.route("/posts/create", methods=['POST'])
@@ -232,17 +257,20 @@ def create_post():
     content = request.form.get('content')
     user_id = request.form.get('user_id')
 
-    references = request.form.get('references', [])
-    references = Post.query.filter(Post.id.in_(references),
-                                   Post.erased == False).all()
+    if not (title and content and user_id):
+        abort(400)  # Bad request        
+    else:
+        references = request.form.get('references', [])
+        references = Post.query.filter(Post.id.in_(references),
+                                       Post.erased == False).all()
 
-    new_post = Post(title=title, content=content, references=references,
-                    user_id=user_id, created=datetime.utcnow())
-    db.session.add(new_post)
-    db.session.commit()
-    post_id = new_post.id
+        new_post = Post(title=title, content=content, references=references,
+                        user_id=user_id, created=datetime.utcnow())
+        db.session.add(new_post)
+        db.session.commit()
+        post_id = new_post.id
 
-    return redirect(f'/users/{user_id}/following/recent-posts')
+        return redirect(f'/users/{user_id}/following/recent-posts')
 
 
 @app.route("/posts/<post_id>")
@@ -265,18 +293,21 @@ def edit_post(post_id):
     content = request.form.get('content')
     user_id = request.form.get('user_id')
 
-    references = request.form.get('references', [])
-    references = Post.query.filter(Post.id.in_(references)).all()
+    if not (title and content and user_id):
+        abort(400)  # Bad request        
+    else:
+        references = request.form.get('references', [])
+        references = Post.query.filter(Post.id.in_(references)).all()
 
-    post = Post.query.filter(Post.id == post_id).one()
+        post = Post.query.filter(Post.id == post_id).one()
 
-    if post.erased:
-        abort(403, 'Cannot update erased post.')
+        if post.erased:
+            abort(403, 'Cannot update erased post.')
 
-    post.title, post.content, post.references = title, content, references
-    db.session.commit()
+        post.title, post.content, post.references = title, content, references
+        db.session.commit()
 
-    return redirect(f'/users/{user_id}/following/recent-posts')
+        return redirect(f'/users/{user_id}/following/recent-posts')
 
 
 @app.route("/posts/<post_id>/erase", methods=['POST'])
