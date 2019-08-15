@@ -1,6 +1,14 @@
+import Main from "./Main"
+import Navbar from "./Navbar"
+
 class App extends React.Component {
 	render() {
-		return <p>Navbar & Content goes here</p>;
+		return (
+			<div>
+				<Navbar />
+				<Main />
+			</div>
+		);
 	}
 }
 
