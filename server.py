@@ -12,6 +12,13 @@ from datetime import datetime
 app = Flask(__name__)
 
 
+@app.route("/")
+def index():
+    """Serves index, and by extension the app."""
+
+    return render_template('index.html')
+
+
 @app.route("/users")
 def users():
     """All users."""
