@@ -95,6 +95,8 @@ def follow_user(user_id):
 
     if not follower_id:
         abort(400)  # Bad request
+    elif User.query.filter(User.id == user_id).one().erased:
+        abort(403, 'Cannot follow a deleted user.')
     else:
         new_follow = Follower(user_id=user_id, follower_id=follower_id)
 
