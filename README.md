@@ -1,1 +1,1 @@
-# glass-bead-game
+# Glassbeads
