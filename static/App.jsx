@@ -50,6 +50,7 @@ class Main extends React.Component {
 		this.props.posts.forEach((post) => {
 			posts.push(
 				<Post
+					key={post.id}
 					title={post.title}
 					content={post.content}
 				/>
@@ -58,8 +59,8 @@ class Main extends React.Component {
 		switch (this.state.page) {
 			case "aggregate":
 				return (
-					<div id="main">
-						<div className="view aggregate">
+					<div className="aggregate" id="main">
+						<div className="view flex-flow-row-wrap">
 							{posts}
 						</div>
 					</div>
@@ -68,9 +69,9 @@ class Main extends React.Component {
 
 			case "bead":		
 				return (
-					<div id="main">
+					<div className="bead" id="main">
 						<Panel />
-						<div className="view bead">
+						<div className="view">
 							<section className="post-extended">
 								<h1>There is a post here</h1>
 								<p>Paragraph here</p>

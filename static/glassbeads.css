@@ -4,8 +4,8 @@ body {
 
 #app {
 	display: grid;
-	grid-template-columns: 80px 1fr;
 	grid-template-areas: "nav main";
+	grid-template-columns: 80px 1fr;
 	background-color: #ccc;
 }
 
@@ -24,6 +24,22 @@ nav {
 	grid-area: main;
 }
 
+.aggregate {
+	grid-template-areas: 
+		"view";
+	grid-template-rows: 1fr;
+	padding: 10px;
+}
+
+.bead {
+	grid-template-areas:
+		"panel"
+		"view"
+		"panel";
+	grid-template-rows: 200px 1fr 200px;
+	padding: 10px;
+}
+
 .panel {
 	grid-area: panel;
 	display: inline-flex;
@@ -33,14 +49,9 @@ nav {
 	grid-area: view;
 }
 
-.aggregate {
+.flex-flow-row-wrap {
 	display: inline-flex;
 	flex-flow: row wrap;
-	padding: 10px;
-}
-
-.bead {
-	padding: 10px;
 }
 
 .post {
