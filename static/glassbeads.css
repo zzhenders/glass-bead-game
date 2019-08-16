@@ -22,17 +22,25 @@ nav {
 
 #main {
 	grid-area: main;
+}
+
+.panel {
+	grid-area: panel;
+	display: inline-flex;
+}
+
+.view {
+	grid-area: view;
+}
+
+.aggregate {
 	display: inline-flex;
 	flex-flow: row wrap;
 	padding: 10px;
 }
 
-.panel {
-	grid-area: panel;
-}
-
-.view {
-	grid-area: view;
+.bead {
+	padding: 10px;
 }
 
 .post {
