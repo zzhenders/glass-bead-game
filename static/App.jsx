@@ -69,52 +69,31 @@ class Main extends React.Component {
 			case "bead":		
 				return (
 					<div id="main">
-						<div className="panel" id="references">
-							<div className="post-tile">
-								<h1>There is a post here</h1>
-								<p>Paragraph here</p>
-							</div>
-							<div className="post-tile">
-								<h1>There is a post here</h1>
-								<p>Paragraph here</p>
-							</div>
-							<div className="post-tile">
-								<h1>There is a post here</h1>
-								<p>Paragraph here</p>
-							</div>
-							<div className="post-tile">
-								<h1>There is a post here</h1>
-								<p>Paragraph here</p>
-							</div>
-						</div>
+						<Panel />
 						<div className="view bead">
 							<section className="post-extended">
 								<h1>There is a post here</h1>
 								<p>Paragraph here</p>
 							</section>
 						</div>
-						<div className="panel" id="responses">
-							<div className="post-tile">
-								<h1>There is a post here</h1>
-								<p>Paragraph here</p>
-							</div>
-							<div className="post-tile">
-								<h1>There is a post here</h1>
-								<p>Paragraph here</p>
-							</div>
-							<div className="post-tile">
-								<h1>There is a post here</h1>
-								<p>Paragraph here</p>
-							</div>
-							<div className="post-tile">
-								<h1>There is a post here</h1>
-								<p>Paragraph here</p>
-							</div>
-						</div>
+						<Panel />
 					</div>
 				);
 				break;
 		}
+	}
+}
+
+class Panel extends React.Component {
+	render() {
+		return (
+			<div className="panel" id="references">
+				<div className="post-tile">
+					<h1>There is a post here</h1>
+					<p>Paragraph here</p>
+				</div>
+			</div>
+		)
 	}
 }
 
