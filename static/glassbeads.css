@@ -1,0 +1,43 @@
+body {
+	margin: 0;
+}
+
+#app {
+	display: grid;
+	grid-template-columns: 80px 1fr;
+	grid-template-areas: "nav main";
+	background-color: #ccc;
+}
+
+nav {
+	grid-area: nav;
+	align-items: center;
+	background-color: #888;
+	display: inline-flex;
+	flex-flow: column;
+	height: 100vh;
+	padding: 20px;
+	/*width: 80px;*/
+}
+
+#main {
+	grid-area: main;
+	display: inline-flex;
+	flex-flow: row wrap;
+	padding: 10px;
+}
+
+.panel {
+	grid-area: panel;
+}
+
+.view {
+	grid-area: view;
+}
+
+.post {
+	border: 1px solid black;
+	max-height: 300px;
+	margin: 10px;
+	padding: 10px;
+}
