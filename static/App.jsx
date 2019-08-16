@@ -3,7 +3,7 @@ class App extends React.Component {
 		return (
 			<div id="app">
 				<Navbar />
-				<Main />
+				<Main posts={this.props.posts}/>
 			</div>
 		);
 	}
@@ -46,23 +46,21 @@ class Main extends React.Component {
 	}
 
 	render() {
+		let posts = [];
+		this.props.posts.forEach((post) => {
+			posts.push(
+				<Post
+					title={post.title}
+					content={post.content}
+				/>
+			);	
+		});
 		switch (this.state.page) {
 			case "aggregate":
 				return (
 					<div id="main">
 						<div className="view aggregate">
-							<section className="post">
-								<h1>There is a post here</h1>
-								<p>Paragraph here</p>
-							</section>
-							<section className="post">
-								<h1>There is a post here</h1>
-								<p>Paragraph here</p>
-							</section>
-							<section className="post">
-								<h1>There is a post here</h1>
-								<p>Paragraph here</p>
-							</section>
+							{posts}
 						</div>
 					</div>
 				);
@@ -120,7 +118,50 @@ class Main extends React.Component {
 	}
 }
 
+class Post extends React.Component {
+	render() {
+		return (
+			<section className="post">
+				<h1>{this.props.title}</h1>
+				<p>{this.props.content}</p>
+			</section>
+		)
+	}
+}
+
+const posts_static = [
+	{
+		id: 1,
+		title: "Poor Lemongrab",
+		content: "You try your best",
+		user_id: 2,
+		created: 1,
+	},
+	{
+		id: 2,
+		title: "One Million Years Dungeon!!",
+		content: "AaAAaaaAAaaaAaaaaAAAaAaaa",
+		user_id: 1,
+		created: 1,
+	},
+	{
+		id: 3,
+		title: "Here's a song I just wrote",
+		content: "Song song song song song song song",
+		user_id: 3,
+		created: 1,
+	},
+	{
+		id: 4,
+		title: "Gunther",
+		content: "You are very very bad!",
+		user_id: 4,
+		created: 1,
+	}
+]
+
 ReactDOM.render(
-	<App />,
+	<App posts={posts_static} />,
 	document.getElementById("root")
 );
+
