@@ -55,7 +55,7 @@ class Main extends React.Component {
 
 			case "bead":		
 				return (
-					<Bead />
+					<Bead posts={this.props.posts}/>
 				);
 				break;
 		}
@@ -88,14 +88,14 @@ class Bead extends React.Component {
 	render() {
 		return(
 			<div className="bead" id="main">
-				<Panel />
+				<Panel type="references" posts={this.props.posts} />
 				<div className="view">
 					<section className="post-extended">
 						<h1>There is a post here</h1>
 						<p>Paragraph here</p>
 					</section>
 				</div>
-				<Panel />
+				<Panel type="responses" posts={this.props.posts} />
 			</div>
 		);
 	}
@@ -103,14 +103,22 @@ class Bead extends React.Component {
 
 class Panel extends React.Component {
 	render() {
+		let posts = [];
+		Object.entries(this.props.posts).forEach(([key, post]) => {
+			posts.push(
+				<PostTile
+					key={key}
+					title={post.title}
+					content={post.content}
+				/>
+			);	
+		});
+		let classAttribute = `panel ${this.props.type}`
 		return (
-			<div className="panel" id="references">
-				<div className="post-tile">
-					<h1>There is a post here</h1>
-					<p>Paragraph here</p>
-				</div>
+			<div className={classAttribute} id="references">
+				{posts}
 			</div>
-		)
+		);
 	}
 }
 
@@ -121,7 +129,18 @@ class Post extends React.Component {
 				<h1>{this.props.title}</h1>
 				<p>{this.props.content}</p>
 			</section>
-		)
+		);
+	}
+}
+
+class PostTile extends React.Component {
+	render() {
+		return (
+			<section className="post-tile">
+				<h1>{this.props.title}</h1>
+				<p>{this.props.content}</p>
+			</section>
+		);
 	}
 }
 
