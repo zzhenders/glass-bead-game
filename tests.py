@@ -28,13 +28,13 @@ class FlaskTests(TestCase):
         db.engine.dispose()
 
 
-    def test_user_root(self):
-        """Test `/users/<user_id>` route."""
+    def test_user_posts(self):
+        """Test `/users/<user_id>/posts` route."""
 
         print('\n\n\ntest user root\n\n\n')
         user = User.query.filter(User.uname=='lemongrab'
                                  ).one()
-        result = self.client.get(f"/users/{user.id}")
+        result = self.client.get(f"/users/{user.id}/posts")
         self.assertIn(b'million', result.data)
 
 

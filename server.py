@@ -37,11 +37,11 @@ def create_user():
         db.session.commit()
 
         user_id = new_user.id
-        return redirect(f'/users/{user_id}')
+        return redirect(f'/users/{user_id}/posts')
 
 
-@app.route("/users/<user_id>")
-def user_root(user_id):
+@app.route("/users/<user_id>/posts")
+def user_posts(user_id):
     """User root directory."""
 
     user = User.query.filter(User.id == user_id
@@ -66,7 +66,7 @@ def update_user(user_id):
         user.uname = uname
         db.session.commit()
 
-        return redirect(f'/users/{user_id}')
+        return redirect(f'/users/{user_id}/posts')
 
 
 @app.route("/users/<user_id>/delete", methods=['POST'])
