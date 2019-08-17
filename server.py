@@ -33,6 +33,16 @@ def aggregate():
                            )
 
 
+@app.route("/bead")
+def bead():
+    """Serves bead view."""
+
+    post_id = request.args.get('postid')
+    return render_template('bead.html',
+                           post_id=post_id,
+                           )
+
+
 @app.route("/users/unames")
 def users():
     """The usernames associated with user ids."""

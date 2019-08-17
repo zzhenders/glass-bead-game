@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block body %}
+	<div className="bead" id="main">
+		<div class="panel references"></div>
+		<div class="view"></div>
+		<div class="panel responses"></div>
+	</div>
+{% endblock %}
+
+{% block js %}
+	<script type="text/javascript">
+		let postid = '{{ post_id }}';
+	</script>
+	<script type="text/javascript" src="/static/bead.js"></script>
+{% endblock %}

@@ -3,7 +3,9 @@ function aggregatePostsHandler(results){
 	Object.entries(results).forEach(([key, post]) => {
 		posts +=
 			`<section class="post">
-				<h1>${post.title}</h1>
+				<a href="/bead?postid=${post.id}">
+					<h1>${post.title}</h1>
+				</a>
 				<p>${post.content}</p>
 			</section>`
 		;	
