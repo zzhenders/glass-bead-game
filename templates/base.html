@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Glassbeads</title>
+	<link rel="stylesheet" href="/static/glassbeads.css">
+</head>
+<body>
+	<noscript>You need to enable JavaScript to run Glassbeads.</noscript>
+
+  <div id="app">
+    <nav>
+      <img src="" alt="Home" />
+      <img src="" alt="Bookmarks" />
+      <img src="" alt="Root" />
+      <img src="" alt="Add" />
+      <img src="" alt="Settings" />
+      <img src="" alt="Search" />
+      <img src="" alt="Logout" />
+    </nav>
+
+  	{% block body %}{% endblock %}
+  </div>
+
+  	<script crossorigin type="text/javascript" src="https://unpkg.com/react@16/umd/react.development.js"></script>
+  	<script crossorigin type="text/javascript" src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+  	<script crossorigin type="text/javascript" src="https://unpkg.com/@babel/standalone/babel.min.js" ></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+  	<!--
+  		<script type="text/jsx" src="/static/App.jsx"></script>
+  	-->
+  	{% block js %}{% endblock %}
+</body>
+</html>

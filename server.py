@@ -19,9 +19,25 @@ def index():
     return render_template('index.html')
 
 
-@app.route("/users")
+@app.route("/aggregate")
+def aggregate():
+    """Serves aggregate view."""
+
+    api = request.args.get('api')
+    api = '/'.join(api.split('.'))
+    # data = request.args.get(data)
+
+    return render_template('aggregate.html',
+                           api=api,
+                           # data=data,
+                           )
+
+
+@app.route("/users/unames")
 def users():
-    """All users."""
+    """The usernames associated with user ids."""
+    pass
+
 
 @app.route("/users/create", methods=['POST'])
 def create_user():
