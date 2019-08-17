@@ -25,23 +25,34 @@ nav {
 }
 
 .aggregate {
+	display: grid;
 	grid-template-areas: 
 		"view";
 	grid-template-rows: 1fr;
+	grid-template-columns: 1fr;
 	padding: 10px;
 }
 
 .bead {
+	display: grid;
 	grid-template-areas:
-		"panel"
+		"references"
 		"view"
-		"panel";
+		"responses";
 	grid-template-rows: 200px 1fr 200px;
+	grid-template-columns: 1fr;
 	padding: 10px;
 }
 
+.references {
+	grid-area: references;
+}
+
+.responses {
+	grid-area: responses;
+}
+
 .panel {
-	grid-area: panel;
 	display: inline-flex;
 }
 
