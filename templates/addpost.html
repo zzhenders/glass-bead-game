@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block body %}
+	<div className="edit view" id="main">
+		<form class="editor" method="post" action="/posts/create">
+			references: <input type="text" name="references">
+			user id: <input type="number" name="user_id">
+			title: <input type="text" name="title">
+			content: <input type="text" name="content">
+			submit: <input type="submit" name="submit">
+		</form>
+	</div>
+{% endblock %}
+
+{% block js %}
+	<script type="text/javascript" src="/static/addpost.js"></script>
+{% endblock %}

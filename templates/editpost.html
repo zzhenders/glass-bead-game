@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block body %}
+	<div className="edit view" id="main">
+		<form class="editor" method="post" action="/posts/{{post.post_id}}/edit>">
+			references: <input type="text" name="references" value="{{references}}">
+			title: <input type="text" name="title" value="{{post.title}}">
+			content: <input type="text" name="content" value="{{post.content}}">
+			submit: <input type="submit" name="submit">
+		</form>
+	</div>
+{% endblock %}
+
+{% block js %}
+	<script type="text/javascript" src="/static/editpost.js"></script>
+{% endblock %}
