@@ -7,6 +7,7 @@ function aggregatePostsHandler(results){
 					<h1>${post.title}</h1>
 				</a>
 				<p>${post.content}</p>
+				<b>${post.user_id}</b>
 			</section>`
 		;	
 	});
