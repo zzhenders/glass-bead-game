@@ -19,6 +19,31 @@ def index():
     return render_template('index.html')
 
 
+@app.route("/addpost")
+def addpost():
+    """Add post."""
+
+    return render_template("addpost.html")
+
+
+@app.route("/editpost")
+def editpost():
+    """Edit post."""
+
+    post_id = request.args.get("postid")
+
+    post = Post.query.filter(Post.id == post_id).one()
+
+    references = []
+    for reference in post.references:
+        references.append(str(reference.id))
+    references = '.'.join(references) 
+
+    return render_template("editpost.html",
+                           post=post,
+                           references=references,)
+
+
 @app.route("/aggregate")
 def aggregate():
     """Serves aggregate view."""
@@ -46,7 +71,12 @@ def bead():
 @app.route("/users/unames")
 def users():
     """The usernames associated with user ids."""
-    pass
+    
+    user_ids = request.args.get('userids')
+    user_ids = user_ids.split('.')
+    users = User.query.filter(User.id.in_(user_ids)).all()
+    return jsonify({user.id: user.uname
+                    for user in users})
 
 
 @app.route("/users/create", methods=['POST'])
@@ -295,7 +325,8 @@ def create_post():
     if not (title and content and user_id):
         abort(400)  # Bad request        
     else:
-        references = request.form.get('references', [])
+        references = request.form.get('references', '')
+        references = references.split('.')
         references = Post.query.filter(Post.id.in_(references),
                                        Post.erased == False).all()
 
