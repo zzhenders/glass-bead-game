@@ -24,7 +24,6 @@ function panelPostsHandler(url='', direction='') {
 function extendedPostHandler(url) {
 	return fetch(url, {method: 'GET'})
 	.then(response => {return response.json()}).then(data => {
-		console.log(data);
 		const extPost =
 				`<section class="post-extended">
 					<h1>${data.title}</h1>
