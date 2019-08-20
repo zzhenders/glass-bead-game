@@ -74,6 +74,7 @@ def users():
     
     user_ids = request.args.get('userids')
     user_ids = user_ids.split('.')
+    user_ids = [int(user_id) for user_id in user_ids]
     users = User.query.filter(User.id.in_(user_ids)).all()
     return jsonify({user.id: user.uname
                     for user in users})
