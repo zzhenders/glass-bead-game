@@ -9,13 +9,17 @@
 
   <div id="app">
     <nav>
-      <a href="/aggregate?api=.users.2.following.recent-posts"><img src="" alt="Home" /></a>
-      <a href="/aggregate?api=.users.2.bookmarks"><img src="" alt="Bookmarks" /></a>
-      <a href="/aggregate?api=.users.2.posts"><img src="" alt="Root" /></a>
+      <a id="home" href=""><img src="" alt="Home" /></a>
+      <a id="bookmarks" href=""><img src="" alt="Bookmarks" /></a>
+      <a id="userroot" href=""><img src="" alt="Root" /></a>
       <a href="/addpost"><img src="" alt="Add" /></a>
       <img src="" alt="Settings" />
       <img src="" alt="Search" />
       <img src="" alt="Logout" />
+      <form id="login" action="">
+        <input id='uid-setter' type="number" name="uid" style="width: 50px;"><br>
+        <input type="submit" value="login">
+      </form>
     </nav>
 
   	{% block body %}{% endblock %}
@@ -28,6 +32,34 @@
   	<!--
   		<script type="text/jsx" src="/static/App.jsx"></script>
   	-->
+    <script type="text/javascript">
+        
+        const homeLink = document.querySelector('#home')
+        const bookmarksLink = document.querySelector('#bookmarks')
+        const rootLink = document.querySelector('#userroot')
+
+        const loginForm = document.querySelector('#login')
+
+        function updateLinks(uid) {
+          homeLink.setAttribute("href", `/aggregate?api=.users.${uid}.following.recent-posts`);
+          bookmarksLink.setAttribute("href", `/aggregate?api=.users.${uid}.bookmarks`);
+          rootLink.setAttribute("href", `/aggregate?api=.users.${uid}.posts`);
+        }
+
+        if (document.cookie) {
+          loginForm.elements.uid.value = parseInt(document.cookie.slice(4));
+          updateLinks(loginForm.elements.uid.value);
+        }
+
+        loginForm.addEventListener('submit', (evt) => {
+          evt.preventDefault();
+          let uid = loginForm.elements.uid.value;
+          uid = 'uid='+uid;
+          document.cookie = uid;
+          updateLinks(uid.slice(4));
+          });
+
+    </script>
   	{% block js %}{% endblock %}
 </body>
 </html>
