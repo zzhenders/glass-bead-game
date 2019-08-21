@@ -14,7 +14,8 @@ function panelPostsHandler(url='', direction='') {
 						<h1>${post.title}</h1>
 					</a>
 					<p>${post.content}</p>
-					<b class="u${post.user_id}">${post.user_id}</b>
+					<a href="aggregate?api=.users.${post.user_id}.posts"
+					class="u${post.user_id}"></a>
 				</section>`;
 			UserIds.add(post.user_id);	
 		});
@@ -30,7 +31,8 @@ function extendedPostHandler(url) {
 				`<section class="post-extended">
 					<h1>${data.title}</h1>
 					<p>${data.content}</p>
-					<b class="u${data.user_id}">${data.user_id}</b>
+					<a href="aggregate?api=.users.${data.user_id}.posts"
+					class="u${data.user_id}"></a>
 					<a href="/editpost?postid=${data.id}">edit</a>
 				</section>`;
 		$('.view').html(extPost);
@@ -44,7 +46,8 @@ function getUsernames() {
 		.then(response => {return response.json()})
 		.then(data => {
 			Object.entries(data).forEach(([key, user]) => {
-				$(`.u${key}`).html(user);});
+				$(`.u${key}`).html(user);
+			});
 		});
 	}
 }

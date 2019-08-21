@@ -12,7 +12,8 @@ function aggregatePostsHandler(api='') {
 						<h1>${post.title}</h1>
 					</a>
 					<p>${post.content}</p>
-					<b class="u${post.user_id}">${post.user_id}</b>
+					<a href="aggregate?api=.users.${post.user_id}.posts"
+					class="u${post.user_id}"></a>
 					<i id="bookmarker pb${post.id}"></i>
 				</section>`;
 			UserIds.add(post.user_id);
@@ -27,7 +28,8 @@ function getUsernames() {
 		.then(response => {return response.json()})
 		.then(data => {
 			Object.entries(data).forEach(([key, user]) => {
-				$(`.u${key}`).html(user);})
+				$(`.u${key}`).html(user);
+			})
 		});
 	}
 }
