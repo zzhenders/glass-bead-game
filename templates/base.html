@@ -14,7 +14,13 @@
       <a id="userroot" href=""><img src="" alt="Root" /></a>
       <a href="/addpost"><img src="" alt="Add" /></a>
       <img src="" alt="Settings" />
-      <img src="" alt="Search" />
+      <img id="search" src="" alt="Search">
+        <form id="search-form"
+        action="#"
+        style="display: none">
+          <input id="search-terms" type="text" name="terms">
+          <input type="submit" value="submit">
+        </form>
       <img src="" alt="Logout" />
       <form id="login" action="">
         <input id='uid-setter' type="number" name="uid" style="width: 50px;"><br>
@@ -37,6 +43,8 @@
         const homeLink = document.querySelector('#home')
         const bookmarksLink = document.querySelector('#bookmarks')
         const rootLink = document.querySelector('#userroot')
+        const searchLink = document.querySelector("#search")
+        const searchForm = document.querySelector("#search-form")
 
         const loginForm = document.querySelector('#login')
 
@@ -44,6 +52,24 @@
           homeLink.setAttribute("href", `/aggregate?api=.users.${uid}.following.recent-posts`);
           bookmarksLink.setAttribute("href", `/aggregate?api=.users.${uid}.bookmarks`);
           rootLink.setAttribute("href", `/aggregate?api=.users.${uid}.posts`);
+        }
+
+        function searchToggle(evt) {
+          evt.preventDefault();
+          if (searchForm.style.display === "none") {
+            searchForm.style.display = "block"; 
+          } else {
+            searchForm.style.display = "none";
+          }
+        }
+
+        function searchForTerms(evt) {
+          evt.preventDefault();
+          let searchTerms = evt.target.elements.terms.value
+          if (searchTerms) {
+            let searchURI = `/aggregate?api=.posts.search?terms=${searchTerms}`;
+            window.location.href = searchURI;
+          } 
         }
 
         if (document.cookie) {
@@ -58,6 +84,9 @@
           document.cookie = uid;
           updateLinks(uid.slice(4));
           });
+
+        searchLink.addEventListener('click', searchToggle);
+        searchForm.addEventListener('submit', searchForTerms);
 
     </script>
   	{% block js %}{% endblock %}
