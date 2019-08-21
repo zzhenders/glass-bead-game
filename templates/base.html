@@ -13,7 +13,7 @@
       <a id="bookmarks" href=""><img src="" alt="Bookmarks" /></a>
       <a id="userroot" href=""><img src="" alt="Root" /></a>
       <a href="/addpost"><img src="" alt="Add" /></a>
-      <img src="" alt="Settings" />
+      <a id="user-settings" href=""><img src="" alt="Settings" /></a>
       <img id="search" src="" alt="Search">
         <form id="search-form"
         action="#"
@@ -43,6 +43,7 @@
         const homeLink = document.querySelector('#home')
         const bookmarksLink = document.querySelector('#bookmarks')
         const rootLink = document.querySelector('#userroot')
+        const userSettingsLink = document.querySelector('#user-settings')
         const searchLink = document.querySelector("#search")
         const searchForm = document.querySelector("#search-form")
 
@@ -52,6 +53,7 @@
           homeLink.setAttribute("href", `/aggregate?api=.users.${uid}.following.recent-posts`);
           bookmarksLink.setAttribute("href", `/aggregate?api=.users.${uid}.bookmarks`);
           rootLink.setAttribute("href", `/aggregate?api=.users.${uid}.posts`);
+          userSettingsLink.setAttribute('href', `/edituser?uid=${uid}`)
         }
 
         function searchToggle(evt) {
