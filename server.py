@@ -233,12 +233,13 @@ def create_bookmark(user_id):
 def delete_bookmark(user_id):
     """Adds a bookmark to the user's bookmarks."""
 
-    bookmark_id = request.form.get('bookmark_id')
+    post_id = request.form.get('post_id')
 
-    if not bookmark_id:
+    if not (post_id and user_id):
         abort(400)  # Bad request
     else:
-        Bookmark.query.filter(Bookmark.id == bookmark_id).delete()
+        Bookmark.query.filter(Bookmark.post_id == int(post_id),
+                              Bookmark.user_id == int(user_id)).delete()
         db.session.commit()
 
         return ('', 204)  # status 204: success, no content
@@ -359,8 +360,13 @@ def create_post():
     else:
         references = request.form.get('references', '')
         references = references.split('.')
-        references = Post.query.filter(Post.id.in_(references),
-                                       Post.erased == False).all()
+        print(references)
+        if references != ['']:
+            references = map(int, references)
+            references = Post.query.filter(Post.id.in_(references),
+                                           Post.erased == False).all()
+        else:
+            references = []
 
         new_post = Post(title=title, content=content, references=references,
                         user_id=user_id, created=datetime.utcnow())
