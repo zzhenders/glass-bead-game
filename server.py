@@ -54,6 +54,26 @@ def editpost():
                            references=references,)
 
 
+@app.route("/adduser")
+def adduser():
+    """Add user."""
+
+    return render_template("adduser.html")
+
+
+@app.route("/edituser")
+def edituser():
+    """Edit user."""
+
+    uid = int(request.args.get("uid"))
+
+    user = User.query.filter(User.id == uid).one()
+
+    return render_template("edituser.html",
+                           uid=uid,
+                           user=user)
+
+
 @app.route("/aggregate")
 def aggregate():
     """Serves aggregate view."""
