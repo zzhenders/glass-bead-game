@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block body %}
+	<div class="user view" id="main">
+		<form class="user-editor" method="post" action="/users/create">
+			username: <input type="text" name="uname">
+			submit: <input type="submit" name="submit">
+		</form>
+	</div>
+{% endblock %}
+
+{% block js %}
+{% endblock %}
