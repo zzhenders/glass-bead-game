@@ -2,11 +2,10 @@ window.UserIds = new Set()
 
 function aggregatePostsHandler(api='') {
 	return fetch(api, {method: 'GET'})
-	.then(response => {return response.json()}).then(data => {
-		// console.log(data);
+	.then(response => {return response.json()})
+	.then(data => {
 		let posts = '';
 		Object.entries(data).forEach(([key, post]) => {
-			// console.log(key, post);
 			posts +=
 				`<section class="post">
 					<a href="/bead?postid=${post.id}">
@@ -23,11 +22,15 @@ function aggregatePostsHandler(api='') {
 }
 
 function getUsernames() {
-	return fetch(`/users/unames?userids=${Array.from(UserIds).join('.')}`)
-	.then(response => {return response.json()}).then(data => {
-		Object.entries(data).forEach(([key, user]) => {
-					$(`.u${key}`).html(user);});
-	});
+	if (UserIds.size != 0) {
+		return fetch(`/users/unames?userids=${Array.from(UserIds).join('.')}`)
+		.then(response => {return response.json()})
+		.then(data => {
+			Object.entries(data).forEach(([key, user]) => {
+				$(`.u${key}`).html(user);})
+		});
+	}
 }
 
-aggregatePostsHandler(api).then(getUsernames)
+aggregatePostsHandler(api)
+.then(getUsernames);

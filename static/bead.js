@@ -2,7 +2,8 @@ window.UserIds = new Set()
 
 function panelPostsHandler(url='', direction='') {
 	return fetch(url, {method: 'GET'})
-	.then(response => {return response.json()}).then(data => {
+	.then(response => {return response.json()})
+	.then(data => {
 		// console.log(data);
 		let posts = '';
 		Object.entries(data).forEach(([key, post]) => {
@@ -23,7 +24,8 @@ function panelPostsHandler(url='', direction='') {
 
 function extendedPostHandler(url) {
 	return fetch(url, {method: 'GET'})
-	.then(response => {return response.json()}).then(data => {
+	.then(response => {return response.json()})
+	.then(data => {
 		const extPost =
 				`<section class="post-extended">
 					<h1>${data.title}</h1>
@@ -37,15 +39,19 @@ function extendedPostHandler(url) {
 }
 
 function getUsernames() {
-	return fetch(`/users/unames?userids=${Array.from(UserIds).join('.')}`)
-	.then(response => {return response.json()}).then(data => {
-		Object.entries(data).forEach(([key, user]) => {
-					$(`.u${key}`).html(user);});
-	});
+	if (UserIds.size != 0) {
+		return fetch(`/users/unames?userids=${Array.from(UserIds).join('.')}`)
+		.then(response => {return response.json()})
+		.then(data => {
+			Object.entries(data).forEach(([key, user]) => {
+				$(`.u${key}`).html(user);});
+		});
+	}
 }
 
 a = panelPostsHandler(`/posts/${postid}/references`, '.references');
 b = panelPostsHandler(`/posts/${postid}/responses`, '.responses');
 c = extendedPostHandler(`/posts/${postid}`)
 
-Promise.all([a, b, c]).then(getUsernames);
+Promise.all([a, b, c])
+.then(getUsernames)
