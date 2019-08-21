@@ -109,7 +109,7 @@ def create_user():
         db.session.commit()
 
         user_id = new_user.id
-        return redirect(f'/users/{user_id}/posts')
+        return redirect(f'/aggregate?api=.users.{user_id}.posts')
 
 
 @app.route("/users/<user_id>/posts")
@@ -138,7 +138,7 @@ def update_user(user_id):
         user.uname = uname
         db.session.commit()
 
-        return redirect(f'/users/{user_id}/posts')
+        return redirect(f'/aggregate?api=.users.{user_id}.posts')
 
 
 @app.route("/users/<user_id>/delete", methods=['POST'])
@@ -215,7 +215,7 @@ def bookmarks(user_id):
 def create_bookmark(user_id):
     """Adds a bookmark to the user's bookmarks."""
 
-    post_id = request.form.get('post_id')
+    post_id = int(request.form.get('post_id'))
 
     if not post_id:
         abort(400)  # Bad request
@@ -233,13 +233,13 @@ def create_bookmark(user_id):
 def delete_bookmark(user_id):
     """Adds a bookmark to the user's bookmarks."""
 
-    post_id = request.form.get('post_id')
+    post_id = int(request.form.get('post_id'))
 
     if not (post_id and user_id):
         abort(400)  # Bad request
     else:
-        Bookmark.query.filter(Bookmark.post_id == int(post_id),
-                              Bookmark.user_id == int(user_id)).delete()
+        Bookmark.query.filter(Bookmark.post_id == post_id,
+                              Bookmark.user_id == user_id).delete()
         db.session.commit()
 
         return ('', 204)  # status 204: success, no content
@@ -374,7 +374,7 @@ def create_post():
         db.session.commit()
         post_id = new_post.id
 
-        return redirect(f'/users/{user_id}/following/recent-posts')
+        return redirect(f'/aggregate?api=.users.{user_id}.following.recent-posts')
 
 
 @app.route("/posts/<post_id>")
@@ -400,7 +400,9 @@ def edit_post(post_id):
     if not (title and content and user_id):
         abort(400)  # Bad request        
     else:
-        references = request.form.get('references', [])
+        references = request.form.get('references', '')
+        references = references.split('.')
+        references = map(int, references)
         references = Post.query.filter(Post.id.in_(references)).all()
 
         post = Post.query.filter(Post.id == post_id).one()
@@ -411,7 +413,7 @@ def edit_post(post_id):
         post.title, post.content, post.references = title, content, references
         db.session.commit()
 
-        return redirect(f'/users/{user_id}/following/recent-posts')
+        return redirect(f'/aggregate?api=.users.{user_id}.following.recent-posts')
 
 
 @app.route("/posts/<post_id>/erase", methods=['POST'])
