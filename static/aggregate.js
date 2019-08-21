@@ -1,4 +1,5 @@
-window.UserIds = new Set()
+window.UserIds = new Set();
+window.PostIds = new Set();
 
 function aggregatePostsHandler(api='') {
 	return fetch(api, {method: 'GET'})
@@ -14,9 +15,10 @@ function aggregatePostsHandler(api='') {
 					<p>${post.content}</p>
 					<a href="aggregate?api=.users.${post.user_id}.posts"
 					class="u${post.user_id}"></a>
-					<i id="bookmarker pb${post.id}"></i>
+					<i class="bookmarker" id="pb${post.id}"></i>
 				</section>`;
 			UserIds.add(post.user_id);
+			PostIds.add(post.id);
 		});
 		$('#main').html(posts);
 	});
@@ -34,5 +36,24 @@ function getUsernames() {
 	}
 }
 
+function getBookmarks() {
+	if (PostIds.size != 0) {
+		uid = parseInt(document.cookie.slice(4));
+		return fetch(`/posts/bookmarked?postids=${Array.from(PostIds).join('.')}&uid=${uid}`)
+		.then(response => {return response.json()})
+		.then(data => {
+			Object.entries(data).forEach(([key, value]) => {
+				if (value) {
+					console.log(value);
+					$(`#pb${key}`).html('unbookmark');
+				} else {
+					$(`#pb${key}`).html('bookmark');
+
+				}
+			})
+		})
+	}
+}
+
 aggregatePostsHandler(api)
-.then(getUsernames);
+.then(getUsernames).then(getBookmarks);
