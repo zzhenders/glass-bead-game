@@ -12,11 +12,21 @@ from datetime import datetime
 app = Flask(__name__)
 
 
+#################################
+#  REACT IMPLEMENTATION (TODO)  #
+#################################
+
+
 @app.route("/")
 def index():
     """Serves index, and by extension the app."""
 
     return render_template('index.html')
+
+
+#############################
+#  JINJA/JS IMPLEMENTATION  #
+#############################
 
 
 @app.route("/addpost")
@@ -66,6 +76,11 @@ def bead():
     return render_template('bead.html',
                            post_id=post_id,
                            )
+
+
+#################
+#  API BACKEND  #
+#################
 
 
 @app.route("/users/unames")
