@@ -15,7 +15,9 @@ function aggregatePostsHandler(api='') {
 					<p>${post.content}</p>
 					<a href="aggregate?api=.users.${post.user_id}.posts"
 					class="u${post.user_id}"></a>
-					<i class="bookmarker" id="pb${post.id}"></i>
+					<i class="bookmarker"
+					id="pb${post.id}"
+					post-id="${post.id}"></i>
 				</section>`;
 			UserIds.add(post.user_id);
 			PostIds.add(post.id);
@@ -36,6 +38,27 @@ function getUsernames() {
 	}
 }
 
+function bookmarker(evt) {
+	post_id = evt.target.attributes['post-id'].value;
+	if (evt.target.innerHTML === "unbookmark") {
+		return fetch(`/users/${uid}/bookmarks/delete`, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/x-www-form-urlencoded',
+			},
+			body: `post_id=${post_id}`,
+		}).then(() => $(`#pb${post_id}`).html('bookmark'));
+	} else if (evt.target.innerHTML === "bookmark") {
+		return fetch(`/users/${uid}/bookmarks/create`, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/x-www-form-urlencoded',
+			},
+			body: `post_id=${post_id}`,
+		}).then(() => $(`#pb${post_id}`).html('unbookmark'));
+	}
+}
+
 function getBookmarks() {
 	if (PostIds.size != 0) {
 		uid = parseInt(document.cookie.slice(4));
@@ -48,8 +71,8 @@ function getBookmarks() {
 					$(`#pb${key}`).html('unbookmark');
 				} else {
 					$(`#pb${key}`).html('bookmark');
-
 				}
+				$(`#pb${key}`).click(bookmarker);
 			})
 		})
 	}
