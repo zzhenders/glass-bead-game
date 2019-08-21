@@ -314,6 +314,22 @@ def user_following_recent(user_id):
 def posts():
     """I don't know yet but this seems important to have."""
 
+@app.route("/posts/bookmarked")
+def bookmarked():
+    """Returns boolean dictionary of whether a post has been bookmarked."""
+
+    uid = request.args.get('uid')
+    post_ids = request.args.get('postids')
+    post_ids = post_ids.split('.')
+    response = {int(post_id): False for post_id in post_ids}
+    bookmarked = Bookmark.query.filter(Bookmark.post_id.in_(post_ids),
+                                  Bookmark.user_id == uid).all()
+    response.update({bookmark.post_id: True
+                    for bookmark in bookmarked})
+    print(response)
+    return jsonify(response)
+
+
 @app.route("/posts/search")
 def search_posts():
     """Search for posts matching given criteria."""
