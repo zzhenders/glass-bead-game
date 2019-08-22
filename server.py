@@ -123,13 +123,15 @@ def create_user():
 
     if not uname:
         abort(400)  # Bad request
-    else:
+    elif uname.isprintable():
         new_user = User(uname=uname)
         db.session.add(new_user)
         db.session.commit()
 
         user_id = new_user.id
         return redirect(f'/aggregate?api=.users.{user_id}.posts')
+    else:
+        abort(400)  # Bad request
 
 
 @app.route("/users/<user_id>/posts")
@@ -152,13 +154,15 @@ def update_user(user_id):
 
     if not uname:
         abort(400)  # Bad request
-    else:
+    elif uname.isprintable():
         user = User.query.filter(uname=uname).one()
         user_id = user.id
-        user.uname = uname
+        user.uname = uname.lower()
         db.session.commit()
 
         return redirect(f'/aggregate?api=.users.{user_id}.posts')
+    else:
+        abort(400)  # Bad request
 
 
 @app.route("/users/<user_id>/delete", methods=['POST'])
