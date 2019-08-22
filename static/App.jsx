@@ -13,13 +13,14 @@ class Navbar extends React.Component {
 	render() {
 		return (
 			<nav>
-				<NavButton alt="Home"/>
-				<NavButton alt="Root"/>
-				<NavButton alt="Bookmarks"/>
-				<NavButton alt="Add"/>
-				<NavButton alt="Search"/>
-				<NavButton alt="Settings"/>
-				<NavButton alt="Logout"/>
+				<NavButton id="home-btn" alt="Home"/>
+				<NavButton id="bookmarks-btn" alt="Bookmarks"/>
+				<NavButton id="userroot-btn" alt="Root"/>
+				<NavButton id="add-post-btn" alt="Add"/>
+				<NavButton id="search-btn" alt="Search"/>
+				<SearchForm />
+				<NavButton id="settings-btn" alt="Settings"/>
+				<NavButton id="logout-btn" alt="Logout"/>
 			</nav>
 		);
 	}
@@ -32,8 +33,24 @@ class NavButton extends React.Component {
 
 	render() {
 		return (
-			<img src="" alt={this.props.alt} onClick={this.alertMessage} />
+			<img id={this.props.id}
+			src=""
+			alt={this.props.alt}
+			onClick={this.alertMessage} />
 		);
+	}
+}
+
+class SearchForm extends React.Component {
+	render() {
+		return (
+			<form id="search-form"
+        	action="#"
+        	style="display: none">
+          		<input id="search-terms" type="text" name="terms">
+          		<input type="submit" value="submit">
+        	</form>
+        );
 	}
 }
 
