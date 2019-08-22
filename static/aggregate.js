@@ -67,7 +67,6 @@ function getBookmarks() {
 		.then(data => {
 			Object.entries(data).forEach(([key, value]) => {
 				if (value) {
-					console.log(value);
 					$(`#pb${key}`).html('unbookmark');
 				} else {
 					$(`#pb${key}`).html('bookmark');
@@ -78,5 +77,10 @@ function getBookmarks() {
 	}
 }
 
+function secondWind() {
+	getBookmarks();
+	getUsernames();
+}
+
 aggregatePostsHandler(api)
-.then(getUsernames).then(getBookmarks);
+.then(secondWind);

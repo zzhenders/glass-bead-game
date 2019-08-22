@@ -97,9 +97,14 @@ function getUsernames() {
 	}
 }
 
+function secondWind() {
+	getBookmarks();
+	getUsernames();
+}
+
 a = panelPostsHandler(`/posts/${postid}/references`, '.references');
 b = panelPostsHandler(`/posts/${postid}/responses`, '.responses');
 c = extendedPostHandler(`/posts/${postid}`)
 
 Promise.all([a, b, c])
-.then(getUsernames).then(getBookmarks);
+.then(secondWind);
