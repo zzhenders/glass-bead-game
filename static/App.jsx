@@ -1,9 +1,27 @@
 class App extends React.Component {
+	constructor(props) {
+	    super(props);
+
+	    this.state = {
+	    	page: "aggregate",
+	    	data: {},
+	    };
+  	}
+
+  	setView = (viewPage, viewData) => {
+  		return () => {
+  			this.setState(state => ({
+  				page: viewPage,
+  				data: viewData,
+  			}));
+  		}
+  	} 
+
 	render() {
 		return (
 			<div id="app">
 				<Navbar />
-				<Main posts={this.props.posts}/>
+				<Main page={this.state.page} data={this.state.data}/>
 			</div>
 		);
 	}
@@ -65,24 +83,17 @@ class SearchForm extends React.Component {
 }
 
 class Main extends React.Component {
-	constructor() {
-		super();
-		this.state = {
-			page: "aggregate" // Set current page view, default aggregate
-		};
-	}
-
 	render() {
-		switch (this.state.page) {
+		switch (this.props.page) {
 			case "aggregate":
 				return (
-					<Aggregate posts={this.props.posts}/>
+					<Aggregate data={this.props.data}/>
 				);
 				break;
 
 			case "bead":		
 				return (
-					<Bead posts={this.props.posts}/>
+					<Bead data={this.props.data}/>
 				);
 				break;
 		}
