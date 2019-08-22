@@ -10,15 +10,29 @@ class App extends React.Component {
 }
 
 class Navbar extends React.Component {
-	render() {
+	constructor(props) {
+	    super(props);
+
+	    this.state = {
+	    	isShowSearch: false,
+	    };
+  	}
+
+  	toggleShowSearch = () => {
+  		this.setState(state => ({
+  			isShowSearch: !state.isShowSearch
+  		}));
+  	};
+
+  	render() {
 		return (
 			<nav>
 				<NavButton id="home-btn" alt="Home"/>
 				<NavButton id="bookmarks-btn" alt="Bookmarks"/>
 				<NavButton id="userroot-btn" alt="Root"/>
 				<NavButton id="add-post-btn" alt="Add"/>
-				<NavButton id="search-btn" alt="Search"/>
-				<SearchForm />
+				<NavButton id="search-btn" alt="Search" onClick={this.toggleShowSearch}/>
+				{this.state.isShowSearch ? <SearchForm /> : null}
 				<NavButton id="settings-btn" alt="Settings"/>
 				<NavButton id="logout-btn" alt="Logout"/>
 			</nav>
@@ -27,16 +41,13 @@ class Navbar extends React.Component {
 }
 
 class NavButton extends React.Component {
-	alertMessage = () => {
-		alert("You Clicked");
-	}
 
 	render() {
 		return (
 			<img id={this.props.id}
 			src=""
 			alt={this.props.alt}
-			onClick={this.alertMessage} />
+			onClick={this.props.onClick} />
 		);
 	}
 }
@@ -45,10 +56,9 @@ class SearchForm extends React.Component {
 	render() {
 		return (
 			<form id="search-form"
-        	action="#"
-        	style="display: none">
-          		<input id="search-terms" type="text" name="terms">
-          		<input type="submit" value="submit">
+        	action="#">
+          		<input id="search-terms" type="text" name="terms" />
+          		<input type="submit" value="submit" />
         	</form>
         );
 	}
