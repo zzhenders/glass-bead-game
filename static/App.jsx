@@ -3,7 +3,7 @@ class App extends React.Component {
 	    super(props);
 
 	    this.state = {
-	    	data: {},
+	    	data: "/posts/search?terms=e",
 	    	page: "aggregate",
 	    	uid: 2,
 	    };
@@ -96,15 +96,13 @@ class Main extends React.Component {
   	}
 
   	setBookmarker = (uid, post_id) => {
-  		return () => {
-  			if (this.isBookmarked(post_id)) {
-  				this.updateBookmark(uid, post_id, 'delete')
-  				.then(this.removeBookmark(post_id));
-  			} else {
-  				this.updateBookmark(uid, post_id, 'create')
-  				.then(this.addBookmark(post_id));
-  			}
-  		}
+		if (this.isBookmarked(post_id)) {
+			this.updateBookmark(uid, post_id, 'delete')
+			.then(this.removeBookmark(post_id));
+		} else {
+			this.updateBookmark(uid, post_id, 'create')
+			.then(this.addBookmark(post_id));
+		}
   	}
 
   	updateBookmark(uid, post_id, action) {
@@ -144,7 +142,7 @@ class Main extends React.Component {
 		switch (this.props.page) {
 			case "aggregate":
 				return (
-					<Aggregate data={this.props.data} bookmarker={this.setBookmarker}/>
+					<Aggregate uid={this.props.uid} data={this.props.data} bookmarker={this.setBookmarker}/>
 				);
 				break;
 
@@ -158,12 +156,35 @@ class Main extends React.Component {
 }
 
 class Aggregate extends React.Component {
+	constructor(props) {
+	    super(props);
+	    this.state = {
+	    	posts: new Object(),
+	    	isLoaded: false,
+	    };
+	}
+
+	componentDidMount() {
+		fetch(this.props.data)
+		.then(response => {return response.json()})
+		.then(
+			(data) => {
+				console.log(data);
+				this.setState({
+					posts: data,
+					isLoaded: true,
+				})}
+		);
+	}
+
 	render() {
 		let posts = [];
-		Object.entries(this.props.data).forEach(([key, post]) => {
+		Object.entries(this.state.posts).forEach(([key, post]) => {
 			posts.push(
 				<Post
+					uid={this.props.uid}
 					key={key}
+					post_id={post.id}
 					title={post.title}
 					content={post.content}
 					user_id={post.user_id}
@@ -224,7 +245,7 @@ class Post extends React.Component {
 			<section className="post">
 				<h1>{this.props.title}</h1>
 				<p>{this.props.content}</p>
-				<Bookmarker post_id={this.props.post_id} />
+				<Bookmarker uid={this.props.uid} post_id={this.props.post_id} onClick={this.props.bookmarker}/>
 			</section>
 		);
 	}
@@ -243,10 +264,12 @@ class PostTile extends React.Component {
 
 class Bookmarker extends React.Component {
 	render() {
+		const uid = this.props.uid;
+		const post_id = this.props.post_id;
 		return (
 			<i className="bookmarker"
-			id="pb${this.props.post_id}"
-			onClick={this.props.onClick(this.props.post_id)}>
+			id="pb${post_id}"
+			onClick={ () => {this.props.onClick(uid, post_id)} }>'hi'
 			</i>
 		);
 	}
