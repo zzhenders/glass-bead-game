@@ -3,8 +3,9 @@ class App extends React.Component {
 	    super(props);
 
 	    this.state = {
-	    	page: "aggregate",
 	    	data: {},
+	    	page: "aggregate",
+	    	uid: 2,
 	    };
   	}
 
@@ -21,7 +22,7 @@ class App extends React.Component {
 		return (
 			<div id="app">
 				<Navbar />
-				<Main page={this.state.page} data={this.state.data}/>
+				<Main page={this.state.page} data={this.state.data} uid={this.state.uid}/>
 			</div>
 		);
 	}
@@ -83,17 +84,73 @@ class SearchForm extends React.Component {
 }
 
 class Main extends React.Component {
+	constructor(props) {
+	    super(props);
+	    this.state = {
+	    	bookmarks: new Set(),
+	    };
+	    this.setBookmarker = this.setBookmarker.bind(this);
+	    this.addBookmark = this.addBookmark.bind(this);
+	    this.removeBookmark = this.removeBookmark.bind(this);
+	    this.isBookmarked = this.isBookmarked.bind(this);
+  	}
+
+  	setBookmarker = (uid, post_id) => {
+  		return () => {
+  			if (this.isBookmarked(post_id)) {
+  				this.updateBookmark(uid, post_id, 'delete')
+  				.then(this.removeBookmark(post_id));
+  			} else {
+  				this.updateBookmark(uid, post_id, 'create')
+  				.then(this.addBookmark(post_id));
+  			}
+  		}
+  	}
+
+  	updateBookmark(uid, post_id, action) {
+  		return () => {
+  			uri = `/users/${uid}/bookmarks/${action}`
+  			fetch(uri, {
+  				method: 'POST',
+				headers: {
+					'Content-Type': 'application/x-www-form-urlencoded',
+				},
+				body: `post_id=${post_id}`,
+  			});
+  		}
+  	}
+
+  	addBookmark(post_id) {
+  		this.setState(({bookmarks}) => {
+  			bookmarks: new Set(bookmarks).add(post_id)
+  		});
+  	}
+
+  	removeBookmark(post_id) {
+  		this.setState(({bookmarks}) => {
+  			const newBookmarks = new Set(bookmarks);
+  			newBookmarks.delete(post_id);
+  			return {
+  				bookmarks: newBookmarks
+  			};
+  		});
+  	}
+
+  	isBookmarked(post_id) {
+  		return this.state.bookmarks.has(post_id);
+  	}
+
 	render() {
 		switch (this.props.page) {
 			case "aggregate":
 				return (
-					<Aggregate data={this.props.data}/>
+					<Aggregate data={this.props.data} bookmarker={this.setBookmarker}/>
 				);
 				break;
 
 			case "bead":		
 				return (
-					<Bead data={this.props.data}/>
+					<Bead data={this.props.data} bookmarker={this.setBookmarker}/>
 				);
 				break;
 		}
@@ -103,12 +160,13 @@ class Main extends React.Component {
 class Aggregate extends React.Component {
 	render() {
 		let posts = [];
-		Object.entries(this.props.posts).forEach(([key, post]) => {
+		Object.entries(this.props.data).forEach(([key, post]) => {
 			posts.push(
 				<Post
 					key={key}
 					title={post.title}
 					content={post.content}
+					user_id={post.user_id}
 				/>
 			);	
 		});
@@ -126,14 +184,14 @@ class Bead extends React.Component {
 	render() {
 		return(
 			<div className="bead" id="main">
-				<Panel type="references" posts={this.props.posts} />
+				<Panel type="references" data={this.props.data} />
 				<div className="view">
 					<section className="post-extended">
 						<h1>There is a post here</h1>
 						<p>Paragraph here</p>
 					</section>
 				</div>
-				<Panel type="responses" posts={this.props.posts} />
+				<Panel type="responses" data={this.props.data} />
 			</div>
 		);
 	}
@@ -142,7 +200,7 @@ class Bead extends React.Component {
 class Panel extends React.Component {
 	render() {
 		let posts = [];
-		Object.entries(this.props.posts).forEach(([key, post]) => {
+		Object.entries(this.props.data).forEach(([key, post]) => {
 			posts.push(
 				<PostTile
 					key={key}
@@ -166,6 +224,7 @@ class Post extends React.Component {
 			<section className="post">
 				<h1>{this.props.title}</h1>
 				<p>{this.props.content}</p>
+				<Bookmarker post_id={this.props.post_id} />
 			</section>
 		);
 	}
@@ -182,39 +241,19 @@ class PostTile extends React.Component {
 	}
 }
 
-const posts_static = {
-	1: {
-		id: 1,
-		title: "Poor Lemongrab",
-		content: "You try your best",
-		user_id: 2,
-		created: 1,
-	},
-	2: {
-		id: 2,
-		title: "One Million Years Dungeon!!",
-		content: "AaAAaaaAAaaaAaaaaAAAaAaaa",
-		user_id: 1,
-		created: 1,
-	},
-	3: {
-		id: 3,
-		title: "Here's a song I just wrote",
-		content: "Song song song song song song song",
-		user_id: 3,
-		created: 1,
-	},
-	4: {
-		id: 4,
-		title: "Gunther",
-		content: "You are very very bad!",
-		user_id: 4,
-		created: 1,
+class Bookmarker extends React.Component {
+	render() {
+		return (
+			<i className="bookmarker"
+			id="pb${this.props.post_id}"
+			onClick={this.props.onClick(this.props.post_id)}>
+			</i>
+		);
 	}
 }
 
 ReactDOM.render(
-	<App posts={posts_static} />,
+	<App />,
 	document.getElementById("root")
 );
 
