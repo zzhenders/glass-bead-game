@@ -7,9 +7,10 @@ class App extends React.Component {
 	    	page: "aggregate",
 	    	uid: 2,
 	    };
+	    this.setView = this.setView.bind(this);
   	}
 
-  	setView = (viewPage, viewData) => {
+  	setView(viewPage, viewData) {
   		return () => {
   			this.setState(state => ({
   				page: viewPage,
@@ -21,8 +22,8 @@ class App extends React.Component {
 	render() {
 		return (
 			<div id="app">
-				<Navbar />
-				<Main page={this.state.page} data={this.state.data} uid={this.state.uid}/>
+				<Navbar setView={this.setView} uid={this.state.uid}/>
+				<Main setView={this.setView} page={this.state.page} data={this.state.data} uid={this.state.uid}/>
 			</div>
 		);
 	}
@@ -44,9 +45,10 @@ class Navbar extends React.Component {
   	};
 
   	render() {
+  		const uid = this.props.uid;
 		return (
 			<nav>
-				<NavButton id="home-btn" alt="Home"/>
+				<NavButton id="home-btn" alt="Home" onClick={this.setView('aggregate', `/users/${uid}/following/recent-posts`)} />
 				<NavButton id="bookmarks-btn" alt="Bookmarks"/>
 				<NavButton id="userroot-btn" alt="Root"/>
 				<NavButton id="add-post-btn" alt="Add"/>
@@ -164,17 +166,27 @@ class Aggregate extends React.Component {
 	    };
 	}
 
-	componentDidMount() {
-		fetch(this.props.data)
+	fetchPosts(api) {
+		fetch(api)
 		.then(response => {return response.json()})
 		.then(
 			(data) => {
-				console.log(data);
 				this.setState({
 					posts: data,
 					isLoaded: true,
-				})}
+				});
+			}
 		);
+	}
+
+	componentDidMount() {
+		this.fetchPosts(this.props.data);
+	}
+
+	componentDidUpdate(prevProps) {
+		if (prevProps.data != this.props.data) { 
+			this.fetchPosts(this.props.data);
+		}
 	}
 
 	render() {
