@@ -1,6 +1,5 @@
 import React from 'react';
-import logo from './logo.svg';
-import './NavButton';
+import NavButton from './NavButton';
 
 class Navbar extends React.Component {
 	constructor(props) {
@@ -37,3 +36,5 @@ class Navbar extends React.Component {
 		);
 	}
 }
+
+export default Navbar;

@@ -2,8 +2,8 @@ import React from 'react';
 import logo from './logo.svg';
 import './Api';
 import './App.css';
-import './Navbar';
-import './Main';
+import Navbar from './Navbar';
+import Main from './Main';
 
 class App extends React.Component {
   constructor(props) {
