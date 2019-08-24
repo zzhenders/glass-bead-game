@@ -1,4 +1,5 @@
 import React from 'react';
+import Panel from './Panel';
 
 class Bead extends React.Component {
 	render() {
