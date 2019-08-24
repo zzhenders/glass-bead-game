@@ -1,5 +1,6 @@
 import React from 'react';
 import NavButton from './NavButton';
+import SearchForm from './SearchForm';
 
 class Navbar extends React.Component {
 	constructor(props) {
