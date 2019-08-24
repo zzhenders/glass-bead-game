@@ -1,5 +1,6 @@
 import React from 'react';
 import Aggregate from './Aggregate';
+import Bead from './Bead';
 import { updateBookmark } from './Api';
 
 class Main extends React.Component {
