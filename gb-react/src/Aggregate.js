@@ -23,7 +23,7 @@ class Aggregate extends React.Component {
 	}
 
 	componentDidUpdate(prevProps) {
-		if (prevProps.data != this.props.data) { 
+		if (prevProps.data !== this.props.data) { 
 			getPosts(this.props.data).then(
 				(data) => {
 					this.setState({
