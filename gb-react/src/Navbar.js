@@ -28,26 +28,32 @@ class Navbar extends React.Component {
 				<NavButton
 					id="home-btn"
 					alt="Home"
-					onClick={this.setView(
-						'aggregate',
-						`/users/${uid}/following/recent-posts`
-					)}
+					onClick={() => {
+						this.props.setView(
+							'aggregate',
+							`/users/${uid}/following/recent-posts`
+						)}
+					}
 				/>
 				<NavButton
 					id="bookmarks-btn"
 					alt="Bookmarks"
-					onClick={this.setView(
-						'aggregate',
-						`/users/${uid}/bookmarks`
-					)}
+					onClick={() => {
+						this.props.setView(
+							'aggregate',
+							`/users/${uid}/bookmarks`
+						)}
+					}
 				/>
 				<NavButton
 					id="userroot-btn"
 					alt="Root"
-					onClick={this.setView(
-						'aggregate',
-						`/users/${uid}/posts`
-					)}
+					onClick={() => {
+						this.props.setView(
+							'aggregate',
+							`/users/${uid}/posts`
+						)}
+					}
 				/>
 				<NavButton
 					id="add-post-btn"
@@ -57,7 +63,10 @@ class Navbar extends React.Component {
 					id="search-btn"
 					alt="Search"
 					onClick={this.toggleShowSearch}/>
-				{this.state.isShowSearch ? <SearchForm /> : null}
+				{this.state.isShowSearch
+					? <SearchForm setView={this.props.setView}/>
+					: null
+				}
 				<NavButton id="settings-btn" alt="Settings"/>
 				<NavButton id="logout-btn" alt="Logout"/>
 			</nav>

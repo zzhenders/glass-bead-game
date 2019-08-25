@@ -18,12 +18,10 @@ class App extends React.Component {
     }
 
     setView(viewPage, viewData) {
-      return () => {
-        this.setState(state => ({
-          page: viewPage,
-          data: viewData,
-        }));
-      }
+      this.setState(state => ({
+        page: viewPage,
+        data: viewData,
+      }));
     } 
 
   render() {
