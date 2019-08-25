@@ -2,4 +2,29 @@ env/
 .DS_Store
 __pycache__/
 node_modules/
-/gb-react/node_modules/
+
+# React #
+
+# dependencies
+gb-react/node_modules/
+gb-react/.pnp
+gb-react.pnp.js
+
+# testing
+gb-react/coverage
+
+# production
+gb-react/build
+
+# misc
+gb-react/.DS_Store
+gb-react/.env.local
+gb-react/.env.development.local
+gb-react/.env.test.local
+gb-react/.env.production.local
+gb-react/.gitignore
+gb-react/README.md
+
+gb-react/npm-debug.log*
+gb-react/yarn-debug.log*
+gb-react/yarn-error.log*
