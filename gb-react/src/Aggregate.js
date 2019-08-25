@@ -46,6 +46,7 @@ class Aggregate extends React.Component {
 					title={post.title}
 					content={post.content}
 					user_id={post.user_id}
+					bookmarker={this.props.bookmarker}
 				/>
 			);	
 		});

@@ -7,7 +7,7 @@ class Post extends React.Component {
 			<section className="post">
 				<h1>{this.props.title}</h1>
 				<p>{this.props.content}</p>
-				<Bookmarker uid={this.props.uid} post_id={this.props.post_id} onClick={this.props.bookmarker}/>
+				<Bookmarker uid={this.props.uid} post_id={this.props.post_id} bookmarker={this.props.bookmarker}/>
 			</section>
 		);
 	}
