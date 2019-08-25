@@ -22,7 +22,6 @@ class SearchForm extends React.Component {
   	}
 
 	render() {
-		console.log(this.state.terms);
 		return (
 			<form
 				onSubmit={this.handleSubmit}

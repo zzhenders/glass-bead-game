@@ -5,10 +5,8 @@ if (process.env.NODE_ENV === 'production') {
 
 export function getPosts(api) {
 	let uri = `${apiBase}${api}`
-	console.log(uri)
 	return fetch(uri, {
 	}).then(response => {
-		console.log(response);
 		return response.json()
 	});
 }
