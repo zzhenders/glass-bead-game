@@ -1,7 +1,7 @@
 import React from 'react';
 import logo from './logo.svg';
 import './Api';
-import './App.css';
+import './glassbeads.css';
 import Navbar from './Navbar';
 import Main from './Main';
 

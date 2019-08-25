@@ -1,0 +1,79 @@
+body {
+  margin: 0;
+}
+
+#app {
+  display: grid;
+  grid-template-areas: "nav main";
+  grid-template-columns: auto 1fr;
+  background-color: #ccc;
+}
+
+nav {
+  grid-area: nav;
+  align-items: center;
+  background-color: #888;
+  display: inline-flex;
+  flex-flow: column;
+  height: 100vh;
+  padding: 20px;
+  /*width: 80px;*/
+}
+
+#main {
+  grid-area: main;
+}
+
+.aggregate {
+  display: grid;
+  grid-template-areas: 
+    "view";
+  grid-template-rows: 1fr;
+  grid-template-columns: 1fr;
+  padding: 10px;
+}
+
+.bead {
+  display: grid;
+  grid-template-areas:
+    "references"
+    "view"
+    "responses";
+  grid-template-rows: 200px 1fr 200px;
+  grid-template-columns: 1fr;
+  padding: 10px;
+}
+
+.references {
+  grid-area: references;
+}
+
+.responses {
+  grid-area: responses;
+}
+
+.panel {
+  display: inline-flex;
+}
+
+.view {
+  grid-area: view;
+  padding: 5px;
+}
+
+.flex-flow-row-wrap {
+  display: inline-flex;
+  flex-flow: row wrap;
+}
+
+.post {
+  border: 1px solid black;
+  max-height: 300px;
+  margin: 10px;
+  padding: 10px;
+}
+
+.post-tile {
+  border: 1px solid black;
+  padding: 10px;
+}
