@@ -20,6 +20,14 @@ export function getUsernames(arrayOfUsernames) {
 	});
 }
 
+export function getBookmarks(arrayOfPostIds, uid) {
+	let uri = `${apiBase}/posts/bookmarked?postids=${arrayOfPostIds.join('.')}&uid=${uid}`
+	return fetch(uri)
+	.then(response => {
+		return response.json()
+	});
+}
+
 export function updateBookmark(uid, post_id, action) {
 	let uri = `${apiBase}/users/${uid}/bookmarks/${action}`
 	return fetch(uri, {
