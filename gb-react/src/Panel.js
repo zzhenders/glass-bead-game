@@ -1,19 +1,24 @@
 import React from 'react';
-import PostTile from './Panel';
+import PostTile from './PostTile';
 
 class Panel extends React.Component {
 	render() {
 		let posts = [];
-		Object.entries(this.props.data).forEach(([key, post]) => {
+		let classAttribute = `panel ${this.props.type}`
+		Object.entries(this.props.posts).forEach(([key, post]) => {
 			posts.push(
 				<PostTile
 					key={key}
+					post_id={post.id}
 					title={post.title}
 					content={post.content}
+					user_id={post.user_id}
+					users={this.props.users}
+					beadIsLoaded={this.props.beadIsLoaded}
+					setView={this.props.setView}
 				/>
-			);	
+			);
 		});
-		let classAttribute = `panel ${this.props.type}`
 		return (
 			<div className={classAttribute} id="references">
 				{posts}
