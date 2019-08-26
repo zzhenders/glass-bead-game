@@ -70,7 +70,7 @@ class Bead extends React.Component {
 
 	}
 
-	componentDidMount() {
+	loadBead() {
 		let a = getPosts(`/posts/${this.props.data}/references`).then(
 			(data) => {
 				this.setState({references: data})
@@ -104,42 +104,13 @@ class Bead extends React.Component {
 		});
 	}
 
+	componentDidMount() {
+		this.loadBead();
+	}
+
 	componentDidUpdate(prevProps) {
 		if (prevProps.data !== this.props.data) {
-			let a = getPosts(`/posts/${this.props.data}/references`)
-			.then(
-				(data) => {
-					this.setState({references: data})
-				});
-			let b = getPosts(`/posts/${this.props.data}`)
-			.then(
-				(data) => {
-					this.setState({post: data})
-				});
-			let c = getPosts(`/posts/${this.props.data}/responses`)
-			.then(
-				(data) => {
-					this.setState({responses: data})
-				});
-			Promise.all([a, b, c]).then(() => {
-				let userIds = new Set();
-				let postIds = new Set();
-
-				Object.entries(this.state.references).forEach(([key, post]) => {
-					userIds.add(post.user_id);
-					postIds.add(post.id);
-				});
-				Object.entries(this.state.responses).forEach(([key, post]) => {
-					userIds.add(post.user_id);
-					postIds.add(post.id);
-				});
-				userIds.add(this.state.post.user_id);
-				postIds.add(this.state.post.id);
-
-				this.lookupUsernames(Array.from(userIds));
-				this.lookupBookmarks(Array.from(postIds), this.props.uid);
-				this.setState({isLoaded: true});
-			});
+			this.loadBead();
 		}
 	}
 
