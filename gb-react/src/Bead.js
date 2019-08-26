@@ -1,5 +1,6 @@
 import React from 'react';
 import Panel from './Panel';
+import PostExt from './PostExt'
 import { getPosts, getBookmarks, getUsernames, updateBookmark } from './Api';
 
 class Bead extends React.Component {
@@ -125,10 +126,16 @@ class Bead extends React.Component {
 					setView={this.props.setView}
 				/>
 				<div className="view">
-					<section className="post-extended">
-						<h1>There is a post here</h1>
-						<p>Paragraph here</p>
-					</section>
+					<PostExt
+						title={this.state.post.title}
+						content={this.state.post.content}
+						post_id={this.state.post.id}
+						user_id={this.state.post.user_id}
+						users={this.state.users}
+						uid={this.props.uid}
+						bookmarker={this.setBookmarker}
+						beadIsLoaded={this.state.isLoaded}
+					/>
 				</div>
 				<Panel
 					type="responses"
