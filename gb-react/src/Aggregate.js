@@ -6,7 +6,7 @@ class Aggregate extends React.Component {
 	constructor(props) {
 	    super(props);
 	    this.state = {
-	    	posts: new Object(),
+	    	posts: {},
 	    	isLoaded: false,
 	    };
 	}
