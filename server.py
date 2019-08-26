@@ -247,6 +247,9 @@ def create_bookmark(user_id):
         abort(400)  # Bad request
     elif Post.query.filter(Post.id == post_id).one().erased:
         abort(403, 'Cannot bookmark erased post.')
+    elif Bookmark.query.filter(Bookmark.post_id == post_id,
+                               Bookmark.user_id == user_id).first():
+        abort(403, 'Post already bookmarked.')
     else:
         new_bookmark = Bookmark(user_id=user_id, post_id=post_id)
         db.session.add(new_bookmark)
