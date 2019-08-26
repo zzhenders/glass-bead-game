@@ -17,10 +17,6 @@ class Navbar extends React.Component {
   		}));
   	};
 
-  	setView = (page, data) => {
-  		return this.props.setView(page, data);
-  	}
-
   	render() {
   		const uid = this.props.uid;
 		return (
