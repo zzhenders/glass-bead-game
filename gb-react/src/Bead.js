@@ -7,7 +7,7 @@ class Bead extends React.Component {
 	constructor(props) {
 	    super(props);
 	    this.state = {
-	    	bookmarks: new Set(),
+	    	bookmarks: {},
 	    	users: {},
 	    	references: {},
 	    	responses: {},
@@ -23,35 +23,29 @@ class Bead extends React.Component {
   	}
 
   	setBookmarker = (uid, post_id) => {
-		console.log(this.state.bookmarks);
 		if (this.isBookmarked(post_id)) {
 			updateBookmark(uid, post_id, 'delete')
 			.then(() => this.removeBookmark(post_id));
 		} else {
 			updateBookmark(uid, post_id, 'create')
 			.then(() => this.addBookmark(post_id));
-			console.log(this.state.bookmarks);
 		}
   	}
 
   	addBookmark(post_id) {
   		this.setState(({bookmarks}) => {
-  			bookmarks: new Set(bookmarks).add(post_id)
+  			bookmarks[post_id] = true;
   		});
   	}
 
   	removeBookmark(post_id) {
   		this.setState(({bookmarks}) => {
-  			const newBookmarks = new Set(bookmarks);
-  			newBookmarks.delete(post_id);
-  			return {
-  				bookmarks: newBookmarks
-  			};
+  			bookmarks[post_id] = false;
   		});
   	}
 
   	isBookmarked(post_id) {
-  		return this.state.bookmarks.has(post_id);
+  		return this.state.bookmarks[post_id];
   	}
 
 	lookupUsernames(arrayOfUserIds) {
@@ -59,14 +53,12 @@ class Bead extends React.Component {
 			this.setState(({users}) => {
 				return {users: data}
 			});
-			console.log(this.state.users);
 		})
 	};
 
 	lookupBookmarks(arrayOfPostIds, uid) {
 		getBookmarks(arrayOfPostIds, uid).then(data => {
 			this.setState({bookmarks: data});
-			console.log(this.state.bookmarks);
 		})
 
 	}
