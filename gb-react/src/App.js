@@ -10,8 +10,8 @@ class App extends React.Component {
       super(props);
 
       this.state = {
-        data: "/posts/search?terms=e",
-        page: "aggregate",
+        data: "4",
+        page: "bead",
         uid: 2,
       };
       this.setView = this.setView.bind(this);
