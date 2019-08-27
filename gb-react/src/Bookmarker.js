@@ -7,7 +7,9 @@ class Bookmarker extends React.Component {
 		return (
 			<i className="bookmarker"
 			id="pb{post_id}"
-			onClick={ () => {this.props.bookmarker(uid, post_id)} }>'{post_id}'
+			onClick={
+				() => {this.props.bookmarker(uid, post_id)}
+			}>{this.props.isBookmarked(post_id) ? 'Unbookmark' : 'Bookmark'}
 			</i>
 		);
 	}

@@ -10,7 +10,6 @@ class PostTile extends React.Component {
 				className="post-tile"
 				onClick={
 					() => {
-						console.log(post_id);
 						this.props.setView('bead', post_id);
 					}}>
 				<h1>{this.props.title}</h1>

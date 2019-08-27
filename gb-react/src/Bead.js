@@ -33,15 +33,19 @@ class Bead extends React.Component {
   	}
 
   	addBookmark(post_id) {
-  		this.setState(({bookmarks}) => {
-  			bookmarks[post_id] = true;
-  		});
+  		const newBookmarks = {
+  			...this.state.bookmarks,
+  			[post_id]: true
+  		}
+  		this.setState({bookmarks: newBookmarks});
   	}
 
   	removeBookmark(post_id) {
-  		this.setState(({bookmarks}) => {
-  			bookmarks[post_id] = false;
-  		});
+  		const newBookmarks = {
+  			...this.state.bookmarks,
+  			[post_id]: false
+  		}
+  		this.setState({bookmarks: newBookmarks});
   	}
 
   	isBookmarked(post_id) {
@@ -126,6 +130,7 @@ class Bead extends React.Component {
 						users={this.state.users}
 						uid={this.props.uid}
 						bookmarker={this.setBookmarker}
+						isBookmarked={this.isBookmarked}
 						beadIsLoaded={this.state.isLoaded}
 					/>
 				</div>
