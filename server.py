@@ -248,11 +248,17 @@ def unfollow_user(user_id):
 def bookmarks(user_id):
     """Bookmarks a user has saved."""
 
+    mode = request.args.get('mode', 'full')
     user = User.query.filter(User.id == user_id
                              ).options(db.joinedload('bookmarks')).one()
-    dict_of_posts = {post.id: post.to_dictionary()
-                     for post in user.bookmarks}
-    return jsonify(dict_of_posts)
+    if mode == 'full':
+        dict_of_posts = {post.id: post.to_dictionary()
+                         for post in user.bookmarks}
+        return jsonify(dict_of_posts)
+    elif mode == 'list':
+        list_of_posts = [post.id for post in posts]
+    else:
+        abort(400)  # Bad request
 
 
 @app.route("/users/<user_id>/bookmarks/create", methods=['POST'])
