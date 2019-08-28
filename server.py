@@ -136,6 +136,24 @@ def create_user():
         abort(400)  # Bad request
 
 
+@app.route("/users/<user_id>/posts")
+def user_posts_all(user_id):
+    """All posts by a particular user."""
+
+    mode = request.args.get('mode', 'full')
+    posts = Post.query.filter(Post.user_id == user_id
+                              ).all()
+    if mode == 'full':
+        dict_of_posts = {post.id: post.to_dictionary()
+                         for post in posts}
+        return jsonify(dict_of_posts)
+    elif mode == 'ids':
+        list_of_post_ids = [post.id for post in posts]
+        return jsonify(list_of_posts)
+    else:
+        abort(400)  # Bad request
+
+
 @app.route("/users/<user_id>/posts/root")
 def user_posts_root(user_id):
     """User root directory."""
