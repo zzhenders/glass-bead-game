@@ -255,13 +255,13 @@ def bookmarks(user_id):
     if mode == 'full':
         dict_of_posts = {post.id: post.to_dictionary()
                          for post in user.bookmarks}
-        return jsonify(dict_of_posts)
     elif mode == 'short':
         dict_of_posts = {post.id: post.title
-                         for post in posts}
+                         for post in user.bookmarks}
     else:
         abort(400)  # Bad request
-
+        
+    return jsonify(dict_of_posts)
 
 @app.route("/users/<user_id>/bookmarks/create", methods=['POST'])
 def create_bookmark(user_id):
