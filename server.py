@@ -403,7 +403,7 @@ def create_post():
         db.session.commit()
         post_id = new_post.id
 
-        return redirect(f'/aggregate?api=.users.{user_id}.following.recent-posts')
+        return ('', 204)  # status 204: success, no content
 
 
 @app.route("/posts/<post_id>")
@@ -442,7 +442,7 @@ def edit_post(post_id):
         post.title, post.content, post.references = title, content, references
         db.session.commit()
 
-        return redirect(f'/aggregate?api=.users.{user_id}.following.recent-posts')
+        return ('', 204)  # status 204: success, no content
 
 
 @app.route("/posts/<post_id>/erase", methods=['POST'])
