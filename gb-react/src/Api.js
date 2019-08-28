@@ -11,14 +11,14 @@ export function getPosts(api) {
 	});
 }
 
-export function writePost(api, references, title, content, user_id, uid) {
+export function writePost(api, data) {
 	let uri = `${apiBase}${api}`;
 	return fetch(uri, {
 		method: 'POST',
 		headers: {
-			'Content-Type':  'application/x-www-form-urlencoded',
+			'Content-Type':  'application/json',
 		},
-		body: `user_id=${uid}&title=${title}&content=${content}&references=${references}`
+		body: JSON.stringify(data),
 	});
 }
 

@@ -3,7 +3,7 @@
 # Flask server for Glass Bead Game. Contains routes.
 
 from flask import Flask, redirect, request, render_template, session, jsonify
-from flask import abort
+from flask import abort, json
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from model import User, Post, Bookmark, Reference, Follower
@@ -380,16 +380,17 @@ def search_posts():
 def create_post():
     """Create a new post."""
 
-    title = request.form.get('title')
-    content = request.form.get('content')
-    user_id = request.form.get('user_id')
+    data = json.loads(request.data)
+
+    title = data.get('title')
+    content = data.get('content')
+    user_id = data.get('user_id')
 
     if not (title and content and user_id):
         abort(400)  # Bad request        
     else:
-        references = request.form.get('references', '')
+        references = data.get('references', '')
         references = references.split('.')
-        print(references)
         if references != ['']:
             references = map(int, references)
             references = Post.query.filter(Post.id.in_(references),
@@ -422,14 +423,16 @@ def post(post_id):
 def edit_post(post_id):
     """Update a post."""
 
-    title = request.form.get('title')
-    content = request.form.get('content')
-    user_id = request.form.get('user_id')
+    data = json.loads(request.data)
+ 
+    title = data.get('title')
+    content = data.get('content')
+    user_id = data.get('user_id')
 
     if not (title and content and user_id):
         abort(400)  # Bad request        
     else:
-        references = request.form.get('references', '')
+        references = data.get('references', '')
         references = references.split('.')
         references = map(int, references)
         references = Post.query.filter(Post.id.in_(references)).all()

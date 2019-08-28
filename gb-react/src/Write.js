@@ -40,13 +40,17 @@ class Write extends React.Component {
 			api = `/posts/${this.props.post_id}/edit`
 		}
 
+		let data = {
+				references: this.state.references,
+				title: this.state.title,
+				content: this.state.content,
+				user_id: this.state.user_id,
+				uid: this.props.uid,
+			};
+
 		writePost(
 			api,
-			this.state.references,
-			this.state.title,
-			this.state.content,
-			this.state.user_id,
-			this.props.uid,
+			data
 			).then( () => {
 				this.props.setView(
 					'aggregate',
