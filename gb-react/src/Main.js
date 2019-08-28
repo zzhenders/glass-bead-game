@@ -1,6 +1,7 @@
 import React from 'react';
 import Aggregate from './Aggregate';
 import Bead from './Bead';
+import Write from './Write'
 
 class Main extends React.Component {
 
@@ -25,6 +26,14 @@ class Main extends React.Component {
 					/>
 				);
 				break;
+			case "write":
+				return (
+					<Write 
+						uid={this.props.uid}
+						data={this.props.data}
+						setView={this.props.setView}
+					/>
+				);
 		}
 	}
 }
