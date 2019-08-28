@@ -47,7 +47,7 @@ class Navbar extends React.Component {
 					onClick={() => {
 						this.props.setView(
 							'aggregate',
-							`/users/${uid}/posts`
+							`/users/${uid}/posts/root`
 						)}
 					}
 				/>

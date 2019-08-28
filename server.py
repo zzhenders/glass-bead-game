@@ -136,8 +136,8 @@ def create_user():
         abort(400)  # Bad request
 
 
-@app.route("/users/<user_id>/posts")
-def user_posts(user_id):
+@app.route("/users/<user_id>/posts/root")
+def user_posts_root(user_id):
     """User root directory."""
 
     user = User.query.filter(User.id == user_id
