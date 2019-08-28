@@ -11,6 +11,17 @@ export function getPosts(api) {
 	});
 }
 
+export function writePost(api, references, title, content, user_id, uid) {
+	let uri = `${apiBase}${api}`;
+	return fetch(uri, {
+		method: 'POST',
+		headers: {
+			'Content-Type':  'application/x-www-form-urlencoded',
+		},
+		body: `user_id=${uid}&title=${title}&content=${content}&references=${references}`
+	});
+}
+
 export function getUsernames(arrayOfUsernames) {
 
 	let uri = `${apiBase}/users/unames?userids=${arrayOfUsernames.join('.')}`
