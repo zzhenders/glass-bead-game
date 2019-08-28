@@ -18,6 +18,7 @@ class SearchForm extends React.Component {
 	handleSubmit(event) {
 		let api = `/posts/search?terms=${this.state.terms}`
 		this.props.setView('aggregate', api);
+		this.props.toggleShowSearch();
 		event.preventDefault();
   	}
 

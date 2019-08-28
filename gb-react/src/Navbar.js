@@ -60,7 +60,7 @@ class Navbar extends React.Component {
 					alt="Search"
 					onClick={this.toggleShowSearch}/>
 				{this.state.isShowSearch
-					? <SearchForm setView={this.props.setView}/>
+					? <SearchForm toggleShowSearch={this.toggleShowSearch} setView={this.props.setView}/>
 					: null
 				}
 				<NavButton id="settings-btn" alt="Settings"/>
