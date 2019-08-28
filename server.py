@@ -499,10 +499,20 @@ def erase_post(post_id):
 def responses(post_id):
     """Responses to a particular post."""
 
+    mode = request.args.get('mode', 'full')
     post = Post.query.filter(Post.id == post_id).one()
-    dict_of_posts = {post.id: post.to_dictionary()
-                     for post in post.responses
-                     if not post.erased}
+
+    if mode == 'full':
+        dict_of_posts = {post.id: post.to_dictionary()
+                         for post in post.responses
+                         if not post.erased}
+    elif mode == 'short':
+        dict_of_posts = {post.id: post.title
+                         for post in post.responses
+                         if not post.erased}
+    else:
+        abort(400)  # Bad request
+
     return jsonify(dict_of_posts)
 
 
@@ -510,9 +520,18 @@ def responses(post_id):
 def references(post_id):
     """References by a particular post."""
 
+    mode = request.args.get('mode', 'full')
     post = Post.query.filter(Post.id == post_id).one()
-    dict_of_posts = {post.id: post.to_dictionary()
-                     for post in post.references}
+
+    if mode == 'full':
+        dict_of_posts = {post.id: post.to_dictionary()
+                         for post in post.references}
+    elif mode == 'short':
+        dict_of_posts = {post.id: post.title
+                         for post in post.references}
+    else:
+        abort(400)  # Bad request
+
     return jsonify(dict_of_posts)
 
 
