@@ -65,7 +65,7 @@ class Aggregate extends React.Component {
 	}
 
 	loadAggregate() {
-		getPosts(this.props.data)
+		getPosts(this.props.api)
 		.then(data => {this.setState({posts: data})})
 		.then(() => {
 			let userIds = new Set();
@@ -87,7 +87,7 @@ class Aggregate extends React.Component {
 	}
 
 	componentDidUpdate(prevProps) {
-		if (prevProps.data !== this.props.data) { 
+		if (prevProps.api !== this.props.api) { 
 			this.loadAggregate();
 		}
 	}

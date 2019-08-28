@@ -11,7 +11,7 @@ class Main extends React.Component {
 				return (
 					<Aggregate
 						uid={this.props.uid}
-						data={this.props.data}
+						api={this.props.data}
 						setView={this.props.setView}
 					/>
 				);
@@ -21,7 +21,7 @@ class Main extends React.Component {
 				return (
 					<Bead
 						uid={this.props.uid}
-						data={this.props.data}
+						post_id={this.props.data}
 						setView={this.props.setView}
 					/>
 				);
@@ -30,7 +30,7 @@ class Main extends React.Component {
 				return (
 					<Write 
 						uid={this.props.uid}
-						data={this.props.data}
+						post_id={this.props.data}
 						setView={this.props.setView}
 					/>
 				);

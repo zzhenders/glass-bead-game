@@ -34,10 +34,10 @@ class Write extends React.Component {
 		event.preventDefault();
 		let api;
 
-		if (this.props.data === '') {
+		if (this.props.post_id === '') {
 			api = '/posts/create'
 		} else {
-			api = `/posts/${this.props.data}/edit`
+			api = `/posts/${this.props.post_id}/edit`
 		}
 
 		writePost(
@@ -56,10 +56,10 @@ class Write extends React.Component {
 	}
 
 	componentDidMount() {
-		if (this.props.data === '') {
+		if (this.props.post_id === '') {
 			this.setState({user_id: this.props.uid})
 		} else {
-			getPosts(`/posts/${this.props.data}`)
+			getPosts(`/posts/${this.props.post_id}`)
 			.then(
 				(post) => {
 					this.setState({
@@ -70,7 +70,7 @@ class Write extends React.Component {
 				}
 			);
 
-			getPosts(`/posts/${this.props.data}/references`)
+			getPosts(`/posts/${this.props.post_id}/references`)
 			.then(
 				(posts) => {
 					let referenceIds = [];
