@@ -147,9 +147,10 @@ def user_posts_all(user_id):
         dict_of_posts = {post.id: post.to_dictionary()
                          for post in posts}
         return jsonify(dict_of_posts)
-    elif mode == 'ids':
-        list_of_post_ids = [post.id for post in posts]
-        return jsonify(list_of_posts)
+    elif mode == 'short':
+        dict_of_posts = {post.id: post.title
+                         for post in posts}
+        return jsonify(dict_of_posts)
     else:
         abort(400)  # Bad request
 
@@ -255,8 +256,9 @@ def bookmarks(user_id):
         dict_of_posts = {post.id: post.to_dictionary()
                          for post in user.bookmarks}
         return jsonify(dict_of_posts)
-    elif mode == 'list':
-        list_of_posts = [post.id for post in posts]
+    elif mode == 'short':
+        dict_of_posts = {post.id: post.title
+                         for post in posts}
     else:
         abort(400)  # Bad request
 
@@ -456,9 +458,10 @@ def edit_post(post_id):
     if not (title and content and user_id):
         abort(400)  # Bad request        
     else:
-        references = data.get('references', '')
-        references = references.split('.')
-        references = map(int, references)
+        references = data.get('references', [])
+        if len(references) > 4:
+            abort(400)  # Bad request
+        references = list(set(references))
         references = Post.query.filter(Post.id.in_(references)).all()
 
         post = Post.query.filter(Post.id == post_id).one()
