@@ -1,5 +1,6 @@
 import React from 'react';
 import Bookmarker from './Bookmarker';
+import Respond from './Respond';
 import User from './User';
 
 class Post extends React.Component {
@@ -21,7 +22,14 @@ class Post extends React.Component {
 						<p><User
 						user_id={this.props.user_id}
 						users={this.props.users}
-						/></p></div>
+						/></p>
+
+						<Respond
+						setView={this.props.setView}
+						post_id={this.props.post_id}
+						/>
+
+						</div>
 					: null }
 			</section>
 		);

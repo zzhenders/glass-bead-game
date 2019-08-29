@@ -132,6 +132,7 @@ class Bead extends React.Component {
 						bookmarker={this.setBookmarker}
 						isBookmarked={this.isBookmarked}
 						beadIsLoaded={this.state.isLoaded}
+						setView={this.props.setView}
 					/>
 				</div>
 				<Panel
