@@ -1,18 +1,22 @@
 import React from 'react';
 import {getPosts, writePost} from './Api';
+import References from './References';
 
 class Write extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
 			user_id: '',
-			references: '',
+			references: {},
+			bookmarks: {},
+			user_posts: {},
 			content: '',
 			title: '',
 			isLoaded: false
 		};
 
-		this.handleReferencesChange = this.handleReferencesChange.bind(this);
+		this.addReference = this.addReference.bind(this);
+		this.removeReference = this.removeReference.bind(this);
 		this.handleTitleChange = this.handleTitleChange.bind(this);
 		this.handleContentChange = this.handleContentChange.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);
@@ -26,8 +30,20 @@ class Write extends React.Component {
 		this.setState({content: event.target.value});
 	}
 
-	handleReferencesChange(event) {
-		this.setState({references: event.target.value});
+	addReference(post_id, post_title) {
+		const newReferences = {
+			...this.state.references,
+			[post_id]: post_title
+		};
+		this.setState({references: newReferences});
+	}
+
+	removeReference(post_id) {
+		const newReferences = {
+			...this.state.references
+		};
+		delete newReferences[post_id];
+		this.setState({references: newReferences});
 	}
 
 	handleSubmit(event) {
@@ -59,11 +75,34 @@ class Write extends React.Component {
 			});
 	}
 
-	componentDidMount() {
-		if (this.props.post_id === '') {
-			this.setState({user_id: this.props.uid})
-		} else {
-			getPosts(`/posts/${this.props.post_id}`)
+	loadCreate() {
+		this.setState({user_id: this.props.uid});
+
+		let a = getPosts(`/users/${this.props.uid}/posts?mode=short`)
+		.then(
+			(posts) => {
+				this.setState({
+					user_posts: posts,
+				})
+			}
+		);
+
+		let b = getPosts(`/users/${this.props.uid}/bookmarks?mode=short`)
+		.then(
+			(posts) => {
+				this.setState({
+					bookmarks: posts,
+				})
+			}
+		);
+
+		Promise.all([a, b]).then(
+			() => this.setState({isLoaded: true})
+		);
+	}
+
+	loadEdit() {
+		let a = getPosts(`/posts/${this.props.post_id}`)
 			.then(
 				(post) => {
 					this.setState({
@@ -74,36 +113,63 @@ class Write extends React.Component {
 				}
 			);
 
-			getPosts(`/posts/${this.props.post_id}/references`)
+		let b = getPosts(`/posts/${this.props.post_id}/references?mode=short`)
 			.then(
 				(posts) => {
-					let referenceIds = [];
-					let referencePosts = [];
-					Object.entries(posts).forEach(([key, post]) => {
-						referenceIds.push(key);
-						referencePosts.push(post);
-					});
 					this.setState({
-						references: referenceIds.join('.'),
+						references: posts,
 					})
 				}
 			);
-		}
-		this.setState({isLoaded: true});
+
+		let c = getPosts(`/users/${this.props.uid}/posts?mode=short`)
+		.then(
+			(posts) => {
+				this.setState({
+					user_posts: posts,
+				})
+			}
+		);
+
+		let d = getPosts(`/users/${this.props.uid}/bookmarks?mode=short`)
+		.then(
+			(posts) => {
+				this.setState({
+					bookmarks: posts,
+				})
+			}
+		);
+
+		Promise.all([a, b, c, d]).then(
+			() => {
+				this.setState({isLoaded: true})
+			}
+		);
 	}
 
+	componentDidMount() {
+		if (this.props.post_id === '') {
+			this.loadCreate()
+		} else {
+			this.loadEdit()
+		}
+	}
 
 	render() {
 		return (
 			<div className="edit view" id="main">
+				{ this.state.isLoaded
+					? 
+					<References
+						references={this.state.references}
+						bookmarks={this.state.bookmarks}
+						user_posts={this.state.user_posts}
+						addReference={this.addReference}
+						removeReference={this.removeReference}
+					/>
+					: null
+				}
 				<form onSubmit={this.handleSubmit} className="editor" method="post" action="/posts/create">
-					references:<br/>
-						<input
-							type="text"
-							name="references"
-							value={this.state.references}
-							onChange={this.handleReferencesChange}
-						/><br/>
 					title:<br/>
 						<input
 							type="text"
