@@ -30,7 +30,7 @@ class References extends React.Component {
 
   	doReference(event) {
   		event.preventDefault();
-  		if (this.state.selection !== undefined) {
+  		if (this.state.selection !== undefined && Object.keys(this.state.selectionOptions).length > 0) {
 	  		this.props.addReference(
 	  			this.state.selection,
 	  			this.state.selectionOptions[this.state.selection]
@@ -45,7 +45,12 @@ class References extends React.Component {
   		Object.entries(this.props.references).forEach((key) => {
   			delete newSelectionOptions[key[0]];
   		});
-  		this.setState({selectionOptions: newSelectionOptions});
+  		if (Object.keys(newSelectionOptions).length > 0) {
+  		  	this.setState({
+  		  		selectionOptions: newSelectionOptions,
+  				selection: Object.keys(newSelectionOptions)[0],
+  		  	});
+  		}
   	}
 
   	componentDidUpdate(prevProps) {
@@ -54,10 +59,13 @@ class References extends React.Component {
 	  		Object.entries(this.props.references).forEach((key) => {
 	  			delete newSelectionOptions[key[0]];
 	  		});
-	  		this.setState({
-	  			selectionOptions: newSelectionOptions,
-  				numReferences: Object.keys(this.props.references).length,
-	  		});
+	  		if (Object.keys(newSelectionOptions).length > 0) {
+		  		this.setState({
+		  			selectionOptions: newSelectionOptions,
+		  			selection: Object.keys(newSelectionOptions)[0],
+	  				numReferences: Object.keys(this.props.references).length,
+		  		});
+	  		}
   		}
   	}
 
@@ -67,22 +75,37 @@ class References extends React.Component {
   			options.push(<option key={key} value={key}>{title}</option>);
   		})
 		console.log(this.props.references, this.state.selection);
+
+		let referenceItems = [];
+		Object.entries(this.props.references).forEach(([key, title]) => {
+			referenceItems.push(
+				<span key={key}>{title} <button onClick={() => {this.props.removeReference(key)}}>-</button></span>
+			);
+		})
+
   		return (
   			//Button for each existing reference. onClick => dropdown menu
   			//if this.state.numReferences < 4:
   			//	Button: Add
   			<div>
-  			{ !this.state.showSelector && this.state.numReferences < 4
-  				? <b onClick={this.toggleShowSelector}>Add</b>
+  			{referenceItems}<br/>
+  			{
+  				!this.state.showSelector && this.state.numReferences < 4 && options.length > 0
+  				? <button onClick={this.toggleShowSelector}>Add Reference</button>
   				: null
   			}
   			{
-  				this.state.showSelector && this.state.numReferences < 4
+  				this.state.showSelector && this.state.numReferences < 4 && options.length > 0
   				? <form onSubmit={this.doReference}>
   					<select
   						value={this.state.selection}
   						name="h"
-  						onChange={this.handleChange}>{options}</select><input type="submit" value="add"/></form>
+  						onChange={this.handleChange}
+  					>
+  						{options}
+  					</select>
+  					<input type="submit" value="Add"/>
+  				</form>
   				: null
   			}
   			</div>

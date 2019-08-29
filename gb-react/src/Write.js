@@ -56,8 +56,9 @@ class Write extends React.Component {
 			api = `/posts/${this.props.post_id}/edit`
 		}
 
+		let referencesArray = Object.keys(this.state.references);
 		let data = {
-				references: this.state.references,
+				references: referencesArray,
 				title: this.state.title,
 				content: this.state.content,
 				user_id: this.state.user_id,
