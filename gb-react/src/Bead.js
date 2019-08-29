@@ -68,15 +68,15 @@ class Bead extends React.Component {
 	}
 
 	loadBead() {
-		let a = getPosts(`/posts/${this.props.api}/references`).then(
+		let a = getPosts(`/posts/${this.props.post_id}/references`).then(
 			(data) => {
 				this.setState({references: data})
 			});
-		let b = getPosts(`/posts/${this.props.api}`).then(
+		let b = getPosts(`/posts/${this.props.post_id}`).then(
 			(data) => {
 				this.setState({post: data})
 			});
-		let c = getPosts(`/posts/${this.props.api}/responses`).then(
+		let c = getPosts(`/posts/${this.props.post_id}/responses`).then(
 			(data) => {
 				this.setState({responses: data})
 			});
@@ -106,7 +106,7 @@ class Bead extends React.Component {
 	}
 
 	componentDidUpdate(prevProps) {
-		if (prevProps.api !== this.props.api) {
+		if (prevProps.post_id !== this.props.post_id) {
 			this.loadBead();
 		}
 	}
