@@ -22,6 +22,34 @@ export function writePost(api, data) {
 	});
 }
 
+export function loginUser(username) {
+	let uri = `${apiBase}/users/login`;
+	let data = {uname: username}
+	return fetch(uri, {
+		method: 'POST',
+		headers: { 
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify(data),
+	}).then(response => {
+		return response.json()
+	});
+}
+
+export function registerUser(username) {
+	let uri = `${apiBase}/users/create`;
+	let data = {uname: username}
+	return fetch(uri, {
+		method: 'POST',
+		headers: { 
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify(data),
+	}).then(response => {
+		return response.json()
+	});
+}
+
 export function getUsernames(arrayOfUsernames) {
 
 	let uri = `${apiBase}/users/unames?userids=${arrayOfUsernames.join('.')}`
