@@ -77,7 +77,10 @@ class Navbar extends React.Component {
 						id="logout-btn"
 						alt="Logout"
 						onClick={
-							() => this.props.setUid(undefined)
+							() => {
+								this.props.setUid(undefined);
+								this.props.setView('login', '');
+							}
 						}/>
 					</>
 				:
@@ -86,7 +89,7 @@ class Navbar extends React.Component {
 						id="create-user-btn"
 						alt="Create Account"
 						onClick={
-							() => this.props.setView('newuser', '')
+							() => this.props.setView('register', '')
 						}/>
 					<NavButton
 						id="login-btn"
