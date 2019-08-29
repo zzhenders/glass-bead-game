@@ -50,7 +50,7 @@ class Write extends React.Component {
 		event.preventDefault();
 		let api;
 
-		if (this.props.post_id === '') {
+		if (this.props.post_id === '' || this.props.post_id[0] === '?') {
 			api = '/posts/create'
 		} else {
 			api = `/posts/${this.props.post_id}/edit`
@@ -97,9 +97,21 @@ class Write extends React.Component {
 			}
 		);
 
-		Promise.all([a, b]).then(
-			() => this.setState({isLoaded: true})
-		);
+		if (this.props.post_id[0] === '?') {
+			let c = getPosts(`/posts/${this.props.post_id.slice(1)}?mode=short`)
+			.then(
+				(post) => {
+					this.setState({references: post});
+				}
+			);
+			Promise.all([a, b, c]).then(
+				() => this.setState({isLoaded:true})
+			);
+		} else {
+			Promise.all([a, b]).then(
+				() => this.setState({isLoaded: true})
+			);
+		}
 	}
 
 	loadEdit() {
@@ -149,8 +161,8 @@ class Write extends React.Component {
 	}
 
 	componentDidMount() {
-		if (this.props.post_id === '') {
-			this.loadCreate()
+		if (this.props.post_id === '' || this.props.post_id[0] === '?') {
+			this.loadCreate();
 		} else {
 			this.loadEdit()
 		}
@@ -170,7 +182,7 @@ class Write extends React.Component {
 					/>
 					: null
 				}
-				<form onSubmit={this.handleSubmit} className="editor" method="post" action="/posts/create">
+				<form onSubmit={this.handleSubmit} className="editor" method="post">
 					title:<br/>
 						<input
 							type="text"
