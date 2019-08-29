@@ -121,19 +121,37 @@ def users():
 def create_user():
     """Add a user."""
 
-    uname = request.form.get('uname')
+    data = json.loads(request.data)
+    uname = data.get('uname')
 
     if not uname:
         abort(400)  # Bad request
     elif uname.isprintable():
+        uname = uname.lower()
         new_user = User(uname=uname)
         db.session.add(new_user)
         db.session.commit()
 
         user_id = new_user.id
-        return redirect(f'/aggregate?api=.users.{user_id}.posts')
+        return jsonify({'uid': user_id})
     else:
         abort(400)  # Bad request
+
+
+@app.route("/users/login", methods=['POST'])
+def login_user():
+    """User login."""
+
+    data = json.loads(request.data)
+    uname = data.get('uname')
+
+    if not uname:
+        abort(400)  # Bad request
+    user = User.query.filter(User.uname == uname.lower()).first()
+    if user is None:
+        abort(403)  # Login failure
+    else:
+        return jsonify({'uid': user.id})
 
 
 @app.route("/users/<user_id>/posts")
