@@ -260,7 +260,7 @@ def bookmarks(user_id):
                          for post in user.bookmarks}
     else:
         abort(400)  # Bad request
-        
+
     return jsonify(dict_of_posts)
 
 @app.route("/users/<user_id>/bookmarks/create", methods=['POST'])
@@ -437,12 +437,21 @@ def create_post():
 def post(post_id):
     """A particular post."""
 
+    mode = request.args.get('mode', 'full')
     post = Post.query.filter(Post.id == post_id).one()
 
-    if post.erased:
-        return jsonify(post.was_erased())
+    if mode == 'full':
+        if post.erased:
+            return jsonify(post.was_erased())
+        else:
+            return jsonify(post.to_dictionary())
+    elif mode == 'short':
+        if post.erased:
+            return jsonify({post_id: 'erased'})
+        else:
+            return jsonify({post_id: post.title})
     else:
-        return jsonify(post.to_dictionary())
+        abort(400)  # Bad request
 
 
 @app.route("/posts/<post_id>/edit", methods=['POST'])
