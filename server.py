@@ -150,6 +150,8 @@ def login_user():
     user = User.query.filter(User.uname == uname.lower()).first()
     if user is None:
         abort(403)  # Login failure
+    elif user.deleted:
+        abort(403)  # Prevents login as a deleted user
     else:
         return jsonify({'uid': user.id})
 
@@ -214,7 +216,8 @@ def delete_user(user_id):
     if user.deleted:
         abort(403, 'Cannot delete a deleted user.')
     else:
-        user.uname = f'{user.uname} (deleted)'
+        # Append the user's id to the end of their (deleted) username.
+        user.uname = f'{user.uname} (deleted) {user.id}'
         user.deleted = True
 
         for post in user.posts:
