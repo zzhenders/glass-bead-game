@@ -20,57 +20,82 @@ class Navbar extends React.Component {
   	render() {
   		const uid = this.props.uid;
 		return (
-			<nav>
-				<NavButton
-					id="home-btn"
-					alt="Home"
-					onClick={() => {
-						this.props.setView(
-							'aggregate',
-							`/users/${uid}/following/recent-posts`
-						)}
+				<nav>
+				{ uid !== undefined
+				?
+					<>
+					<NavButton
+						id="home-btn"
+						alt="Home"
+						onClick={() => {
+							this.props.setView(
+								'aggregate',
+								`/users/${uid}/following/recent-posts`
+							)}
+						}
+					/>
+					<NavButton
+						id="bookmarks-btn"
+						alt="Bookmarks"
+						onClick={() => {
+							this.props.setView(
+								'aggregate',
+								`/users/${uid}/bookmarks`
+							)}
+						}
+					/>
+					<NavButton
+						id="userroot-btn"
+						alt="Root"
+						onClick={() => {
+							this.props.setView(
+								'aggregate',
+								`/users/${uid}/posts/root`
+							)}
+						}
+					/>
+					<NavButton
+						id="add-post-btn"
+						alt="Add"
+						onClick={() => {
+							this.props.setView(
+								'write',
+								'',
+							)}
+						}
+					/>
+					<NavButton
+						id="search-btn"
+						alt="Search"
+						onClick={this.toggleShowSearch}/>
+					{this.state.isShowSearch
+						? <SearchForm toggleShowSearch={this.toggleShowSearch} setView={this.props.setView}/>
+						: null
 					}
-				/>
-				<NavButton
-					id="bookmarks-btn"
-					alt="Bookmarks"
-					onClick={() => {
-						this.props.setView(
-							'aggregate',
-							`/users/${uid}/bookmarks`
-						)}
-					}
-				/>
-				<NavButton
-					id="userroot-btn"
-					alt="Root"
-					onClick={() => {
-						this.props.setView(
-							'aggregate',
-							`/users/${uid}/posts/root`
-						)}
-					}
-				/>
-				<NavButton
-					id="add-post-btn"
-					alt="Add"
-					onClick={() => {
-						this.props.setView(
-							'write',
-							'',
-						)}
-					}
-				/>
-				<NavButton
-					id="search-btn"
-					alt="Search"
-					onClick={this.toggleShowSearch}/>
-				{this.state.isShowSearch
-					? <SearchForm toggleShowSearch={this.toggleShowSearch} setView={this.props.setView}/>
-					: null
+					<NavButton id="settings-btn" alt="Settings"/>
+					<NavButton
+						id="logout-btn"
+						alt="Logout"
+						onClick={
+							() => this.props.setUid(undefined)
+						}/>
+					</>
+				:
+					<>
+					<NavButton
+						id="create-user-btn"
+						alt="Create Account"
+						onClick={
+							() => this.props.setView('newuser', '')
+						}/>
+					<NavButton
+						id="login-btn"
+						alt="Login"
+						onClick={
+							() => this.props.setView('login', '')
+						}/>
+					</>
 				}
-				<NavButton id="settings-btn" alt="Settings"/>
-				<NavButton id="logout-btn" alt="Logout"/>
 			</nav>
 		);
 	}
