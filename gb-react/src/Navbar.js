@@ -54,6 +54,12 @@ class Navbar extends React.Component {
 				<NavButton
 					id="add-post-btn"
 					alt="Add"
+					onClick={() => {
+						this.props.setView(
+							'write',
+							'',
+						)}
+					}
 				/>
 				<NavButton
 					id="search-btn"
