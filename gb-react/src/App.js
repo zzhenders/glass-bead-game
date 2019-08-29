@@ -10,11 +10,12 @@ class App extends React.Component {
       super(props);
 
       this.state = {
-        data: "4",
-        page: "bead",
-        uid: 2,
+        data: "",
+        page: "",
+        uid: undefined,
       };
       this.setView = this.setView.bind(this);
+      this.setUid = this.setUid.bind(this);
     }
 
     setView(viewPage, viewData) {
@@ -22,13 +23,27 @@ class App extends React.Component {
         page: viewPage,
         data: viewData,
       }));
-    } 
+    }
+
+    setUid(newUid) {
+      this.setState({uid: newUid});
+    }
 
   render() {
     return (
       <div id="app">
-        <Navbar setView={this.setView} uid={this.state.uid}/>
-        <Main setView={this.setView} page={this.state.page} data={this.state.data} uid={this.state.uid}/>
+        <Navbar
+          setView={this.setView}
+          setUid={this.setUid}
+          uid={this.state.uid}
+        />
+        <Main
+          setView={this.setView}
+          setUid={this.setUid}
+          page={this.state.page}
+          data={this.state.data}
+          uid={this.state.uid}
+        />
       </div>
     );
   }
