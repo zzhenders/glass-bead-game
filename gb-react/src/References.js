@@ -18,12 +18,6 @@ class References extends React.Component {
   		this.setState({showSelector: !this.state.showSelector})
   	}
 
-  	// this.props.references
-  	// this.props.user_posts
-  	// this.props.bookmarks
-  	// this.props.addReference
-  	// this.props.removeReference
-
   	handleChange(event) {
   		this.setState({selection: event.target.value});
   	}
@@ -41,8 +35,12 @@ class References extends React.Component {
   	}
 
   	componentDidMount() {
-  		let newSelectionOptions = {...this.props.user_posts, ...this.props.bookmarks};
-  		Object.entries(this.props.references).forEach((key) => {
+  		let newSelectionOptions = {
+  			...this.props.user_posts,
+  			...this.props.bookmarks
+  		};
+  		Object.entries(this.props.references)
+  		.forEach((key) => {
   			delete newSelectionOptions[key[0]];
   		});
   		if (Object.keys(newSelectionOptions).length > 0) {
@@ -55,8 +53,12 @@ class References extends React.Component {
 
   	componentDidUpdate(prevProps) {
   		if (prevProps.references !== this.props.references) {
-  			let newSelectionOptions = {...this.props.user_posts, ...this.props.bookmarks};
-	  		Object.entries(this.props.references).forEach((key) => {
+  			let newSelectionOptions = {
+  				...this.props.user_posts,
+  				...this.props.bookmarks
+  			};
+	  		Object.entries(this.props.references)
+	  		.forEach((key) => {
 	  			delete newSelectionOptions[key[0]];
 	  		});
 	  		if (Object.keys(newSelectionOptions).length > 0) {
@@ -71,27 +73,43 @@ class References extends React.Component {
 
   	render() {
   		let options = [];
-  		Object.entries(this.state.selectionOptions).forEach(([key, title]) => {
-  			options.push(<option key={key} value={key}>{title}</option>);
+  		Object.entries(this.state.selectionOptions)
+  		.forEach(([key, title]) => {
+  			options.push(
+  				<option
+  					key={key}
+  					value={key}
+  				>
+  					{title}
+  				</option>
+  			);
   		})
-		console.log(this.props.references, this.state.selection);
 
 		let referenceItems = [];
-		Object.entries(this.props.references).forEach(([key, title]) => {
+		Object.entries(this.props.references)
+		.forEach(([key, title]) => {
 			referenceItems.push(
-				<span key={key}>{title} <button onClick={() => {this.props.removeReference(key)}}>-</button></span>
+				<span key={key}>
+					{title}
+					<button
+						onClick={
+							() => {
+								this.props.removeReference(key)
+							}
+						}
+					> - </button>
+				</span>
 			);
 		})
 
   		return (
-  			//Button for each existing reference. onClick => dropdown menu
-  			//if this.state.numReferences < 4:
-  			//	Button: Add
   			<div>
   			{referenceItems}<br/>
   			{
   				!this.state.showSelector && this.state.numReferences < 4 && options.length > 0
-  				? <button onClick={this.toggleShowSelector}>Add Reference</button>
+  				? <button
+  					onClick={this.toggleShowSelector}
+  				  >Add Reference</button>
   				: null
   			}
   			{
