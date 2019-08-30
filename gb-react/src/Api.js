@@ -50,6 +50,24 @@ export function registerUser(username) {
 	});
 }
 
+export function editUser(uid, data) {
+	let uri = `${apiBase}/users/${uid}/update`;
+	return fetch(uri, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify(data),
+	});
+}
+
+export function deleteUser(uid) {
+	let uri = `${apiBase}/users/${uid}/delete`;
+	return fetch(uri, {
+		method: 'POST',
+	});
+}
+
 export function getUsernames(arrayOfUsernames) {
 
 	let uri = `${apiBase}/users/unames?userids=${arrayOfUsernames.join('.')}`
