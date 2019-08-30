@@ -1,6 +1,7 @@
 import React from 'react';
 import Post from './Post';
-import { getPosts, updateBookmark, getUsernames, getBookmarks } from './Api';
+import { getPosts, updateBookmark, getBookmarks,
+		 getFollowing, getUsernames } from './Api';
 
 class Aggregate extends React.Component {
 	constructor(props) {
@@ -9,10 +10,12 @@ class Aggregate extends React.Component {
 	    	bookmarks: {},
 	    	posts: {},
 	    	users: {},
+	    	following: {},
 	    	isLoaded: false,
 	    };
 	    this.lookupUsernames = this.lookupUsernames.bind(this);
 	    this.lookupBookmarks = this.lookupBookmarks.bind(this);
+	    this.lookupFollowing = this.lookupFollowing.bind(this);
 	    this.setBookmarker = this.setBookmarker.bind(this);
 	    this.addBookmark = this.addBookmark.bind(this);
 	    this.removeBookmark = this.removeBookmark.bind(this);
@@ -49,20 +52,23 @@ class Aggregate extends React.Component {
   		return this.state.bookmarks[post_id];
   	}
 
-	lookupUsernames(arrayOfUserIds) {
-		getUsernames(arrayOfUserIds).then(data => {
-			this.setState(({users}) => {
-				return {users: data}
-			});
-		})
-	};
-
 	lookupBookmarks(arrayOfPostIds, uid) {
 		getBookmarks(arrayOfPostIds, uid).then(data => {
 			this.setState({bookmarks: data});
 		})
-
 	}
+
+	lookupFollowing(uid) {
+		getFollowing(uid).then(data => {
+			this.setState({following: data});
+		})
+	}
+
+	lookupUsernames(arrayOfUserIds) {
+		getUsernames(arrayOfUserIds).then(data => {
+			this.setState({users: data});
+		})
+	};
 
 	loadAggregate() {
 		getPosts(this.props.api)
