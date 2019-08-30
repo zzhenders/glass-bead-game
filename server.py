@@ -241,8 +241,11 @@ def follow_user(user_id):
 
     if not follower_id:
         abort(400)  # Bad request
-    elif User.query.filter(User.id == user_id).one().erased:
+    elif User.query.filter(User.id == user_id).one().deleted:
         abort(403, 'Cannot follow a deleted user.')
+    elif Follower.query.filter(Follower.user_id == user_id,
+                               Follower.follower_id == follower_id).first():
+        abort(403, 'User already followed.')
     else:
         new_follow = Follower(user_id=user_id, follower_id=follower_id)
 
@@ -254,14 +257,19 @@ def follow_user(user_id):
 
 @app.route("/users/<user_id>/unfollow", methods=['POST'])
 def unfollow_user(user_id):
-    """Follow the user identified by `user_id`."""
+    """Unollow the user identified by `user_id`."""
 
     follower_id = request.form.get('uid')  # uid: the user making the request
     if not follower_id:
         abort(400)  # Bad request
+
+    follower = Follower.query.filter(Follower.user_id == user_id,
+                              Follower.follower_id == follower_id).first()
+    if not follower:
+        abort(403, "User not followed or doesn't exist.")
     else:
-        Follower.query.filter(user_id=user_id,
-                              follower_id=follower_id).delete()
+        Follower.query.filter(Follower.user_id == user_id,
+                              Follower.follower_id == follower_id).delete()
         db.session.commit()
 
         return ('', 204)  # status 204: success, no content
@@ -378,7 +386,7 @@ def user_following(user_id):
         dict_of_users = {followed.id: followed.to_dictionary()
                          for followed in user.followed}
     elif mode == 'short':
-        dict_of_users = {follower.id: followed.uname
+        dict_of_users = {followed.id: followed.uname
                          for followed in user.followed}
     else:
         abort(400)  # Bad request
