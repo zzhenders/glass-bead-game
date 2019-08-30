@@ -326,10 +326,18 @@ def delete_bookmark(user_id):
 def user_followers(user_id):
     """Users following user specified."""
 
+    mode = request.args.get('mode', 'full')
     user = User.query.filter(User.id == user_id
                              ).options(db.joinedload('followers')).one()
-    dict_of_users = {follower.id: follower.to_dictionary()
-                     for follower in user.followers}
+    if mode == 'full':
+        dict_of_users = {follower.id: follower.to_dictionary()
+                         for follower in user.followers}
+    elif mode == 'short':
+        dict_of_users = {follower.id: follower.uname
+                         for follower in user.followers}
+    else:
+        abort(400)  # Bad request
+
     return jsonify(dict_of_users)
 
 
@@ -362,10 +370,19 @@ def user_following(user_id):
     the URI and model respectively.
     """
 
+    mode = request.args.get('mode', 'full')
     user = User.query.filter(User.id == user_id
                              ).options(db.joinedload('followed')).one()
-    dict_of_users = {followed.id: followed.to_dictionary()
-                     for followed in user.followed}
+
+    if mode == 'full':
+        dict_of_users = {followed.id: followed.to_dictionary()
+                         for followed in user.followed}
+    elif mode == 'short':
+        dict_of_users = {follower.id: followed.uname
+                         for followed in user.followed}
+    else:
+        abort(400)  # Bad request
+
     return jsonify(dict_of_users)
 
 
