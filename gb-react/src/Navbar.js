@@ -72,7 +72,13 @@ class Navbar extends React.Component {
 						? <SearchForm toggleShowSearch={this.toggleShowSearch} setView={this.props.setView}/>
 						: null
 					}
-					<NavButton id="settings-btn" alt="Settings"/>
+					<NavButton
+						id="settings-btn"
+						alt="Settings"
+						onClick={() => {
+							this.props.setView('settings', '')
+						}}
+					/>
 					<NavButton
 						id="logout-btn"
 						alt="Logout"
