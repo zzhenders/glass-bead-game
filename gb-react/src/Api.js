@@ -102,3 +102,14 @@ export function updateBookmark(uid, post_id, action) {
 		body: `post_id=${post_id}`,
 		});
 }
+
+export function updateFollowing(uid, user_id, action) {
+	const uri = `${apiBase}/users/${user_id}/${action}`
+	return fetch(uri, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/x-www-form-urlencoded',
+		},
+		body: `uid=${uid}`,
+		});
+}

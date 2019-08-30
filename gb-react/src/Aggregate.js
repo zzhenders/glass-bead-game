@@ -1,6 +1,6 @@
 import React from 'react';
 import Post from './Post';
-import { getPosts, updateBookmark, getBookmarks,
+import { getPosts, updateBookmark, updateFollowing, getBookmarks,
 		 getFollowing, getUsernames } from './Api';
 
 class Aggregate extends React.Component {
@@ -17,6 +17,7 @@ class Aggregate extends React.Component {
 	    this.lookupBookmarks = this.lookupBookmarks.bind(this);
 	    this.lookupFollowing = this.lookupFollowing.bind(this);
 	    this.setBookmarker = this.setBookmarker.bind(this);
+	    this.setFollowing = this.setFollowing.bind(this);
 	    this.addBookmark = this.addBookmark.bind(this);
 	    this.removeBookmark = this.removeBookmark.bind(this);
 	    this.isBookmarked = this.isBookmarked.bind(this);
@@ -32,6 +33,17 @@ class Aggregate extends React.Component {
 		}
   	}
 
+  	setFollowing = (uid, user_id, uname) => {
+  		if (this.state.following.hasOwnProperty(user_id)) {
+  			updateFollowing(uid, user_id, 'unfollow')
+  			.then(() => this.removeFollowing(user_id));
+  		} else {
+  			updateFollowing(uid, user_id, 'follow')
+  			.then(() => this.addFollowing(user_id, uname));
+  		}
+  	}
+
+
   	addBookmark(post_id) {
   		const newBookmarks = {
   			...this.state.bookmarks,
@@ -46,6 +58,21 @@ class Aggregate extends React.Component {
   			[post_id]: false
   		}
   		this.setState({bookmarks: newBookmarks});
+  	}
+
+  	addFollowing(user_id, uname) {
+  		const newFollowing = {
+  			...this.state.following,
+  			[user_id]: uname
+  		}
+  		this.setState({following: newFollowing});
+  	}
+
+  	removeFollowing(user_id) {
+  		let newFollowing = this.state.following;
+  		delete newFollowing[user_id];
+
+  		this.setState({following: newFollowing});
   	}
 
   	isBookmarked(post_id) {
@@ -87,6 +114,7 @@ class Aggregate extends React.Component {
 
 			if (userIds.length > 0 && postIds.length > 0) {
 				this.lookupUsernames(userIds);
+				this.lookupFollowing(this.props.uid);
 				this.lookupBookmarks(postIds, this.props.uid);
 			}
 			this.setState({isLoaded: true});
@@ -115,6 +143,8 @@ class Aggregate extends React.Component {
 					content={post.content}
 					user_id={post.user_id}
 					users={this.state.users}
+					following={this.state.following}
+					setFollowing={this.setFollowing}
 					bookmarker={this.setBookmarker}
 					isBookmarked={this.isBookmarked}
 					aggregateIsLoaded={this.state.isLoaded}

@@ -1,7 +1,7 @@
 import React from 'react';
 import Panel from './Panel';
 import PostExt from './PostExt'
-import { getPosts, updateBookmark, getBookmarks,
+import { getPosts, updateBookmark, updateFollowing, getBookmarks,
 		 getFollowing, getUsernames } from './Api';
 
 class Bead extends React.Component {
@@ -20,6 +20,7 @@ class Bead extends React.Component {
 	    this.lookupFollowing = this.lookupFollowing.bind(this);
 	    this.lookupUsernames = this.lookupUsernames.bind(this);
 	    this.setBookmarker = this.setBookmarker.bind(this);
+	    this.setFollowing = this.setFollowing.bind(this);
 	    this.addBookmark = this.addBookmark.bind(this);
 	    this.removeBookmark = this.removeBookmark.bind(this);
 	    this.isBookmarked = this.isBookmarked.bind(this);
@@ -33,6 +34,16 @@ class Bead extends React.Component {
 			updateBookmark(uid, post_id, 'create')
 			.then(() => this.addBookmark(post_id));
 		}
+  	}
+
+  	setFollowing = (uid, user_id, uname) => {
+  		if (this.state.following.hasOwnProperty(user_id)) {
+  			updateFollowing(uid, user_id, 'unfollow')
+  			.then(() => this.removeFollowing(user_id));
+  		} else {
+  			updateFollowing(uid, user_id, 'follow')
+  			.then(() => this.addFollowing(user_id, uname));
+  		}
   	}
 
   	addBookmark(post_id) {
@@ -49,6 +60,21 @@ class Bead extends React.Component {
   			[post_id]: false
   		}
   		this.setState({bookmarks: newBookmarks});
+  	}
+
+  	addFollowing(user_id, uname) {
+  		const newFollowing = {
+  			...this.state.following,
+  			[user_id]: uname
+  		}
+  		this.setState({following: newFollowing});
+  	}
+
+  	removeFollowing(user_id) {
+  		let newFollowing = this.state.following;
+  		delete newFollowing[user_id];
+
+  		this.setState({following: newFollowing});
   	}
 
   	isBookmarked(post_id) {
@@ -102,6 +128,7 @@ class Bead extends React.Component {
 			postIds.add(this.state.post.id);
 
 			this.lookupUsernames(Array.from(userIds));
+			this.lookupFollowing(this.props.uid);
 			this.lookupBookmarks(Array.from(postIds), this.props.uid);
 			this.setState({isLoaded: true});
 		});
@@ -129,12 +156,14 @@ class Bead extends React.Component {
 				/>
 				<div className="view">
 					<PostExt
+						uid={this.props.uid}
+						post_id={this.state.post.id}
 						title={this.state.post.title}
 						content={this.state.post.content}
-						post_id={this.state.post.id}
 						user_id={this.state.post.user_id}
 						users={this.state.users}
-						uid={this.props.uid}
+						following={this.state.following}
+						setFollowing={this.setFollowing}
 						bookmarker={this.setBookmarker}
 						isBookmarked={this.isBookmarked}
 						beadIsLoaded={this.state.isLoaded}

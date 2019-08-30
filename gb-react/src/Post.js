@@ -20,8 +20,11 @@ class Post extends React.Component {
 						/>
 
 						<p><User
+						uid={this.props.uid}
 						user_id={this.props.user_id}
 						users={this.props.users}
+						setFollowing={this.props.setFollowing}
+						following={this.props.following}
 						/></p>
 
 						<Respond
