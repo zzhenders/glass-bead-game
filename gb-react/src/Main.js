@@ -2,6 +2,7 @@ import React from 'react';
 import Aggregate from './Aggregate';
 import Bead from './Bead';
 import Login from './Login';
+import Settings from './Settings';
 import Register from './Register';
 import Write from './Write'
 
@@ -53,6 +54,14 @@ class Main extends React.Component {
 					/>
 				);
 				break;
+			case "settings":
+				return (
+					<Settings
+						uid={this.props.uid}
+						setView={this.props.setView}
+						setUid={this.props.setUid}
+					/>
+				);
 			default:
 				return (
 					<Login
