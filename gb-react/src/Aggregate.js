@@ -76,8 +76,13 @@ class Aggregate extends React.Component {
 				postIds.add(post.id);
 			});
 
-			this.lookupUsernames(Array.from(userIds));
-			this.lookupBookmarks(Array.from(postIds), this.props.uid);
+			userIds = Array.from(userIds);
+			postIds = Array.from(postIds);
+
+			if (userIds.length > 0 && postIds.length > 0) {
+				this.lookupUsernames(userIds);
+				this.lookupBookmarks(postIds, this.props.uid);
+			}
 			this.setState({isLoaded: true});
 		});
 	}
