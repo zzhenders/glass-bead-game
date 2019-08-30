@@ -191,17 +191,18 @@ def user_posts_root(user_id):
 def update_user(user_id):
     """Update user information."""
 
-    uname = request.form.get('uname')
+    data = json.loads(request.data)
+    uname = data.get('uname')
 
     if not uname:
         abort(400)  # Bad request
     elif uname.isprintable():
-        user = User.query.filter(uname=uname).one()
-        user_id = user.id
+        user = User.query.filter(User.id == user_id).one()
         user.uname = uname.lower()
+        db.session.add(user)
         db.session.commit()
 
-        return redirect(f'/aggregate?api=.users.{user_id}.posts')
+        return ('', 204)  # status 204: success, no content
     else:
         abort(400)  # Bad request
 
@@ -436,14 +437,11 @@ def create_post():
     if not (title and content and user_id):
         abort(400)  # Bad request        
     else:
-        references = data.get('references', '')
-        references = references.split('.')
-        if references != ['']:
-            references = map(int, references)
-            references = Post.query.filter(Post.id.in_(references),
-                                           Post.erased == False).all()
-        else:
-            references = []
+        references = data.get('references', [])
+        if len(references) > 4:
+            abort(400)  # Bad request
+        references = list(set(references))
+        references = Post.query.filter(Post.id.in_(references)).all()
 
         new_post = Post(title=title, content=content, references=references,
                         user_id=user_id, created=datetime.utcnow())
