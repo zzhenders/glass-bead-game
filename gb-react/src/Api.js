@@ -4,7 +4,7 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 export function getPosts(api) {
-	let uri = `${apiBase}${api}`
+	const uri = `${apiBase}${api}`
 	return fetch(uri, {
 	}).then(response => {
 		return response.json()
@@ -12,7 +12,7 @@ export function getPosts(api) {
 }
 
 export function writePost(api, data) {
-	let uri = `${apiBase}${api}`;
+	const uri = `${apiBase}${api}`;
 	return fetch(uri, {
 		method: 'POST',
 		headers: {
@@ -23,8 +23,8 @@ export function writePost(api, data) {
 }
 
 export function loginUser(username) {
-	let uri = `${apiBase}/users/login`;
-	let data = {uname: username}
+	const uri = `${apiBase}/users/login`;
+	const data = {uname: username}
 	return fetch(uri, {
 		method: 'POST',
 		headers: { 
@@ -37,8 +37,8 @@ export function loginUser(username) {
 }
 
 export function registerUser(username) {
-	let uri = `${apiBase}/users/create`;
-	let data = {uname: username}
+	const uri = `${apiBase}/users/create`;
+	const data = {uname: username}
 	return fetch(uri, {
 		method: 'POST',
 		headers: { 
@@ -51,7 +51,7 @@ export function registerUser(username) {
 }
 
 export function editUser(uid, data) {
-	let uri = `${apiBase}/users/${uid}/update`;
+	const uri = `${apiBase}/users/${uid}/update`;
 	return fetch(uri, {
 		method: 'POST',
 		headers: {
@@ -62,23 +62,30 @@ export function editUser(uid, data) {
 }
 
 export function deleteUser(uid) {
-	let uri = `${apiBase}/users/${uid}/delete`;
+	const uri = `${apiBase}/users/${uid}/delete`;
 	return fetch(uri, {
 		method: 'POST',
 	});
 }
 
-export function getUsernames(arrayOfUsernames) {
-
-	let uri = `${apiBase}/users/unames?userids=${arrayOfUsernames.join('.')}`
+export function getBookmarks(arrayOfPostIds, uid) {
+	const uri = `${apiBase}/posts/bookmarked?postids=${arrayOfPostIds.join('.')}&uid=${uid}`
 	return fetch(uri)
 	.then(response => {
 		return response.json()
 	});
 }
 
-export function getBookmarks(arrayOfPostIds, uid) {
-	let uri = `${apiBase}/posts/bookmarked?postids=${arrayOfPostIds.join('.')}&uid=${uid}`
+export function getFollowing(uid) {
+	const uri = `${apiBase}/users/${uid}/following?mode=short`;
+	return fetch(uri)
+	.then(response => {
+		return response.json()
+	})
+}
+
+export function getUsernames(arrayOfUsernames) {
+	const uri = `${apiBase}/users/unames?userids=${arrayOfUsernames.join('.')}`
 	return fetch(uri)
 	.then(response => {
 		return response.json()
@@ -86,7 +93,7 @@ export function getBookmarks(arrayOfPostIds, uid) {
 }
 
 export function updateBookmark(uid, post_id, action) {
-	let uri = `${apiBase}/users/${uid}/bookmarks/${action}`
+	const uri = `${apiBase}/users/${uid}/bookmarks/${action}`
 	return fetch(uri, {
 		method: 'POST',
 		headers: {
