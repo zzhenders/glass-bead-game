@@ -1,21 +1,24 @@
 import React from 'react';
 import Panel from './Panel';
 import PostExt from './PostExt'
-import { getPosts, getBookmarks, getUsernames, updateBookmark } from './Api';
+import { getPosts, updateBookmark, getBookmarks,
+		 getFollowing, getUsernames } from './Api';
 
 class Bead extends React.Component {
 	constructor(props) {
 	    super(props);
 	    this.state = {
 	    	bookmarks: {},
+	    	following: {},
 	    	users: {},
 	    	references: {},
 	    	responses: {},
 	    	post: {},
 	    	isLoaded: false,
 	    };
-	    this.lookupUsernames = this.lookupUsernames.bind(this);
 	    this.lookupBookmarks = this.lookupBookmarks.bind(this);
+	    this.lookupFollowing = this.lookupFollowing.bind(this);
+	    this.lookupUsernames = this.lookupUsernames.bind(this);
 	    this.setBookmarker = this.setBookmarker.bind(this);
 	    this.addBookmark = this.addBookmark.bind(this);
 	    this.removeBookmark = this.removeBookmark.bind(this);
@@ -52,20 +55,23 @@ class Bead extends React.Component {
   		return this.state.bookmarks[post_id];
   	}
 
-	lookupUsernames(arrayOfUserIds) {
-		getUsernames(arrayOfUserIds).then(data => {
-			this.setState(({users}) => {
-				return {users: data}
-			});
-		})
-	};
-
 	lookupBookmarks(arrayOfPostIds, uid) {
 		getBookmarks(arrayOfPostIds, uid).then(data => {
 			this.setState({bookmarks: data});
 		})
-
 	}
+
+	lookupFollowing(uid) {
+		getFollowing(uid).then(data => {
+			this.setState({following: data});
+		})
+	}
+
+	lookupUsernames(arrayOfUserIds) {
+		getUsernames(arrayOfUserIds).then(data => {
+			this.setState({users: data});
+		})
+	};
 
 	loadBead() {
 		let a = getPosts(`/posts/${this.props.post_id}/references`).then(
