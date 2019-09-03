@@ -153,16 +153,30 @@ def login_user():
 
     data = json.loads(request.data)
     uname = data.get('uname')
+    password = data.get('pass')
+
+    dummy = True  # If problem with implementation, fails closed.
 
     if not uname:
-        abort(400)  # Bad request
-    user = User.query.filter(User.uname == uname.lower()).first()
-    if user is None:
-        abort(403)  # Login failure
-    elif user.deleted:
-        abort(403)  # Prevents login as a deleted user
+        dummy = True
     else:
-        return jsonify({'uid': user.id})
+        user = User.query.filter(User.uname == uname.lower()).first()
+        if user is None:
+            dummy = True
+        elif user.deleted:
+            dummy = True
+        else:
+            dummy = False
+
+    if dummy == True:  # Helps prevent side channel timing attacks.
+        check_password(password)
+        abort(403)
+    else:
+        hash_match = check_password(password, user.salt, user.pass_hash)
+        if hash_match is True:
+            return jsonify({'uid': user.id})
+        else:
+            abort(403)
 
 
 @app.route("/users/<user_id>/posts")
