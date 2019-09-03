@@ -45,3 +45,21 @@ def make_hash(password, salt):
 						argon_type=ARGON_TYPE)
 
 	return computed_hash
+
+def validate_password(uname, password):
+	"""Validate that password meets minimum standards."""
+
+	# This is an example of a check against blacklisted weak passwords.
+	# On a production-level system, this would need to be beefed up.
+	bad_password_set = set(['password',
+							'PASSWORD',
+							uname,
+							f'{uname}1',
+							f'{uname}!'])
+
+	if len(password) > 128 or len(password) < 8:
+		return False
+	elif password in bad_password_set:
+		return False
+	else:
+		return True
