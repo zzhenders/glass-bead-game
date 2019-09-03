@@ -54,11 +54,11 @@ class Register extends React.Component {
 				const data = {'uname': this.state.uname,
 							  'pass': this.state.pass}
 				registerUser(data)
-				.then( (data) => {
-					this.props.setUid(data.uid);
+				.then( (response) => {
+					this.props.setUid(response.uid);
 					this.props.setView(
 						'aggregate',
-						`/users/${data.uid}/following/recent-posts`
+						`/users/${response.uid}/following/recent-posts`
 					)
 				}).catch( (result) => {
 					console.log(result);
@@ -87,7 +87,7 @@ class Register extends React.Component {
 					/>{ this.state.unameError ? <b>Username already registered!</b> : null }
 					<br/>
 					<label htmlFor="pass">
-					Password (minimum 8 characters, 1 number or symbol):
+					Password (minimum 8 characters, 1 number or symbol) 
 					</label>
 					<input
 						type="password"
@@ -98,7 +98,7 @@ class Register extends React.Component {
 					/>{ this.state.passError ? <b>Password too short or simple!</b> : null }
 					<br/>
 					<label htmlFor="confirm-password">
-					Confirm Password: 
+					Confirm Password 
 					</label>
 					<input
 						type="password"
