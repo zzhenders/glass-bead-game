@@ -1,8 +1,8 @@
 from os import urandom;
 import argon2;
 
-TIME = 4   # Number of iterations of argon2 hash.
-MEM = 16    # Memory usage of argon2 hash.
+TIME = 4000   # Number of iterations of argon2 hash.
+MEM = 64    # Memory usage of argon2 hash.
 PAR = 2     # Parallelism of threads of argon2 hash.
 SIZE = 128  # Bitlength of outputted hashes/salts.
 ARGON_TYPE = argon2.Argon2Type.Argon2_d
