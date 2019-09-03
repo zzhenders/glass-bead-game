@@ -6,9 +6,10 @@ from flask import Flask, redirect, request, render_template, session, jsonify
 from flask import abort, json
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
+from datetime import datetime
 from model import User, Post, Bookmark, Reference, Follower
 from model import connect_to_db, DB_URI, db
-from datetime import datetime
+from security import check_password, make_hash, make_salt, validate_password
 
 app = Flask(__name__)
 CORS(app)
@@ -123,12 +124,20 @@ def create_user():
 
     data = json.loads(request.data)
     uname = data.get('uname')
+    password = data.get('pass')
 
     if not uname:
-        abort(400)  # Bad request
+        abort(401, 'Username already registered.')  # Bad request
+    elif not validate_password(uname, password):
+        abort(401, 'Password too short or too simple.')  # Bad request
     elif uname.isprintable():
         uname = uname.lower()
-        new_user = User(uname=uname)
+        salt = make_salt()
+        pass_hash = make_hash(password, salt)
+        new_user = User(uname=uname,
+                        salt=salt,
+                        pass_hash=pass_hash,
+                        )
         db.session.add(new_user)
         db.session.commit()
 
