@@ -22,9 +22,8 @@ export function writePost(api, data) {
 	});
 }
 
-export function loginUser(username) {
+export function loginUser(data) {
 	const uri = `${apiBase}/users/login`;
-	const data = {uname: username}
 	return fetch(uri, {
 		method: 'POST',
 		headers: { 
