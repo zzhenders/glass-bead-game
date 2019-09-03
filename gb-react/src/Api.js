@@ -36,9 +36,8 @@ export function loginUser(username) {
 	});
 }
 
-export function registerUser(username) {
+export function registerUser(data) {
 	const uri = `${apiBase}/users/create`;
-	const data = {uname: username}
 	return fetch(uri, {
 		method: 'POST',
 		headers: { 
