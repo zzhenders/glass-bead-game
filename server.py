@@ -7,11 +7,13 @@ from flask import abort, json
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
+from os import environ
 from model import User, Post, Bookmark, Reference, Follower
 from model import connect_to_db, DB_URI, db
 from security import check_password, make_hash, make_salt, validate_password
 
 app = Flask(__name__)
+app.secret_key = environ['SECRET_KEY']
 CORS(app)
 
 
