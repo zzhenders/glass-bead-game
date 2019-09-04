@@ -1,16 +1,19 @@
 from os import urandom;
-import argon2;
+from base64 import urlsafe_b64encode as b64encode
+from base64 import urlsafe_b64decode as b64decode
+from hashlib import sha256
+import argon2
 
 TIME = 4000   # Number of iterations of argon2 hash.
 MEM = 64    # Memory usage of argon2 hash.
 PAR = 2     # Parallelism of threads of argon2 hash.
-SIZE = 128  # Bitlength of outputted hashes/salts.
+SIZE = 128  # Bytelength of outputted hashes/salts.
 ARGON_TYPE = argon2.Argon2Type.Argon2_d
 
-def make_salt():
-	"""Generate a cryptographically secure salt."""
-	return urandom(SIZE)
 
+##############################
+#  AUTHENTICATION FUNCTIONS  #
+##############################
 
 def check_password(password, salt=urandom(SIZE), stored_hash=urandom(SIZE)):
 	"""Check that a password matches a salt and hash.
@@ -44,7 +47,12 @@ def make_hash(password, salt):
 						buflen=SIZE,
 						argon_type=ARGON_TYPE)
 
+
+def make_salt():
+	"""Generate a cryptographically secure salt."""
+	return urandom(SIZE)
 	return computed_hash
+
 
 def validate_password(uname, password):
 	"""Validate that password meets minimum standards."""
@@ -63,3 +71,29 @@ def validate_password(uname, password):
 		return False
 	else:
 		return True
+
+
+##################################
+#  SESSION MANAGEMENT FUNCTIONS  #
+##################################
+
+def generate_session(client_ip, user_agent):
+	"""Generates a session tuple of the form (session_id, salt)."""
+
+	salt = urandom(32)  #  32 bytes = 256 bits
+	session_id = sha256()
+	session_id.update(f'{client_ip}'.encode('utf-8'))
+	session_id.update(f'{user_agent}'.encode('utf-8'))
+	session_id.update(b64encode(salt))
+	session_id = session_id.digest()
+	return (session_id, salt)
+
+def verify_session_id(session_id, salt, client_ip, user_agent):
+	"""Checks integrity of given session ID."""
+
+	generated_id = sha256()
+	generated_id.update(f'{client_ip}'.encode('utf-8'))
+	generated_id.update(f'{user_agent}'.encode('utf-8'))
+	generated_id.update(b64encode(salt))
+	generated_id = generated_id.digest()
+	return generated_id == session_id
