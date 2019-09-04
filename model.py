@@ -125,6 +125,17 @@ class Follower(db.Model):
 	user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 	follower_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
+class Session(db.Model):
+	"""User sessions."""
+
+	__tablename__ = "sessions"
+
+	id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+	session_id = db.Column(db.LargeBinary, nullable=False)
+	salt = db.Column(db.LargeBinary, nullable=False)
+	created = db.Column(db.DateTime, nullable=False)
+	user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+
 def connect_to_db(app, database_uri):
 	app.config['SQLALCHEMY_DATABASE_URI'] = database_uri
 	app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
