@@ -3,17 +3,15 @@
 # Flask server for Glass Bead Game. Contains routes.
 
 from flask import Flask, redirect, request, render_template, session, jsonify
-from flask import abort, json
+from flask import abort, json, response
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
-from os import environ
 from model import User, Post, Bookmark, Reference, Follower
 from model import connect_to_db, DB_URI, db
 from security import check_password, make_hash, make_salt, validate_password
 
 app = Flask(__name__)
-app.secret_key = environ['SECRET_KEY']
 CORS(app)
 
 
@@ -27,80 +25,6 @@ def index():
     """Serves index, and by extension the app."""
 
     return render_template('index.html')
-
-
-#############################
-#  JINJA/JS IMPLEMENTATION  #
-#############################
-
-
-@app.route("/addpost")
-def addpost():
-    """Add post."""
-
-    return render_template("addpost.html")
-
-
-@app.route("/editpost")
-def editpost():
-    """Edit post."""
-
-    post_id = request.args.get("postid")
-
-    post = Post.query.filter(Post.id == post_id).one()
-
-    references = []
-    for reference in post.references:
-        references.append(str(reference.id))
-    references = '.'.join(references) 
-
-    return render_template("editpost.html",
-                           post=post,
-                           references=references,)
-
-
-@app.route("/adduser")
-def adduser():
-    """Add user."""
-
-    return render_template("adduser.html")
-
-
-@app.route("/edituser")
-def edituser():
-    """Edit user."""
-
-    uid = int(request.args.get("uid"))
-
-    user = User.query.filter(User.id == uid).one()
-
-    return render_template("edituser.html",
-                           uid=uid,
-                           user=user)
-
-
-@app.route("/aggregate")
-def aggregate():
-    """Serves aggregate view."""
-
-    api = request.args.get('api')
-    api = '/'.join(api.split('.'))
-    # data = request.args.get(data)
-
-    return render_template('aggregate.html',
-                           api=api,
-                           # data=data,
-                           )
-
-
-@app.route("/bead")
-def bead():
-    """Serves bead view."""
-
-    post_id = request.args.get('postid')
-    return render_template('bead.html',
-                           post_id=post_id,
-                           )
 
 
 #################
