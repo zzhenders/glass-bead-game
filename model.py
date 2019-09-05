@@ -131,9 +131,9 @@ class Session(db.Model):
 	__tablename__ = "sessions"
 
 	id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-	session_id = db.Column(db.LargeBinary, nullable=False)
+	session_id = db.Column(db.LargeBinary, nullable=False, unique=True)
 	salt = db.Column(db.LargeBinary, nullable=False)
-	created = db.Column(db.DateTime, nullable=False)
+	expiration = db.Column(db.DateTime, nullable=False)
 	user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
 def connect_to_db(app, database_uri):
