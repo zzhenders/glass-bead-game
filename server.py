@@ -6,10 +6,13 @@ from flask import Flask, redirect, request, render_template, session, jsonify
 from flask import abort, json, response
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
-from datetime import datetime
+from base64 import urlsafe_b64encode as b64encode
+from base64 import urlsafe_b64decode as b64decode
+from datetime import datetime, timedelta
 from model import User, Post, Bookmark, Reference, Follower
 from model import connect_to_db, DB_URI, db
 from security import check_password, make_hash, make_salt, validate_password
+from security import generate_session, validate_session_id
 
 app = Flask(__name__)
 CORS(app)
@@ -25,6 +28,52 @@ def index():
     """Serves index, and by extension the app."""
 
     return render_template('index.html')
+
+
+#################################################
+#  DECORATOR-LESS SESSION MANAGEMENT FUNCTIONS  #
+#################################################
+
+
+def session_check(session_id, client_ip, user_agent, uid):
+    """Checks authorization."""
+
+    session_id = b64decode(session_id)
+    session = Session.query.filter(Session.session_id == session_id).first()
+
+    if session is None:
+        return ''
+    else:
+        validated = validate_session_id(session.session_id,
+                                        session.salt,
+                                        client_ip,
+                                        user_agent)
+    if not validated:
+        'In production, log anomaly here for possible security threat'
+        return ''
+    elif session.user_id != uid:
+        'In production, log anomaly here for possible security threat'
+        return ''
+    else:
+        # Check against expiration
+        time_now = datetime.now()
+        if time_now >= session.expiration:
+            return ''
+        elif session.expiration - time_now < timedelta(minutes=5):
+            Session.query.filter(Session.session_id == session_id).delete()
+            session_id, salt = generate_session(client_ip, user_agent)
+            expiration = time_now + timedelta(minutes=30)
+
+            new_session = Session(session_id=session_id,
+                                  salt=salt,
+                                  expiration=expiration,
+                                  user_id=uid)
+            db.session.add(new_session)
+            db.session.commit()
+            return b64encode(session_id)
+        else:
+            return b64encode(session_id)
+
 
 
 #################
