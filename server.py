@@ -1,6 +1,6 @@
 # server.py
 #
-# Flask server for Glass Bead Game. Contains routes.
+# Flask server for Glassbeads. Contains routes.
 
 from flask import Flask, redirect, request, render_template, session, jsonify
 from flask import abort, json, response
@@ -13,6 +13,8 @@ from model import User, Post, Bookmark, Reference, Follower
 from model import connect_to_db, DB_URI, db
 from security import check_password, make_hash, make_salt, validate_password
 from security import generate_session, validate_session_id
+
+SESSION_DURATION = 30  # Number of minutes a user session should exist.
 
 app = Flask(__name__)
 CORS(app)
@@ -33,6 +35,22 @@ def index():
 #################################################
 #  DECORATOR-LESS SESSION MANAGEMENT FUNCTIONS  #
 #################################################
+
+
+def auth_change(client_ip, user_agent, uid):
+    """Generates user session."""
+
+    session_id, salt = generate_session(client_ip, user_agent)
+    expiration = datetime.now() + timedelta(minutes=SESSION_DURATION)
+
+    new_session = Session(session_id=session_id,
+                                  salt=salt,
+                                  expiration=expiration,
+                                  user_id=uid)
+    db.session.add(new_session)
+    db.session.commit()
+
+    return b64encode(session_id)
 
 
 def session_check(session_id, client_ip, user_agent, uid):
@@ -62,7 +80,7 @@ def session_check(session_id, client_ip, user_agent, uid):
         elif session.expiration - time_now < timedelta(minutes=5):
             Session.query.filter(Session.session_id == session_id).delete()
             session_id, salt = generate_session(client_ip, user_agent)
-            expiration = time_now + timedelta(minutes=30)
+            expiration = time_now + timedelta(minutes=SESSION_DURATION)
 
             new_session = Session(session_id=session_id,
                                   salt=salt,
@@ -70,6 +88,7 @@ def session_check(session_id, client_ip, user_agent, uid):
                                   user_id=uid)
             db.session.add(new_session)
             db.session.commit()
+
             return b64encode(session_id)
         else:
             return b64encode(session_id)
