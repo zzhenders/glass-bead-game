@@ -149,10 +149,13 @@ class Bead extends React.Component {
 			<div className="bead" id="main">
 				<Panel
 					type="references"
+					uid={this.props.uid}
 					posts={this.state.references}
 					users={this.state.users}
 					beadIsLoaded={this.state.isLoaded}
 					setView={this.props.setView}
+					following={this.state.following}
+					setFollowing={this.setFollowing}
 				/>
 				<div className="view">
 					<PostExt
@@ -172,10 +175,13 @@ class Bead extends React.Component {
 				</div>
 				<Panel
 					type="responses"
+					uid={this.props.uid}
 					posts={this.state.responses}
 					users={this.state.users}
 					beadIsLoaded={this.state.isLoaded}
 					setView={this.props.setView}
+					following={this.state.following}
+					setFollowing={this.setFollowing}
 				/>
 			</div>
 		);

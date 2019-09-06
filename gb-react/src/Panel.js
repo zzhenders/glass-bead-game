@@ -9,6 +9,7 @@ class Panel extends React.Component {
 			posts.push(
 				<PostTile
 					key={key}
+					uid={this.props.uid}
 					post_id={post.id}
 					title={post.title}
 					content={post.content}
@@ -16,6 +17,8 @@ class Panel extends React.Component {
 					users={this.props.users}
 					beadIsLoaded={this.props.beadIsLoaded}
 					setView={this.props.setView}
+					setFollowing={this.props.setFollowing}
+					following={this.props.following}
 				/>
 			);
 		});

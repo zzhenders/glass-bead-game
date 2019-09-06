@@ -3,7 +3,6 @@ import User from './User';
 
 class PostTile extends React.Component {
 	render() {
-		let users = this.props.users;
 		let post_id = this.props.post_id;
 		return (
 			<section
@@ -16,8 +15,11 @@ class PostTile extends React.Component {
 				<p>{this.props.content}</p>
 				{ this.props.beadIsLoaded
 					? <User
+						uid={this.props.uid}
 						user_id={this.props.user_id}
 						users={this.props.users}
+						setFollowing={this.props.setFollowing}
+						following={this.props.following}
 						/>
 					: null }
 			</section>

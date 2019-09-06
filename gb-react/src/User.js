@@ -7,7 +7,8 @@ class User extends React.Component {
 		return (
 			<>
 				<b>{username}</b>
-				<i onClick={() => {
+				<i onClick={(event) => {
+					event.stopPropagation();
 					this.props.setFollowing(
 						this.props.uid,
 						user_id,
