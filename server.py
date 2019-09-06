@@ -56,6 +56,14 @@ def auth_change(client_ip, user_agent, uid):
     return b64encode(session_id)
 
 
+def session_destroy(session_id):
+    """From a session_id, deletes the associated session from db."""
+
+    session_id = b64decode(session_id)
+    session = Session.query.filter(Session.session_id == session_id).delete()
+    return ''
+
+
 def session_check(session_id, client_ip, user_agent, uid):
     """Checks authorization."""
 
