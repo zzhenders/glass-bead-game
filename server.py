@@ -714,17 +714,20 @@ def erase_post(post_id):
     by the relevant users.
     """
 
+
+    post = Post.query.filter(Post.id == post_id).one()
+
+    user_id = post.user_id
+
     session_id = session_check(session['id'],
                                request.remote_addr,
                                request.user_agent,
-                               int(user_id))
+                               user_id)
     if session_id == '':
         session['id'] = ''
         abort(401)  # Unauthorized
     else:
         session['id'] = session_id
-
-    post = Post.query.filter(Post.id == post_id).one()
 
     if post.erased:
         abort(403, 'Cannot erase an erased post.')
