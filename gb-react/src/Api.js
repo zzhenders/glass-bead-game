@@ -1,4 +1,5 @@
-let apiBase = 'http://localhost:5000'
+let apiBase = '';
+
 if (process.env.NODE_ENV === 'production') {
 	apiBase = '';
 }
