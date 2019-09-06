@@ -27,14 +27,13 @@ class Settings extends React.Component {
 				'uname': this.state.uname
 			}
 			editUser(this.props.uid, data)
-			.then( (data) => {
-				console.log(data);
+			.then( () => {
 				this.props.setView(
 					'aggregate',
-					`/users/${data.uid}/following/recent-posts`
+					`/users/${this.props.uid}/following/recent-posts`
 				)
 			}).catch( () => {
-				this.setState({editUnameError: true});
+				this.setState({editUnameError: true})
 			});
 		}
 	}
