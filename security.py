@@ -46,12 +46,13 @@ def make_hash(password, salt):
 						p=PAR,
 						buflen=SIZE,
 						argon_type=ARGON_TYPE)
+	return computed_hash
 
 
 def make_salt():
 	"""Generate a cryptographically secure salt."""
+
 	return urandom(SIZE)
-	return computed_hash
 
 
 def validate_password(uname, password):
@@ -88,7 +89,7 @@ def generate_session(client_ip, user_agent):
 	session_id = session_id.digest()
 	return (session_id, salt)
 
-def verify_session_id(session_id, salt, client_ip, user_agent):
+def validate_session_id(session_id, salt, client_ip, user_agent):
 	"""Checks integrity of given session ID."""
 
 	generated_id = sha256()
