@@ -3,13 +3,14 @@
 # Flask server for Glassbeads. Contains routes.
 
 from flask import Flask, redirect, request, render_template, session, jsonify
-from flask import abort, json, response
+from flask import abort, json
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from base64 import urlsafe_b64encode as b64encode
 from base64 import urlsafe_b64decode as b64decode
 from datetime import datetime, timedelta
-from model import User, Post, Bookmark, Reference, Follower
+from os import environ
+from model import User, Post, Bookmark, Reference, Follower, Session
 from model import connect_to_db, DB_URI, db
 from security import check_password, make_hash, make_salt, validate_password
 from security import generate_session, validate_session_id
@@ -17,7 +18,12 @@ from security import generate_session, validate_session_id
 SESSION_DURATION = 30  # Number of minutes a user session should exist.
 
 app = Flask(__name__)
-CORS(app)
+app.secret_key = environ['SECRET_KEY']
+app.config.update(
+    SESSION_COOKIE_NAME='id',
+    )
+
+CORS(app, supports_credentials=True)
 
 
 #################################
@@ -44,9 +50,9 @@ def auth_change(client_ip, user_agent, uid):
     expiration = datetime.now() + timedelta(minutes=SESSION_DURATION)
 
     new_session = Session(session_id=session_id,
-                                  salt=salt,
-                                  expiration=expiration,
-                                  user_id=uid)
+                          salt=salt,
+                          expiration=expiration,
+                          user_id=uid)
     db.session.add(new_session)
     db.session.commit()
 
@@ -136,6 +142,9 @@ def create_user():
         db.session.commit()
 
         user_id = new_user.id
+        session['id'] = auth_change(request.remote_addr,
+                                    request.user_agent,
+                                    user_id)
         return jsonify({'uid': user_id})
     else:
         abort(400)  # Bad request
