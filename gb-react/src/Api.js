@@ -4,6 +4,14 @@ if (process.env.NODE_ENV === 'production') {
 	apiBase = '';
 }
 
+export function checkAuthentication() {
+	const uri = `${apiBase}/users/auth`
+	return fetch(uri)
+	.then(response => {;
+		return response.json()
+	})
+}
+
 export function getPosts(api) {
 	const uri = `${apiBase}${api}`
 	return fetch(uri, {
