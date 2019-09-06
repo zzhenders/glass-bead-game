@@ -9,6 +9,18 @@ class User extends React.Component {
 				<b>{username}</b>
 				<i onClick={(event) => {
 					event.stopPropagation();
+					this.props.setView(
+						'aggregate',
+						`/users/${user_id}/posts/root`);
+				}}>(root)</i>
+				<i onClick={(event) => {
+					event.stopPropagation();
+					this.props.setView(
+						'aggregate',
+						`/users/${user_id}/posts?mode=full`);
+				}}>(all)</i>
+				<i onClick={(event) => {
+					event.stopPropagation();
 					this.props.setFollowing(
 						this.props.uid,
 						user_id,

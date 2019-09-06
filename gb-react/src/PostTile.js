@@ -20,6 +20,7 @@ class PostTile extends React.Component {
 						users={this.props.users}
 						setFollowing={this.props.setFollowing}
 						following={this.props.following}
+						setView={this.props.setView}
 						/>
 					: null }
 			</section>
