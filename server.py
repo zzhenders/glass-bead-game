@@ -60,7 +60,7 @@ def session_destroy(session_id):
     """From a session_id, deletes the associated session from db."""
 
     session_id = b64decode(session_id)
-    session = Session.query.filter(Session.session_id == session_id).delete()
+    Session.query.filter(Session.session_id == session_id).delete()
     return ''
 
 
@@ -68,27 +68,27 @@ def session_check(session_id, client_ip, user_agent, uid):
     """Checks authorization."""
 
     session_id = b64decode(session_id)
-    session = Session.query.filter(Session.session_id == session_id).first()
+    sess = Session.query.filter(Session.session_id == session_id).first()
 
-    if session is None:
+    if sess is None:
         return ''
     else:
-        validated = validate_session_id(session.session_id,
-                                        session.salt,
+        validated = validate_session_id(sess.session_id,
+                                        sess.salt,
                                         client_ip,
                                         user_agent)
     if not validated:
         'In production, log anomaly here for possible security threat'
         return ''
-    elif session.user_id != uid:
+    elif sess.user_id != uid:
         'In production, log anomaly here for possible security threat'
         return ''
     else:
         # Check against expiration
         time_now = datetime.now()
-        if time_now >= session.expiration:
+        if time_now >= sess.expiration:
             return ''
-        elif session.expiration - time_now < timedelta(minutes=5):
+        elif sess.expiration - time_now < timedelta(minutes=5):
             Session.query.filter(Session.session_id == session_id).delete()
             session_id, salt = generate_session(client_ip, user_agent)
             expiration = time_now + timedelta(minutes=SESSION_DURATION)
@@ -152,6 +152,33 @@ def create_user():
         return jsonify({'uid': user_id})
     else:
         abort(400)  # Bad request
+
+
+@app.route("/users/auth")
+def check_authentication():
+    """Check if user session exists."""
+
+    session_id = session.get('id', '')
+    print(session_id)
+    session_id = b64decode(session_id)
+    print(session_id)
+
+    sess = Session.query.filter(Session.session_id == session_id).first()
+
+    if sess is None:
+        return jsonify({'uid': None})
+    else:
+        verify_sid = session_check(session['id'],
+                                   request.remote_addr,
+                                   request.user_agent,
+                                   int(sess.user_id))
+
+        if verify_sid == '':
+            session['id'] = ''
+            return jsonify({'uid': None})
+        else:
+            session['id'] = verify_sid
+            return jsonify({'uid': sess.user_id})
 
 
 @app.route("/users/login", methods=['POST'])
@@ -232,6 +259,8 @@ def update_user(user_id):
     if session_id == '':
         session['id'] = ''
         abort(401)  # Unauthorized
+    else:
+        session['id'] = session_id
 
     data = json.loads(request.data)
     uname = data.get('uname')
@@ -253,6 +282,15 @@ def update_user(user_id):
 def delete_user(user_id):
     """Remove user."""
 
+    session_id = session_check(session['id'],
+                               request.remote_addr,
+                               request.user_agent,
+                               int(user_id))
+
+    if session_id == '':
+        session['id'] = ''
+        abort(401)  # Unauthorized
+
     user = User.query.filter(User.id == user_id
                              ).options(db.joinedload('posts')).one()
 
@@ -269,8 +307,10 @@ def delete_user(user_id):
 
         Follower.query.filter(Follower.follower_id == user.id).delete()
         Bookmark.query.filter(Bookmark.user_id == user_id).delete()
+        Session.query.filter(Session.session_id == session_id).delete()
         
         db.session.commit()
+        session['id'] = ''
 
         return ('', 204) # status 204: success, no content
 
@@ -280,10 +320,20 @@ def follow_user(user_id):
     """Follow the user identified by `user_id`."""
 
     follower_id = request.form.get('uid')  # uid: the user making the request
-
     if not follower_id:
         abort(400)  # Bad request
-    elif User.query.filter(User.id == user_id).one().deleted:
+
+    session_id = session_check(session['id'],
+                               request.remote_addr,
+                               request.user_agent,
+                               int(follower_id))
+    if session_id == '':
+        session['id'] = ''
+        abort(401)  # Unauthorized
+    else:
+        session['id'] = session_id
+
+    if User.query.filter(User.id == user_id).one().deleted:
         abort(403, 'Cannot follow a deleted user.')
     elif Follower.query.filter(Follower.user_id == user_id,
                                Follower.follower_id == follower_id).first():
@@ -304,6 +354,16 @@ def unfollow_user(user_id):
     follower_id = request.form.get('uid')  # uid: the user making the request
     if not follower_id:
         abort(400)  # Bad request
+
+    session_id = session_check(session['id'],
+                               request.remote_addr,
+                               request.user_agent,
+                               int(follower_id))
+    if session_id == '':
+        session['id'] = ''
+        abort(401)  # Unauthorized
+    else:
+        session['id'] = session_id
 
     follower = Follower.query.filter(Follower.user_id == user_id,
                               Follower.follower_id == follower_id).first()
@@ -339,6 +399,16 @@ def bookmarks(user_id):
 def create_bookmark(user_id):
     """Adds a bookmark to the user's bookmarks."""
 
+    session_id = session_check(session['id'],
+                               request.remote_addr,
+                               request.user_agent,
+                               int(user_id))
+    if session_id == '':
+        session['id'] = ''
+        abort(401)  # Unauthorized
+    else:
+        session['id'] = session_id
+
     post_id = int(request.form.get('post_id'))
 
     if not post_id:
@@ -359,6 +429,16 @@ def create_bookmark(user_id):
 @app.route("/users/<user_id>/bookmarks/delete", methods=['POST'])
 def delete_bookmark(user_id):
     """Adds a bookmark to the user's bookmarks."""
+
+    session_id = session_check(session['id'],
+                               request.remote_addr,
+                               request.user_agent,
+                               int(user_id))
+    if session_id == '':
+        session['id'] = ''
+        abort(401)  # Unauthorized
+    else:
+        session['id'] = session_id
 
     post_id = int(request.form.get('post_id'))
 
@@ -464,6 +544,17 @@ def bookmarked():
     """Returns boolean dictionary of whether a post has been bookmarked."""
 
     uid = request.args.get('uid')
+
+    session_id = session_check(session['id'],
+                               request.remote_addr,
+                               request.user_agent,
+                               int(uid))
+    if session_id == '':
+        session['id'] = ''
+        abort(401)  # Unauthorized
+    else:
+        session['id'] = session_id
+
     post_ids = request.args.get('postids')
     post_ids = post_ids.split('.')
     response = {int(post_id): False for post_id in post_ids}
@@ -504,6 +595,16 @@ def create_post():
     if not (title and content and user_id):
         abort(400)  # Bad request        
     else:
+        session_id = session_check(session['id'],
+                                   request.remote_addr,
+                                   request.user_agent,
+                                   int(user_id))
+        if session_id == '':
+            session['id'] = ''
+            abort(401)  # Unauthorized
+        else:
+            session['id'] = session_id
+
         references = data.get('references', [])
         if len(references) > 4:
             abort(400)  # Bad request
@@ -553,6 +654,16 @@ def edit_post(post_id):
     if not (title and content and user_id):
         abort(400)  # Bad request        
     else:
+        session_id = session_check(session['id'],
+                                   request.remote_addr,
+                                   request.user_agent,
+                                   int(user_id))
+        if session_id == '':
+            session['id'] = ''
+            abort(401)  # Unauthorized
+        else:
+            session['id'] = session_id
+
         references = data.get('references', [])
         if len(references) > 4:
             abort(400)  # Bad request
@@ -577,6 +688,16 @@ def erase_post(post_id):
     Deletes content of a post. Responses will still exist until changed
     by the relevant users.
     """
+
+    session_id = session_check(session['id'],
+                               request.remote_addr,
+                               request.user_agent,
+                               int(user_id))
+    if session_id == '':
+        session['id'] = ''
+        abort(401)  # Unauthorized
+    else:
+        session['id'] = session_id
 
     post = Post.query.filter(Post.id == post_id).one()
 
