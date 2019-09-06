@@ -1,4 +1,5 @@
 import React from 'react';
+import { logoutUser } from './Api';
 import NavButton from './NavButton';
 import SearchForm from './SearchForm';
 
@@ -9,6 +10,10 @@ class Navbar extends React.Component {
 	    this.state = {
 	    	isShowSearch: false,
 	    };
+  	}
+
+  	logout(uid) {
+  		logoutUser({'uid': uid})
   	}
 
   	toggleShowSearch = () => {
@@ -84,6 +89,7 @@ class Navbar extends React.Component {
 						alt="Logout"
 						onClick={
 							() => {
+								this.logout(uid);
 								this.props.setUid(undefined);
 								this.props.setView('login', '');
 							}
