@@ -11,6 +11,10 @@ class Post extends React.Component {
 					() => this.props.setView('bead', this.props.post_id)
 				}>{this.props.title}</h1>
 				<p>{this.props.content}</p>
+				{ this.props.uid === this.props.user_id
+					? <i onClick={()=>{ this.props.setView('write', this.props.post_id)}}>(edit)</i>
+					: <br/>
+				}
 				{ this.props.aggregateIsLoaded
 					? <div><Bookmarker
 						uid={this.props.uid}

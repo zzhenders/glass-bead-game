@@ -9,6 +9,10 @@ class PostExt extends React.Component {
 			<section className="post">
 				<h1>{this.props.title}</h1>
 				<p>{this.props.content}</p>
+				{ this.props.uid === this.props.user_id
+					? <i onClick={()=>{ this.props.setView('write', this.props.post_id)}}>(edit)</i>
+					: <br/>
+				}
 				{ this.props.beadIsLoaded
 					? <div><Bookmarker
 						uid={this.props.uid}
