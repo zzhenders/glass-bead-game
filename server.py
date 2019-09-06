@@ -216,6 +216,31 @@ def login_user():
             abort(403)
 
 
+@app.route("/users/logout", methods=['POST'])
+def logout_user():
+    """User logout."""
+
+    data = json.loads(request.data)
+    uid = data.get('uid')
+
+    if uid is None:
+        abort(400)  # Bad request
+
+    session_id = session.get('id', '')
+
+    session_id = session_check(session_id,
+                               request.remote_addr,
+                               request.user_agent,
+                               int(uid))
+
+    if session_id == '':
+        session['id'] = ''
+        abort(401)  # Unauthorized
+    else:
+        session['id'] = session_destroy(session_id)
+        return ('', 204)
+
+
 @app.route("/users/<user_id>/posts")
 def user_posts_all(user_id):
     """All posts by a particular user."""
