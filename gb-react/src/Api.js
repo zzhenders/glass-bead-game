@@ -75,6 +75,17 @@ export function deleteUser(uid) {
 	});
 }
 
+export function logoutUser(data) {
+	const uri = `${apiBase}/users/logout`;
+	return fetch(uri, {
+		method: 'POST',
+		headers: { 
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify(data),
+	});
+}
+
 export function getBookmarks(arrayOfPostIds, uid) {
 	const uri = `${apiBase}/posts/bookmarked?postids=${arrayOfPostIds.join('.')}&uid=${uid}`
 	return fetch(uri)
