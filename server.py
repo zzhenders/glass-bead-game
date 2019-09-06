@@ -4,7 +4,6 @@
 
 from flask import Flask, redirect, request, render_template, session, jsonify
 from flask import abort, json
-from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from base64 import urlsafe_b64encode as b64encode
 from base64 import urlsafe_b64decode as b64decode
@@ -23,8 +22,6 @@ app.config.update(
     SESSION_COOKIE_NAME='id',
     )
 
-CORS(app, supports_credentials=True)
-
 
 #################################
 #  REACT IMPLEMENTATION (TODO)  #
@@ -35,7 +32,7 @@ CORS(app, supports_credentials=True)
 def index():
     """Serves index, and by extension the app."""
 
-    return render_template('index.html')
+    return render_template('build/index.html')
 
 
 #################################################
@@ -98,7 +95,6 @@ def session_check(session_id, client_ip, user_agent, uid):
             return b64encode(session_id)
         else:
             return b64encode(session_id)
-
 
 
 #################
@@ -177,6 +173,9 @@ def login_user():
     else:
         hash_match = check_password(password, user.salt, user.pass_hash)
         if hash_match is True:
+            session['id'] = auth_change(request.remote_addr,
+                                        request.user_agent,
+                                        user.id)
             return jsonify({'uid': user.id})
         else:
             abort(403)
@@ -216,6 +215,15 @@ def user_posts_root(user_id):
 @app.route("/users/<user_id>/update", methods=['POST'])
 def update_user(user_id):
     """Update user information."""
+
+    session_id = session_check(session['id'],
+                               request.remote_addr,
+                               request.user_agent,
+                               int(user_id))
+
+    if session_id == '':
+        session['id'] = ''
+        abort(401)  # Unauthorized
 
     data = json.loads(request.data)
     uname = data.get('uname')
