@@ -1,4 +1,5 @@
 import React from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Bookmarker from './Bookmarker';
 import Respond from './Respond';
 import User from './User';
@@ -12,7 +13,15 @@ class Post extends React.Component {
 				}>{this.props.title}</h1>
 				<p>{this.props.content}</p>
 				{ this.props.uid === this.props.user_id
-					? <i onClick={()=>{ this.props.setView('write', this.props.post_id)}}>(edit)</i>
+					? <i
+						onClick={
+							()=>{
+								this.props.setView('write', this.props.post_id)
+							}
+						}
+						>
+						<FontAwesomeIcon icon="edit" />
+						</i>
 					: <br/>
 				}
 				{ this.props.aggregateIsLoaded
