@@ -51,7 +51,7 @@ class Login extends React.Component {
 				>
 					<label htmlFor="uname">
 					Username 
-					</label>
+					</label><br/>
 					<input
 						type="text"
 						id="uname"
@@ -61,7 +61,7 @@ class Login extends React.Component {
 					/><br/>
 					<label htmlFor="pass">
 					Password 
-					</label>
+					</label><br/>
 					<input
 						type="password"
 						id="pass"

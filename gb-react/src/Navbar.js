@@ -32,6 +32,7 @@ class Navbar extends React.Component {
 					<NavButton
 						id="home-btn"
 						alt="Home"
+						icon="home"
 						onClick={() => {
 							this.props.setView(
 								'aggregate',
@@ -42,6 +43,7 @@ class Navbar extends React.Component {
 					<NavButton
 						id="bookmarks-btn"
 						alt="Bookmarks"
+						icon={['fas', 'bookmark']}
 						onClick={() => {
 							this.props.setView(
 								'aggregate',
@@ -52,6 +54,7 @@ class Navbar extends React.Component {
 					<NavButton
 						id="userroot-btn"
 						alt="Root"
+						icon="user"
 						onClick={() => {
 							this.props.setView(
 								'aggregate',
@@ -62,6 +65,7 @@ class Navbar extends React.Component {
 					<NavButton
 						id="add-post-btn"
 						alt="Add"
+						icon="edit"
 						onClick={() => {
 							this.props.setView(
 								'write',
@@ -72,6 +76,7 @@ class Navbar extends React.Component {
 					<NavButton
 						id="search-btn"
 						alt="Search"
+						icon="search"
 						onClick={this.toggleShowSearch}/>
 					{this.state.isShowSearch
 						? <SearchForm toggleShowSearch={this.toggleShowSearch} setView={this.props.setView}/>
@@ -80,6 +85,7 @@ class Navbar extends React.Component {
 					<NavButton
 						id="settings-btn"
 						alt="Settings"
+						icon="cog"
 						onClick={() => {
 							this.props.setView('settings', '')
 						}}
@@ -87,6 +93,7 @@ class Navbar extends React.Component {
 					<NavButton
 						id="logout-btn"
 						alt="Logout"
+						icon="sign-out-alt"
 						onClick={
 							() => {
 								this.logout(uid);
@@ -100,12 +107,14 @@ class Navbar extends React.Component {
 					<NavButton
 						id="create-user-btn"
 						alt="Create Account"
+						icon="user-plus"
 						onClick={
 							() => this.props.setView('register', '')
 						}/>
 					<NavButton
 						id="login-btn"
 						alt="Login"
+						icon="sign-in-alt"
 						onClick={
 							() => this.props.setView('login', '')
 						}/>

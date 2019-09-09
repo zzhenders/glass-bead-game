@@ -1,12 +1,16 @@
 import React from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 class NavButton extends React.Component {
 	render() {
 		return (
-			<img id={this.props.id}
-			src=""
-			alt={this.props.alt}
-			onClick={this.props.onClick} />
+			<div>
+				<FontAwesomeIcon id={this.props.id}
+				icon={this.props.icon}
+				alt={this.props.alt}
+				size="2x"
+				onClick={this.props.onClick} />
+			</div>
 		);
 	}
 }

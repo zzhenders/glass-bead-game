@@ -1,9 +1,18 @@
 import React from 'react';
-import logo from './logo.svg';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faSignInAlt, faUserPlus, faHome, faUser, faEdit, faSearch,
+         faBookmark as faBookmarkSolid, faCog, faSignOutAlt,
+         faArrowAltCircleRight,
+         } from '@fortawesome/free-solid-svg-icons';
+import { faBookmark as faBookmarkRegular } from '@fortawesome/free-regular-svg-icons'; 
 import { checkAuthentication } from './Api';
 import './glassbeads.css';
 import Navbar from './Navbar';
 import Main from './Main';
+
+library.add(faSignInAlt, faUserPlus, faHome, faBookmarkSolid, faBookmarkRegular,
+            faUser, faEdit, faSearch, faCog, faSignOutAlt, faArrowAltCircleRight,
+            )
 
 class App extends React.Component {
   constructor(props) {
