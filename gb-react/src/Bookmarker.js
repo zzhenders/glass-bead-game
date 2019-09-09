@@ -1,4 +1,5 @@
 import React from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 class Bookmarker extends React.Component {
 	render() {
@@ -9,7 +10,11 @@ class Bookmarker extends React.Component {
 			id="pb{post_id}"
 			onClick={
 				() => {this.props.bookmarker(uid, post_id)}
-			}>{this.props.isBookmarked(post_id) ? 'Unbookmark' : 'Bookmark'}
+			}>
+			{this.props.isBookmarked(post_id)
+				? <FontAwesomeIcon icon={['fas', 'bookmark']}/>
+				: <FontAwesomeIcon icon={['far', 'bookmark']}/>
+			}
 			</i>
 		);
 	}
