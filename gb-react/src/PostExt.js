@@ -6,7 +6,7 @@ import User from './User';
 class PostExt extends React.Component {
 	render() {
 		return (
-			<section className="post">
+			<section className="post ext">
 				<h1>{this.props.title}</h1>
 				<p>{this.props.content}</p>
 				{ this.props.uid === this.props.user_id
