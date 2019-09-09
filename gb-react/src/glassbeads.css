@@ -1,27 +1,91 @@
+/* text styles */
+
+body {
+  font-family: 'Lato', sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Quando', serif;
+}
+
+h1, p {
+  margin-block-start: .5em;
+  margin-block-end: .5em;
+}
+
+.post h1:hover, .post-tile h1:hover {
+  color: #7f49b7;
+}
+
+.ext h1:hover {
+  color: #1c1c24;
+}
+
+
+
+/* formatting styles */
+
 body {
   margin: 0;
+  background-image: url(full-bloom-e.png);
+  /* Background pattern from Toptal Subtle Patterns */
+  background-attachment: fixed;
 }
 
 #app {
   display: grid;
   grid-template-areas: "nav main";
-  grid-template-columns: auto 1fr;
-  background-color: #ccc;
+  grid-template-columns: 80px 1fr;
 }
 
 nav {
   grid-area: nav;
   align-items: center;
-  background-color: #888;
   display: inline-flex;
   flex-flow: column;
   height: 100vh;
   padding: 20px;
-  /*width: 80px;*/
+  background-color: #457273;
+  position: fixed;
+}
+
+nav div {
+  margin-bottom: 15px;
+  margin-top: 10px;
+}
+
+nav svg {
+  color: #e8edef;
+}
+
+nav svg:hover {
+  color: #ffffff;
+}
+
+nav form {
+  margin-bottom: 15px;
+}
+
+nav input {
+  height: 22px;
+  margin-right: 2px;
+  vertical-align: middle;
+}
+
+nav label {
+  vertical-align: middle;
+}
+
+input {
+  background-color: #e8edef;
+  border-style: unset;
+  border-radius: 5px;
+  padding: 5px;
 }
 
 #main {
   grid-area: main;
+  height: 100vh;
 }
 
 .aggregate {
@@ -42,6 +106,12 @@ nav {
   grid-template-rows: 200px 1fr 200px;
   grid-template-columns: 1fr;
   padding: 10px;
+}
+
+.user-login {
+  margin-left: auto;
+  margin-right: auto;
+  width: 400px;
 }
 
 .references {
@@ -67,13 +137,30 @@ nav {
 }
 
 .post {
-  border: 1px solid black;
-  max-height: 300px;
+  border: 2px solid;
+  border-color: #7fa6af;
+  border-radius: 15px;
+  background-color: #e8edef;
+  color: #1c1c24;
+  display: grid;
+  max-height: 600px;
+  min-height: 300px;
+  max-width: 400px;
+  min-width: 200px;
   margin: 10px;
-  padding: 10px;
+  padding: 20px;
 }
 
+
 .post-tile {
-  border: 1px solid black;
-  padding: 10px;
+  border: 2px solid;
+  border-color: #7fa6af;
+  border-radius: 15px;
+  background-color: #e8edef;
+  color: #1c1c24;
+  padding: 15px;
+}
+
+.post:hover, .post-tile:hover {
+  border-color: #e8edef;
 }
