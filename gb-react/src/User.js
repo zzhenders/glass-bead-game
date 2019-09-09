@@ -1,4 +1,5 @@
 import React from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 class User extends React.Component {
 	render() {
@@ -6,7 +7,7 @@ class User extends React.Component {
 		let user_id = this.props.user_id;
 		return (
 			<>
-				<b>{username}</b>
+				<b className="username">{username}</b>
 				<i onClick={(event) => {
 					event.stopPropagation();
 					this.props.setView(
@@ -28,8 +29,8 @@ class User extends React.Component {
 						)
 				}}>
 				{ this.props.following.hasOwnProperty(user_id)
-					? ' (unfollow)'
-					: ' (follow)'
+					? <FontAwesomeIcon icon="minus-circle" />
+					: <FontAwesomeIcon icon="plus-circle" />
 				}
 				</i>
 			</>

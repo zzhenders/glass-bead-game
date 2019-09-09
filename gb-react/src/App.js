@@ -2,7 +2,7 @@ import React from 'react';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faSignInAlt, faUserPlus, faHome, faUser, faEdit, faSearch,
          faBookmark as faBookmarkSolid, faCog, faSignOutAlt,
-         faArrowAltCircleRight,
+         faArrowAltCircleRight, faPlusCircle, faMinusCircle
          } from '@fortawesome/free-solid-svg-icons';
 import { faBookmark as faBookmarkRegular } from '@fortawesome/free-regular-svg-icons'; 
 import { checkAuthentication } from './Api';
@@ -12,7 +12,7 @@ import Main from './Main';
 
 library.add(faSignInAlt, faUserPlus, faHome, faBookmarkSolid, faBookmarkRegular,
             faUser, faEdit, faSearch, faCog, faSignOutAlt, faArrowAltCircleRight,
-            )
+            faPlusCircle, faMinusCircle)
 
 class App extends React.Component {
   constructor(props) {
