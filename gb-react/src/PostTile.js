@@ -7,11 +7,13 @@ class PostTile extends React.Component {
 		return (
 			<section
 				className="post-tile"
+			>
+				<h1
 				onClick={
 					() => {
 						this.props.setView('bead', post_id);
-					}}>
-				<h1>{this.props.title}</h1>
+					}}
+				>{this.props.title}</h1>
 				<p>{this.props.content}</p>
 				{ this.props.beadIsLoaded
 					? <User
