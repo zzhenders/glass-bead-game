@@ -1,4 +1,5 @@
 import React from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 class Respond extends React.Component {
 	render() {
@@ -9,7 +10,9 @@ class Respond extends React.Component {
 						'write',
 						`?${this.props.post_id}`)
 				}
-			}>(respond)</i>
+			}>
+			<FontAwesomeIcon icon="reply" />
+			</i>
 		)
 	}
 }
