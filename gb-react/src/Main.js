@@ -35,6 +35,7 @@ class Main extends React.Component {
 						uid={this.props.uid}
 						post_id={this.props.data}
 						setView={this.props.setView}
+						setUid={this.props.setUid}
 					/>
 				);
 				break;
