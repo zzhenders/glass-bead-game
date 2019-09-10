@@ -6,8 +6,8 @@ class User extends React.Component {
 		let username = this.props.users[this.props.user_id];
 		let user_id = this.props.user_id;
 		return (
-			<>
-				<b className="username">{username}</b>
+			<span className="user">
+				<b className="username">@{username}</b>
 				<i onClick={(event) => {
 					event.stopPropagation();
 					this.props.setView(
@@ -37,7 +37,7 @@ class User extends React.Component {
 					: <FontAwesomeIcon icon="plus-circle" />
 				}
 				</i>
-			</>
+			</span>
 		)
 	}
 }

@@ -8,46 +8,51 @@ class Post extends React.Component {
 	render() {
 		return (
 			<section className="post">
-				<h1 onClick={
+				<h1
+				className="title"
+				onClick={
 					() => this.props.setView('bead', this.props.post_id)
 				}>{this.props.title}</h1>
-				<p>{this.props.content}</p>
-				{ this.props.uid === this.props.user_id
-					? <i
-						onClick={
-							()=>{
-								this.props.setView('write', this.props.post_id)
+				<div className="content">{this.props.content}</div>
+				<div className="options">
+					{ this.props.aggregateIsLoaded
+						? <><User
+							uid={this.props.uid}
+							user_id={this.props.user_id}
+							users={this.props.users}
+							setFollowing={this.props.setFollowing}
+							following={this.props.following}
+							setView={this.props.setView}
+							/>
+
+							<Bookmarker
+							uid={this.props.uid}
+							post_id={this.props.post_id}
+							bookmarker={this.props.bookmarker}
+							isBookmarked={this.props.isBookmarked}
+							/>
+
+							<Respond
+							setView={this.props.setView}
+							post_id={this.props.post_id}
+							/>
+
+							</>
+						: null }
+					{ this.props.uid === this.props.user_id
+						? <span
+							onClick={
+								(evt)=>{
+									evt.preventDefault();
+									this.props.setView('write', this.props.post_id);
+								}
 							}
-						}
-						>
-						<FontAwesomeIcon icon="edit" />
-						</i>
-					: <br/>
-				}
-				{ this.props.aggregateIsLoaded
-					? <div><Bookmarker
-						uid={this.props.uid}
-						post_id={this.props.post_id}
-						bookmarker={this.props.bookmarker}
-						isBookmarked={this.props.isBookmarked}
-						/>
-
-						<p><User
-						uid={this.props.uid}
-						user_id={this.props.user_id}
-						users={this.props.users}
-						setFollowing={this.props.setFollowing}
-						following={this.props.following}
-						setView={this.props.setView}
-						/></p>
-
-						<Respond
-						setView={this.props.setView}
-						post_id={this.props.post_id}
-						/>
-
-						</div>
-					: null }
+							>
+							<FontAwesomeIcon className="edit" icon="edit" />
+							</span>
+						: null
+					}
+				</div>
 			</section>
 		);
 	}

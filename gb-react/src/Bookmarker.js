@@ -6,7 +6,7 @@ class Bookmarker extends React.Component {
 		const uid = this.props.uid;
 		const post_id = this.props.post_id;
 		return (
-			<i className="bookmarker"
+			<span className="bookmarker"
 			id="pb{post_id}"
 			onClick={
 				() => {this.props.bookmarker(uid, post_id)}
@@ -15,7 +15,7 @@ class Bookmarker extends React.Component {
 				? <FontAwesomeIcon icon={['fas', 'bookmark']}/>
 				: <FontAwesomeIcon icon={['far', 'bookmark']}/>
 			}
-			</i>
+			</span>
 		);
 	}
 }
