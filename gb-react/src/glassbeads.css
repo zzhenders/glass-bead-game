@@ -54,7 +54,7 @@ body {
 
 #app {
   display: grid;
-  grid-template-areas: "nav main";
+  grid-template-areas: ". main";
   grid-template-columns: 80px 1fr;
 }
 
