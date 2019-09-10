@@ -13,13 +13,17 @@ class User extends React.Component {
 					this.props.setView(
 						'aggregate',
 						`/users/${user_id}/posts/root`);
-				}}>(root)</i>
+				}}>
+					<FontAwesomeIcon icon="leaf" />
+				</i>
 				<i onClick={(event) => {
 					event.stopPropagation();
 					this.props.setView(
 						'aggregate',
 						`/users/${user_id}/posts?mode=full`);
-				}}>(all)</i>
+				}}>
+					<FontAwesomeIcon icon="tree" />
+				</i>
 				<i onClick={(event) => {
 					event.stopPropagation();
 					this.props.setFollowing(

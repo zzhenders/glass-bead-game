@@ -54,7 +54,7 @@ class Navbar extends React.Component {
 					<NavButton
 						id="userroot-btn"
 						alt="Root"
-						icon="user"
+						icon="leaf"
 						onClick={() => {
 							this.props.setView(
 								'aggregate',
