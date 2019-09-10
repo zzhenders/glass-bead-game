@@ -1,4 +1,5 @@
 import React from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { loginUser } from './Api';
 
 class Login extends React.Component {
@@ -45,36 +46,49 @@ class Login extends React.Component {
 	render() {
 		return (
 			<div className="login view" id="main">
+				<div className="login container">
 				<form
-					className="user-login"
+					className="login-form"
 					onSubmit={this.handleSubmit}
-				>
-					<label htmlFor="uname">
-					Username 
-					</label><br/>
-					<input
-						type="text"
-						id="uname"
-						name="uname"
-						value={this.state.uname}
-						onChange={this.handleUnameChange}
-					/><br/>
-					<label htmlFor="pass">
-					Password 
-					</label><br/>
-					<input
-						type="password"
-						id="pass"
-						name="pass"
-						value={this.state.pass}
-						onChange={this.handlePassChange}
-					/><br/>
+				><br/>
+					<table><tbody>
+						<tr>
+							<td><label htmlFor="uname">
+							Username 
+							</label></td>
+							<td><input
+								type="text"
+								id="uname"
+								name="uname"
+								value={this.state.uname}
+								onChange={this.handleUnameChange}
+							/></td>
+						</tr>
+						<tr>
+							<td><label htmlFor="pass">
+							Password 
+							</label></td>
+							<td><input
+								type="password"
+								id="pass"
+								name="pass"
+								value={this.state.pass}
+								onChange={this.handlePassChange}
+							/></td>
+						</tr>
+					</tbody></table>
+					<label>
 					<input
 						type="submit"
 						value="Login"
-					/><br/>
-					{ this.state.error ? <b>username or password incorrect</b> : null }
+						hidden
+					/>
+					<FontAwesomeIcon icon="arrow-alt-circle-right" size="lg"/>
+					<br/></label>
+					{ this.state.error ? <b className="error">username or password incorrect<br/></b> : <br/> }
+					<br/>
 				</form>
+				</div>
 			</div>
 		)
 	}
