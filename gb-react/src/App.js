@@ -1,6 +1,6 @@
 import React from 'react';
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faSignInAlt, faUserPlus, faHome, faUser, faEdit, faSearch,
+import { faSignInAlt, faUserPlus, faHome, faLeaf, faTree, faEdit, faSearch,
          faBookmark as faBookmarkSolid, faCog, faSignOutAlt,
          faArrowAltCircleRight, faPlusCircle, faMinusCircle, faReply,
          } from '@fortawesome/free-solid-svg-icons';
@@ -11,8 +11,8 @@ import Navbar from './Navbar';
 import Main from './Main';
 
 library.add(faSignInAlt, faUserPlus, faHome, faBookmarkSolid, faBookmarkRegular,
-            faUser, faEdit, faSearch, faCog, faSignOutAlt, faArrowAltCircleRight,
-            faPlusCircle, faMinusCircle, faReply)
+            faEdit, faSearch, faCog, faSignOutAlt, faArrowAltCircleRight,
+            faPlusCircle, faMinusCircle, faReply, faLeaf, faTree)
 
 class App extends React.Component {
   constructor(props) {
