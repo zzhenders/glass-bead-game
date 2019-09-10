@@ -14,13 +14,16 @@ h1, p {
 }
 
 .post h1:hover, .post-tile h1:hover {
-  color: #7f49b7;
+  color: #cc7e85;
 }
 
 .ext h1:hover {
   color: #1c1c24;
 }
 
+svg:hover {
+  color: #cc7e85;
+}
 
 
 /* formatting styles */
@@ -45,7 +48,7 @@ nav {
   flex-flow: column;
   height: 100vh;
   padding: 20px;
-  background-color: #457273;
+  background-color: #666a86;
   position: fixed;
 }
 
@@ -54,12 +57,12 @@ nav div {
   margin-top: 10px;
 }
 
-nav svg {
-  color: #e8edef;
+nav svg, .container svg {
+  color: #95b8d1;
 }
 
-nav svg:hover {
-  color: #ffffff;
+nav svg:hover, .container svg:hover {
+  color: #fffcf2;
 }
 
 nav form {
@@ -77,7 +80,7 @@ nav label {
 }
 
 input {
-  background-color: #e8edef;
+  background-color: #fffcf2;
   border-style: unset;
   border-radius: 5px;
   padding: 5px;
@@ -86,6 +89,38 @@ input {
 #main {
   grid-area: main;
   height: 100vh;
+}
+
+.container {
+  background-color: #666a86;
+  border-radius: 15px;
+  color: #95b8d1;
+  display: grid;
+  font-size: 1.1em;
+  font-weight: bold;
+  margin-top: 100px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 20px;
+  width: 400px;
+}
+
+.login {
+  grid-template-areas: ". login-form .";
+  grid-template-columns: 1fr 6fr 1fr;
+}
+
+.register {
+  grid-template-areas: ". signup .";
+  grid-template-columns: 1fr 6fr 1fr;
+}
+
+.login-form {
+  grid-area: login-form;
+}
+
+.signup {
+  grid-area: signup;
 }
 
 .aggregate {
@@ -106,12 +141,6 @@ input {
   grid-template-rows: 200px 1fr 200px;
   grid-template-columns: 1fr;
   padding: 10px;
-}
-
-.user-login {
-  margin-left: auto;
-  margin-right: auto;
-  width: 400px;
 }
 
 .references {
@@ -138,9 +167,9 @@ input {
 
 .post {
   border: 2px solid;
-  border-color: #7fa6af;
+  border-color: #95b8d1;
   border-radius: 15px;
-  background-color: #e8edef;
+  background-color: #fffcf2;
   color: #1c1c24;
   display: grid;
   max-height: 600px;
@@ -154,9 +183,9 @@ input {
 
 .post-tile {
   border: 2px solid;
-  border-color: #7fa6af;
+  border-color: #95b8d1;
   border-radius: 15px;
-  background-color: #e8edef;
+  background-color: #fffcf2;
   color: #1c1c24;
   padding: 15px;
 }
