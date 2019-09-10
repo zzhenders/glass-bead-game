@@ -1,15 +1,18 @@
 /* color palette */
 
 :root {
-  --module-color: #666a86;
-  --module-border-color: #95b8d1;
-  --active-module-border-color: #e8edef;
-  --module-item-color: #95b8d1;
-  --active-module-item-color: #fffcf2;
-  --text-bg-color: #fffcf2;
-  --text-color: #1c1c24;
-  --text-link-color: #1c1c24;
-  --active-text-link-color: #cc7e85;
+  --background-color: #7DD4a8;
+  --module-color: #24211A;
+  --module-border-color: #FA7785;
+  --active-module-border-color: #7DD4B6;
+  --module-item-color: #FA7785;
+  --active-module-item-color: #F4F7ED;
+  --text-bg-color: #F4F7ED;
+  --text-color: #24211A;
+  --text-border-color: #24211A;
+  --active-text-border-color: #24211A;
+  --text-link-color: #7DD4B6;
+  --active-text-link-color: #FA7785;
 }
 
 /* text styles */
@@ -24,8 +27,8 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 h1, p {
-  margin-block-start: .5em;
-  margin-block-end: .5em;
+  margin-block-start: 0.3em;
+  margin-block-end: 0em;
 }
 
 .post h1:hover, .post-tile h1:hover {
@@ -47,19 +50,23 @@ svg:hover {
 
 body {
   margin: 0;
-  background-image: url(full-bloom-e.png);
+  background-color: var(--background-color);
+  /*background-image: url(full-bloom-e.png);*/
   /* Background pattern from Toptal Subtle Patterns */
   background-attachment: fixed;
 }
 
 #app {
   display: grid;
-  grid-template-areas: ". main";
-  grid-template-columns: 80px 1fr;
+  grid-template-areas:
+  ". . "
+  ". main "
+  ". . ";
+  grid-template-columns: 100px 1fr;
+  grid-template-rows: 30px auto 30px;
 }
 
 nav {
-  grid-area: nav;
   align-items: center;
   display: inline-flex;
   flex-flow: column;
@@ -187,13 +194,19 @@ input {
 
 .post {
   border: 5px solid;
-  border-color: var(--module-border-color);
+  border-color: var(--text-border-color);
   border-radius: 5px;
   background-color: var(--text-bg-color);
   color: var(--text-color);
   display: grid;
-  max-height: 600px;
-  min-height: 300px;
+  grid-template-areas:
+    "title"
+    "content"
+    "options";
+  grid-template-rows: auto auto auto;
+  grid-gap: 20px;
+  max-height: none;
+  min-height: none;
   max-width: 400px;
   min-width: 200px;
   margin: 10px;
@@ -201,15 +214,64 @@ input {
 }
 
 
-.post-tile {
-  border: 2px solid;
-  border-color: var(--module-border-color);
+.tile {
+  border: 5px solid;
+  border-color: var(--text-border-color);
   border-radius: 5px;
   background-color: var(--text-bg-color);
   color: var(--text-color);
+  display: grid;
+  max-height: 140px;
+  min-height: 140px;
   padding: 15px;
 }
 
-.post:hover, .post-tile:hover {
-  border-color: var(--active-module-border-color);
+.post:hover {
+  border-color: var(--active-text-border-color);
+  transition:all 0.3s ease;
 }
+
+.title {
+  grid-area: title;
+  max-width: 400px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.content {
+  grid-area: content;
+}
+
+.options {
+  display: grid;
+  grid-area: options;
+  grid-template-areas: "user . bookmarker respond edit";
+  grid-template-columns: 4fr auto auto auto auto;
+  grid-gap: 1em;
+}
+
+.user {
+  grid-area: user;
+}
+
+.user i, .user b {
+  margin-right: 1em;
+}
+
+.username {
+  color: var(--active-text-link-color);
+}
+
+.bookmarker {
+  grid-area: bookmarker;
+  /*margin-right: 50px;*/
+}
+
+.respond {
+  grid-area: respond;
+}
+
+.edit {
+  grid-area: edit;
+}
+
