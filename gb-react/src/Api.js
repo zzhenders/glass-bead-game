@@ -31,6 +31,13 @@ export function writePost(api, data) {
 	});
 }
 
+export function deletePost(post_id) {
+	const uri = `${apiBase}/posts/${post_id}/erase`;
+	return fetch(uri, {
+		method: 'POST',
+	});
+}
+
 export function loginUser(data) {
 	const uri = `${apiBase}/users/login`;
 	return fetch(uri, {
