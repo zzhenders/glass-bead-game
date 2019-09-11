@@ -42,8 +42,7 @@ class Post extends React.Component {
 					{ this.props.uid === this.props.user_id
 						? <span
 							onClick={
-								(evt)=>{
-									evt.preventDefault();
+								()=>{
 									this.props.setView('write', this.props.post_id);
 								}
 							}
