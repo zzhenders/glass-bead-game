@@ -140,8 +140,11 @@ input {
   width: 400px;
 }
 
-.container input {
+/* container styles */
+
+.container input, .container textarea {
   border: 5px var(--text-color) solid;
+  border-radius: 5px;
   background-color: var(--text-bg-color);
 }
 
@@ -171,6 +174,8 @@ input {
   grid-area: signup;
 }
 
+/* view styles */
+
 .aggregate {
   display: grid;
   grid-template-areas: 
@@ -189,6 +194,7 @@ input {
   grid-template-rows: 200px 1fr 200px;
   grid-template-columns: 1fr;
   padding: 10px;
+  position: relative;
 }
 
 .references {
@@ -201,6 +207,9 @@ input {
 
 .panel {
   display: inline-flex;
+  position: absolute;
+  overflow-x: hidden;
+  overflow-y: unset;
 }
 
 .view {
@@ -212,6 +221,8 @@ input {
   display: inline-flex;
   flex-flow: row wrap;
 }
+
+/* post styles */
 
 .post {
   border: 5px solid;
@@ -235,19 +246,6 @@ input {
   padding: 20px;
 }
 
-
-.tile {
-  border: 5px solid;
-  border-color: var(--text-border-color);
-  border-radius: 5px;
-  background-color: var(--text-bg-color);
-  color: var(--text-color);
-  display: grid;
-  max-height: 140px;
-  min-height: 140px;
-  padding: 15px;
-}
-
 .post:hover {
   border-color: var(--active-text-border-color);
   transition:all 0.3s ease;
@@ -262,6 +260,28 @@ input {
 
 .content {
   grid-area: content;
+}
+
+.tile {
+  border: 5px solid;
+  border-color: var(--text-border-color);
+  border-radius: 5px;
+  background-color: var(--text-bg-color);
+  color: var(--text-color);
+  display: grid;
+  max-height: 140px;
+  min-height: 140px;
+  max-width: 250px;
+  min-width: 250px;
+  padding: 15px;
+}
+
+.tile .content, .tile .title {
+  max-width: 250px;
+  max-height: 1.3em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .options {
@@ -295,5 +315,42 @@ input {
 
 .edit {
   grid-area: edit;
+}
+
+/* write styles */
+
+.write {
+  display: inherit;
+}
+
+.citations {
+  grid-area: citations;
+}
+
+.citations svg {
+  margin-left: 5px;
+}
+
+.citations span {
+  margin-right: 5px;
+  white-space: nowrap;
+}
+
+.write textarea {
+  min-height: 5em;
+  max-height: 50vh;
+  resize: vertical;
+  width: 96%;
+}
+
+.woptions {
+  display: grid;
+  grid-template-areas: ". submit";
+  grid-template-columns: 1fr auto;
+  padding-top: 1em;
+}
+
+.woptions svg {
+  grid-area: submit;
 }
 

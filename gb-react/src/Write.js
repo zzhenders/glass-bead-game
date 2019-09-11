@@ -199,7 +199,7 @@ class Write extends React.Component {
 								onChange={this.handleContentChange}
 								value={this.state.content}
 							></textarea><br/>
-						<label>
+						<label className="woptions">
 							<input
 								type="submit"
 								value="submit"
