@@ -1,4 +1,5 @@
 import React from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 class References extends React.Component {
 	constructor(props) {
@@ -89,27 +90,31 @@ class References extends React.Component {
 		Object.entries(this.props.references)
 		.forEach(([key, title]) => {
 			referenceItems.push(
-				<span key={key}>
+				<span className="ref" key={key}>
 					{title}
-					<button
+					<span className="ref-minus"
 						onClick={
 							() => {
 								this.props.removeReference(key)
 							}
 						}
-					> - </button>
+					>
+            <FontAwesomeIcon icon="minus" />
+          </span>
 				</span>
 			);
 		})
 
   		return (
-  			<div>
+  			<div className="citations">
   			{referenceItems}<br/>
   			{
   				!this.state.showSelector && this.state.numReferences < 4 && options.length > 0
-  				? <button
+  				? <span className="ref-plus"
   					onClick={this.toggleShowSelector}
-  				  >Add Reference</button>
+  				  >
+              <FontAwesomeIcon icon="plus" />
+            </span>
   				: null
   			}
   			{
@@ -122,7 +127,10 @@ class References extends React.Component {
   					>
   						{options}
   					</select>
-  					<input type="submit" value="Add"/>
+  					<label>
+              <input type="submit" value="Add" hidden />
+              <FontAwesomeIcon icon="plus" />
+            </label>
   				</form>
   				: null
   			}
