@@ -159,9 +159,7 @@ def check_authentication():
     """Check if user session exists."""
 
     session_id = session.get('id', '')
-    print(session_id)
     session_id = b64decode(session_id)
-    print(session_id)
 
     sess = Session.query.filter(Session.session_id == session_id).first()
 
@@ -587,7 +585,6 @@ def bookmarked():
                                   Bookmark.user_id == uid).all()
     response.update({bookmark.post_id: True
                     for bookmark in bookmarked})
-    print(response)
     return jsonify(response)
 
 
