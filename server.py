@@ -244,7 +244,8 @@ def user_posts_all(user_id):
     """All posts by a particular user."""
 
     mode = request.args.get('mode', 'full')
-    posts = Post.query.filter(Post.user_id == user_id
+    posts = Post.query.filter(Post.user_id == user_id,
+                              Post.erased == False,
                               ).all()
     if mode == 'full':
         dict_of_posts = {post.id: post.to_dictionary()
