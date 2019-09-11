@@ -13,6 +13,11 @@
   --active-text-border-color: #24211A;
   --text-link-color: #7DD4B6;
   --active-text-link-color: #FA7785;
+  --container-color: #25a5bf59;
+  --container-border-color: #24211A;
+  --container-text-color: #24211A;
+  --container-link-color: #F4F7ED;
+  --active-container-link-color: #7DD4a8;
 }
 
 /* text styles */
@@ -119,9 +124,12 @@ input {
 }
 
 .container {
-  background-color: var(--module-color);
+  background-color: var(--container-color);
+  border-color: var(--text-border-color);
+  border-style: solid;
+  border-width: 5px;
   border-radius: 5px;
-  color: var(--module-item-color);
+  color: var(--text-color);
   display: grid;
   font-size: 1.1em;
   font-weight: bold;
@@ -130,6 +138,19 @@ input {
   margin-right: auto;
   padding: 20px;
   width: 400px;
+}
+
+.container input {
+  border: 5px var(--text-color) solid;
+  background-color: var(--text-bg-color);
+}
+
+.container svg {
+  color: var(--text-color);
+}
+
+.container svg:hover {
+  color: var(--text-bg-color);
 }
 
 .login {
@@ -202,8 +223,9 @@ input {
   grid-template-areas:
     "title"
     "content"
+    "."
     "options";
-  grid-template-rows: auto auto auto;
+  grid-template-rows: auto auto auto 1em;
   grid-gap: 20px;
   max-height: none;
   min-height: none;
