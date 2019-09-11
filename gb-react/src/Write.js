@@ -1,4 +1,5 @@
 import React from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {getPosts, writePost} from './Api';
 import References from './References';
 
@@ -171,34 +172,43 @@ class Write extends React.Component {
 	render() {
 		return (
 			<div className="edit view" id="main">
-				{ this.state.isLoaded
-					? 
-					<References
-						references={this.state.references}
-						bookmarks={this.state.bookmarks}
-						user_posts={this.state.user_posts}
-						addReference={this.addReference}
-						removeReference={this.removeReference}
-					/>
-					: null
-				}
-				<form onSubmit={this.handleSubmit} className="editor" method="post">
-					title:<br/>
-						<input
-							type="text"
-							name="title"
-							value={this.state.title}
-							onChange={this.handleTitleChange}
-						/><br/>
-					content:<br/>
-						<textarea
-							type="text"
-							name="content"
-							onChange={this.handleContentChange}
-							value={this.state.content}
-						></textarea><br/>
-					submit: <input type="submit" name="submit" />
-				</form>
+				<div className="write container">
+					{ this.state.isLoaded
+						? 
+						<References
+							references={this.state.references}
+							bookmarks={this.state.bookmarks}
+							user_posts={this.state.user_posts}
+							addReference={this.addReference}
+							removeReference={this.removeReference}
+						/>
+						: null
+					}
+					<form onSubmit={this.handleSubmit} className="editor" method="post">
+						title:<br/>
+							<input
+								type="text"
+								name="title"
+								value={this.state.title}
+								onChange={this.handleTitleChange}
+							/><br/>
+						content:<br/>
+							<textarea
+								type="text"
+								name="content"
+								onChange={this.handleContentChange}
+								value={this.state.content}
+							></textarea><br/>
+						<label>
+							<input
+								type="submit"
+								value="submit"
+								hidden
+							/>
+							<FontAwesomeIcon icon="check" />
+						</label>
+					</form>
+				</div>
 			</div>
 		);
 	}
