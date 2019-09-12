@@ -263,12 +263,12 @@ def user_posts_all(user_id):
 def user_posts_root(user_id):
     """User root directory."""
 
-    user = User.query.filter(User.id == user_id,
-                             Post.erased == False,
+    user = User.query.filter(User.id == user_id
                              ).options(db.joinedload('posts')).one()
     dict_of_posts = {post.id: post.to_dictionary()
                      for post in user.posts
-                     if not post.references}
+                     if not post.references
+                     and not post.erased}
     return jsonify(dict_of_posts)
 
 

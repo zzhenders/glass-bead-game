@@ -354,3 +354,31 @@ input {
   grid-area: submit;
 }
 
+/* settings styles */
+
+.settings-options {
+  display: grid;
+  grid-template-areas: "change-name delete-user";
+  grid-template-columns: 1fr 1fr;
+  grid-gap: .6em;
+  padding-top: 1em;
+  padding-bottom: 1em;
+}
+
+#change-name {
+  grid-area: change-name;
+}
+
+#delete-user {
+  grid-area: delete-user;
+}
+
+/* override styles */
+
+.warning svg, .warning {
+  color: crimson;
+}
+
+.warning svg:hover {
+  color: red;
+}
