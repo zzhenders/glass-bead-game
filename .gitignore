@@ -29,3 +29,6 @@ gb-react/README.md
 gb-react/npm-debug.log*
 gb-react/yarn-debug.log*
 gb-react/yarn-error.log*
+gb-react/node_modules
+gb-react/build
+gb-react/yarn-error.log
