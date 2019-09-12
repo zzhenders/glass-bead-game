@@ -85,7 +85,7 @@ class Navbar extends React.Component {
 					<NavButton
 						id="settings-btn"
 						alt="Settings"
-						icon="cog"
+						icon="user-cog"
 						onClick={() => {
 							this.props.setView('settings', '')
 						}}
