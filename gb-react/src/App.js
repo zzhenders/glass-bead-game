@@ -1,9 +1,9 @@
 import React from 'react';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faSignInAlt, faUserPlus, faHome, faLeaf, faTree, faEdit, faSearch,
-         faBookmark as faBookmarkSolid, faCog, faSignOutAlt, faTrashAlt,
+         faBookmark as faBookmarkSolid, faUserCog, faSignOutAlt, faTrashAlt,
          faArrowAltCircleRight, faPlusCircle, faMinusCircle, faReply, faCheck,
-         faPlus, faMinus} from '@fortawesome/free-solid-svg-icons';
+         faPlus, faMinus, faUserCheck, faUserMinus} from '@fortawesome/free-solid-svg-icons';
 import { faBookmark as faBookmarkRegular } from '@fortawesome/free-regular-svg-icons'; 
 import { checkAuthentication } from './Api';
 import './glassbeads.css';
@@ -11,9 +11,9 @@ import Navbar from './Navbar';
 import Main from './Main';
 
 library.add(faSignInAlt, faUserPlus, faHome, faBookmarkSolid, faBookmarkRegular,
-            faEdit, faSearch, faCog, faSignOutAlt, faArrowAltCircleRight, faCheck,
+            faEdit, faSearch, faUserCog, faSignOutAlt, faArrowAltCircleRight, faCheck,
             faPlusCircle, faMinusCircle, faReply, faLeaf, faTree, faTrashAlt,
-            faPlus, faMinus)
+            faPlus, faMinus, faUserCheck, faUserMinus)
 
 class App extends React.Component {
   constructor(props) {
