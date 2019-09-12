@@ -263,7 +263,8 @@ def user_posts_all(user_id):
 def user_posts_root(user_id):
     """User root directory."""
 
-    user = User.query.filter(User.id == user_id
+    user = User.query.filter(User.id == user_id,
+                             Post.erased == False,
                              ).options(db.joinedload('posts')).one()
     dict_of_posts = {post.id: post.to_dictionary()
                      for post in user.posts
