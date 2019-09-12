@@ -1,4 +1,5 @@
 import React from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { editUser, deleteUser } from './Api';
 
 class Settings extends React.Component {
@@ -55,33 +56,50 @@ class Settings extends React.Component {
 	render() {
 		return (
 			<div className="settings view" id="main">
-				<form
-					className="user-settings"
-					id="change-uname"
-					onSubmit={this.handleEdit}
-				>
-					<label htmlFor="uname">
-					Username 
-					</label>
-					<input
-						type="text"
-						id="uname"
-						name="uname"
-						value={this.state.uname}
-						onChange={this.handleUnameChange}
-					/><br/>
-					<input
-						type="submit"
-						value="Change Username"
-					/><br/>
+				<div className="container">
+					<form
+						className="user-settings"
+						id="change-uname"
+						onSubmit={this.handleEdit}
+					>
+						<label htmlFor="uname">
+							Change Username: 
+						</label><br />
+						<input
+							type="text"
+							id="uname"
+							name="uname"
+							value={this.state.uname}
+							onChange={this.handleUnameChange}
+						/><br />
+						<div className="settings-options">
+							<span id="change-name">
+								<input
+									type="submit"
+									value="Change Username"
+									hidden
+								/>
+								<FontAwesomeIcon icon="user-check" />
+							</span>
+							{ !this.state.deleteConfirm
+								? <span id="delete-user" onClick={this.handleDelete}>
+									<FontAwesomeIcon icon="user-minus" />
+								</span>
+								: <>
+									<span id="delete-user"
+										className="warning"
+										onClick={this.handleDeleteConfirm}
+									>
+										<FontAwesomeIcon icon="user-minus" />
+									</span><br/>
+									<p className="warning">Are you sure you want to delete your account?</p>
+								</>
+							}
+						</div>				
+					</form>
 					{ this.state.editUnameError ? <b>That Username is Taken!</b> : null }
-				</form>
-				{ !this.state.deleteConfirm
-					? <button onClick={this.handleDelete}>Delete Account</button>
-					: <>
-					<p>Are you sure you want to delete your account?</p>
-					<button onClick={this.handleDeleteConfirm}>Delete My Account</button></>
-				}
+					
+				</div>
 			</div>
 		)
 	}
