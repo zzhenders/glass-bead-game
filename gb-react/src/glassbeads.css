@@ -271,6 +271,8 @@ input {
 
 .content {
   grid-area: content;
+  max-width: inherit;
+  overflow-wrap: break-word;
 }
 
 .tile {
@@ -300,7 +302,7 @@ input {
   grid-area: options;
   grid-template-areas: "user . bookmarker respond edit";
   grid-template-columns: 4fr auto auto auto auto;
-  grid-gap: 1em;
+  grid-gap: 0.7em;
 }
 
 .user {
