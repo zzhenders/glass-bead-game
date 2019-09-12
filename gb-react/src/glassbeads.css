@@ -18,6 +18,7 @@
   --container-text-color: #24211A;
   --container-link-color: #F4F7ED;
   --active-container-link-color: #7DD4a8;
+  --panel-color: #48a5afbf;
 }
 
 /* text styles */
@@ -79,6 +80,7 @@ nav {
   padding: 20px;
   background-color: var(--module-color);
   position: fixed;
+  z-index: 2;
 }
 
 nav div {
@@ -188,26 +190,35 @@ input {
 .bead {
   display: grid;
   grid-template-areas:
-    "references"
-    "view"
-    "responses";
-  grid-template-rows: 200px 1fr 200px;
-  grid-template-columns: 1fr;
+    ". bead-view .";
+  grid-template-columns: 1fr auto 3fr;
   padding: 10px;
   position: relative;
 }
 
+.bead .view {
+  grid-area: bead-view;
+  margin-top: 160px;
+  margin-bottom: 200px;
+}
+
 .references {
-  grid-area: references;
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 80px;
 }
 
 .responses {
-  grid-area: responses;
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  left: 80px;
 }
 
 .panel {
+  background-color: var(--panel-color);
   display: inline-flex;
-  position: absolute;
   overflow-x: hidden;
   overflow-y: unset;
 }
