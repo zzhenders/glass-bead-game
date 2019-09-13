@@ -23,16 +23,28 @@ app.config.update(
     )
 
 
-#################################
-#  REACT IMPLEMENTATION (TODO)  #
-#################################
+##########################
+#  REACT IMPLEMENTATION  #
+##########################
 
 
 @app.route("/")
 def index():
     """Serves index, and by extension the app."""
 
-    return render_template('build/index.html')
+    return render_template("index.html")
+
+
+@app.route("/js/<path:path>")
+
+def send_js(path):
+    return send_from_directory('js', path)
+
+
+@app.route("/css/<path:path>")
+
+def send_css(path):
+    return send_from_directory('css', path)
 
 
 #################################################

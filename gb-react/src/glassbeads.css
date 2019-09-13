@@ -219,7 +219,7 @@ input {
 .panel {
   background-color: var(--panel-color);
   display: inline-flex;
-  overflow-x: hidden;
+  overflow-x: scroll;
   overflow-y: unset;
 }
 
