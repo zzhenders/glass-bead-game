@@ -792,4 +792,4 @@ def references(post_id):
 
 if __name__ == '__main__':
     connect_to_db(app, DB_URI)
-    app.run(debug=True, host="0.0.0.0")
+    app.run(debug=False, host="0.0.0.0")
