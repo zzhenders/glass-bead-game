@@ -20,6 +20,7 @@ app = Flask(__name__)
 app.secret_key = environ['SECRET_KEY']
 app.config.update(
     SESSION_COOKIE_NAME='id',
+    SESSION_COOKIE_HTTPONLY=True,
     )
 
 
